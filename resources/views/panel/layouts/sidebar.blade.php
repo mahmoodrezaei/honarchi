@@ -49,9 +49,9 @@
                 <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true">
                     <a href="#"
                        class="m-menu__link"><i
-                                class="m-menu__link-icon flaticon-profile-1"></i><span
+                                class="m-menu__link-icon flaticon-signs-1"></i><span
                                 class="m-menu__link-title"><span class="m-menu__link-wrap"><span
-                                        class="m-menu__link-text">پروفایل</span> </span></span></a>
+                                        class="m-menu__link-text">دسته‌بندی‌ها</span> </span></span></a>
                 </li>
                 <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true">
                     <a href="#"
