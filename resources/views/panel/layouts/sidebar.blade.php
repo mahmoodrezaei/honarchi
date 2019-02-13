@@ -47,7 +47,7 @@
                     <i class="m-menu__section-icon flaticon-more-v2"></i>
                 </li>
                 <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true">
-                    <a href="#"
+                    <a href={{ route('categories.index') }}
                        class="m-menu__link"><i
                                 class="m-menu__link-icon flaticon-signs-1"></i><span
                                 class="m-menu__link-title"><span class="m-menu__link-wrap"><span

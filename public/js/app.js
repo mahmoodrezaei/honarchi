@@ -48837,9 +48837,9 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/ehsan/projects/honarchi/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /home/ehsan/projects/honarchi/resources/sass/app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! /home/ehsan/projects/honarchi/resources/sass/panel.scss */"./resources/sass/panel.scss");
+__webpack_require__(/*! /var/www/html/myprojects/honarchi/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /var/www/html/myprojects/honarchi/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /var/www/html/myprojects/honarchi/resources/sass/panel.scss */"./resources/sass/panel.scss");
 
 
 /***/ })
