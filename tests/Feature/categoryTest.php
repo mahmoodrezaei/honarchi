@@ -26,12 +26,12 @@ class categoryTest extends TestCase
             return $arr['name'];
             }, $categories);
 
-        $response = $this->get(route('categories.index'));
+        $response = $this->json('GET', route('categories.index'));
 
-        $response->assertViewIs('panel.category.index');
-        $response->assertViewHas('categories');
-        $response->assertSeeInOrder($categoriesNames);
         $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => ['id', 'name', 'parent_id']
+        ]);
 
     }
 
@@ -44,58 +44,74 @@ class categoryTest extends TestCase
         $category2 = factory(Category::class)->create();
 
 
-        $response = $this->post(route('categories.store'), [
+        $response = $this->json('POST', route('categories.store'), [
             'name' => null,
             'parent_id' => null
         ]);
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'name' => [
+                        'The name field is required.'
+                    ]
+                ]
+            ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'name' => 'The name field is required.'
-        ]);
 
-
-        $response = $this->post(route('categories.store'), [
+        $response = $this->json('POST', route('categories.store'), [
             'name' => str_random(31),
             'parent_id' => null
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'name' => 'The name may not be greater than 30 characters.'
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'name' => ['The name may not be greater than 30 characters.']
+                ]
         ]);
 
 
-        $response = $this->post(route('categories.store'), [
+        $response = $this->json('POST', route('categories.store'), [
             'name' => $category2->name,
             'parent_id' => null
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'name' => 'The name has already been taken.'
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'name' => ['The name has already been taken.']
+                ]
         ]);
 
 
-        $response = $this->post(route('categories.store'), [
+        $response = $this->json('POST', route('categories.store'), [
             'name' => $category1->name,
             'parent_id' => -1
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'parent_id' => 'The parent id must be at least 1.'
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'parent_id' => ['The parent id must be at least 1.']
+                ]
         ]);
 
 
-        $response = $this->post(route('categories.store'), [
+        $response = $this->json('POST', route('categories.store'), [
             'name' => $category1->name,
             'parent_id' => 'string'
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'parent_id' => 'The parent id must be an integer.'
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'parent_id' => ['The parent id must be an integer.']
+                ]
         ]);
     }
     
@@ -106,24 +122,18 @@ class categoryTest extends TestCase
     {
         $category = factory(Category::class)->make();
 
-        $response = $this->post(route('categories.store'), $category->toArray());
+        $response = $this->json('POST', route('categories.store'), $category->toArray());
 
-        $response->assertStatus(302);
-        $response->assertSessionHas('message', 'Successful');
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'id', 'name', 'parent_id'
+        ]);
+        $response->assertJson([
+                'name' => $category->name,
+                'parent_id' => $category->parent_id
+        ]);
 
         $this->assertDatabaseHas($this->table, $category->toArray());
-    }
-
-    /**
-     * @test
-     */
-    public function create_a_category()
-    {
-
-        $response = $this->get(route('categories.create'));
-        $response->assertStatus(200);
-
-
     }
 
     /**
@@ -136,66 +146,83 @@ class categoryTest extends TestCase
         $category3 = factory(Category::class)->create();
 
 
-        $response = $this->put(route('categories.update', ['category' => $category2->id]), [
+        $response = $this->json('PUT', route('categories.update', ['category' => $category2->id]), [
             'name' => null,
             'parent_id' => null
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'name' => 'The name field is required.'
+        $response->assertStatus(422)
+            ->assertExactJson([
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'name' => [
+                    'The name field is required.'
+                ]
+            ]
         ]);
 
 
-        $response = $this->put(route('categories.update', ['category' => $category2->id]), [
+        $response = $this->json('PUT', route('categories.update', ['category' => $category2->id]), [
             'name' => str_random(31),
             'parent_id' => null
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'name' => 'The name may not be greater than 30 characters.'
-        ]);
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'name' => ['The name may not be greater than 30 characters.']
+                ]
+            ]);
 
 
-        $response = $this->put(route('categories.update', ['category' => $category2->id]), [
+        $response = $this->json('PUT', route('categories.update', ['category' => $category2->id]), [
             'name' => $category3->name,
             'parent_id' => null
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'name' => 'The name has already been taken.'
-        ]);
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'name' => ['The name has already been taken.']
+                ]
+            ]);
 
 
-        $response = $this->put(route('categories.update', ['category' => $category2->id]), [
+        $response = $this->json('PUT', route('categories.update', ['category' => $category2->id]), [
             'name' => $category1->name,
             'parent_id' => -1
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'parent_id' => 'The parent id must be at least 1.'
-        ]);
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'parent_id' => ['The parent id must be at least 1.']
+                ]
+            ]);
 
 
-        $response = $this->put(route('categories.update', ['category' => $category2->id]), [
+        $response = $this->json('PUT', route('categories.update', ['category' => $category2->id]), [
             'name' => $category1->name,
             'parent_id' => 'string'
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'parent_id' => 'The parent id must be an integer.'
-        ]);
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'parent_id' => ['The parent id must be an integer.']
+                ]
+            ]);
 
-        $response = $this->put(route('categories.update', ['category' => $category2->id]), [
+        $response = $this->json('PUT', route('categories.update', ['category' => $category2->id]), [
             'name' => $category2->name,
             'parent_id' => null
         ]);
 
-        $response->assertStatus(302);
+        $response->assertStatus(200);
     }
 
     /**
@@ -216,27 +243,16 @@ class categoryTest extends TestCase
         $category = factory(Category::class)->create();
         $category->name = $category->name.'_updated';
 
-        $response = $this->put(route('categories.update', ['category' => $category->id]), $category->toArray());
-
-        $response->assertStatus(302);
-        $response->assertSessionHas('message', 'Successful');
-
-        $this->assertDatabaseHas($this->table, $category->toArray());
-    }
-
-    /**
-     * @test
-     */
-    public function edit_a_category()
-    {
-        $category = factory(Category::class)->create();
-
-        $response = $this->get(route('categories.edit', ['category' => $category->id]));
+        $response = $this->json('PUT', route('categories.update', ['category' => $category->id]), $category->toArray());
 
         $response->assertStatus(200);
-        $response->assertViewHas('categories');
-        $response->assertViewHas('category');
-
+        $response->assertJsonStructure([
+            'id', 'name', 'parent_id'
+        ]);
+        $response->assertJson([
+            'name' => $category->name,
+            'parent_id' => $category->parent_id
+        ]);
     }
 
     /**
@@ -244,7 +260,7 @@ class categoryTest extends TestCase
      */
     public function will_fail_with_a_404_if_category_we_want_to_delete_not_found()
     {
-        $response = $this->delete(route('categories.destroy', ['category' => -1]));
+        $response = $this->json('DELETE', route('categories.destroy', ['category' => -1]));
 
         $response->assertStatus(404);
     }
@@ -258,8 +274,8 @@ class categoryTest extends TestCase
 
         $response = $this->delete(route('categories.destroy', ['category' => $category->id]));
 
-        $response->assertStatus(302);
-        $response->assertSessionHas('message', 'Successful');
+        $response->assertStatus(204)
+            ->assertSee(null);
 
         $this->assertDatabaseMissing($this->table, $category->toArray());
 

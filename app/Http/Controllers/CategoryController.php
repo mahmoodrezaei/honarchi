@@ -16,18 +16,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
 
-        return view('panel.category.index', compact('categories',$categories));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $categories = Category::all();
-        return view('panel.category.create', compact('categories'));
+        return response()->json($categories, 200);
     }
 
     /**
@@ -44,23 +33,10 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|integer|min:1|exists:categories,id'
         ]);
 
-        Category::create($request->all());
+        $category = Category::create($request->all());
 
-        return redirect()->route('categories.index')->withMessage('Successful');
+        return response()->json($category, 201);
 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        $categories = Category::all();
-
-        return view('panel.category.edit', compact(['categories' , 'category']));
     }
 
     /**
@@ -80,7 +56,7 @@ class CategoryController extends Controller
 
         $category->update($request->all());
 
-        return redirect()->route('categories.index')->withMessage('Successful');
+        return response()->json($category, 200);
 
     }
 
@@ -95,6 +71,6 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-        return redirect()->route('categories.index')->withMessage('Successful');
+        return response()->json(null, 204);
     }
 }
