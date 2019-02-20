@@ -5294,7 +5294,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/ehsan/projects/honarchi/resources/js/panel.js */"./resources/js/panel.js");
+module.exports = __webpack_require__(/*! /home/omid/honarchi/resources/js/panel.js */"./resources/js/panel.js");
 
 
 /***/ })
