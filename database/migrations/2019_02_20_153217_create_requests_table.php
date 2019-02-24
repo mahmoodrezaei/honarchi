@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateRequestsTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -18,7 +19,7 @@ class CreateRequestsTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
-            $table->string('title');
+            $table->string('subject');
             $table->text('description');
             $table->timestamps();
         });

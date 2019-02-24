@@ -8,7 +8,7 @@ class About extends Model
 {
     protected $fillable =
         [
-            'title1', 'body1', 'title2', 'body2' , 'img'
+            'cover_title', 'cover_body', 'cover_img', 'title', 'body', 'img', 'address', 'phone', 'cell_phone', 'email', 'instagram', 'telegram'
         ];
 
 

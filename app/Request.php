@@ -9,6 +9,6 @@ class Request extends Model
     protected $table = 'requests';
     protected $fillable =
         [
-            'first_name', 'last_name', 'email', 'title' , 'description'
+            'first_name', 'last_name', 'email', 'subject' , 'description'
         ];
 }
