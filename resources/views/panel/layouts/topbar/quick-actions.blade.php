@@ -6,7 +6,7 @@
     <div class="m-dropdown__wrapper" style="z-index: 101;">
         <span class="m-dropdown__arrow m-dropdown__arrow--left m-dropdown__arrow--adjust" style="left: auto; right: 29.5px;"></span>
         <div class="m-dropdown__inner">
-            <div class="m-dropdown__header m--align-center" style="background: url(assets/quick_actions_bg.jpg); background-size: cover;">
+            <div class="m-dropdown__header m--align-center" style="background: url(assets/images/bg/quick_actions_bg.jpg); background-size: cover;">
                 <span class="m-dropdown__header-title">Quick Actions</span>
                 <span class="m-dropdown__header-subtitle">Shortcuts</span>
             </div>

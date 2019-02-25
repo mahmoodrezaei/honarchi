@@ -10,7 +10,13 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
-    return view('panel.index');
+    return view('welcome');
 });
+
+Auth::routes();
+
+// Admin Routes
+// TODO: add auth middlware
+Route::get('/admin/{any?}', 'AdminController@index')
+    ->where('any', '.*');

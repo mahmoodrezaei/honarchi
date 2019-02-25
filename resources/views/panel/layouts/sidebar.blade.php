@@ -12,7 +12,7 @@
 
                 <!-- dashboard section -->
                 <li class="m-menu__item  m-menu__item--active" aria-haspopup="true">
-                    <a href="/"
+                    <a href="#"
                        class="m-menu__link "><i
                                 class="m-menu__link-icon flaticon-line-graph"></i><span
                                 class="m-menu__link-title"><span class="m-menu__link-wrap"> <span
@@ -39,6 +39,19 @@
                                 class="m-menu__link-icon flaticon-notes"></i><span
                                 class="m-menu__link-title"><span class="m-menu__link-wrap"><span
                                         class="m-menu__link-text">سابقه درخواست‌ها</span> </span></span></a>
+                </li>
+
+                <!-- setting section -->
+                <li class="m-menu__section ">
+                    <h4 class="m-menu__section-text">کاربران</h4>
+                    <i class="m-menu__section-icon flaticon-users"></i>
+                </li>
+                <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true">
+                    <a href="#"
+                       class="m-menu__link"><i
+                                class="m-menu__link-icon flaticon-users"></i><span
+                                class="m-menu__link-title"><span class="m-menu__link-wrap"><span
+                                        class="m-menu__link-text">لیست کاربران</span> </span></span></a>
                 </li>
 
                 <!-- setting section -->
