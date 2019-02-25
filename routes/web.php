@@ -10,9 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
+
     return view('panel.index');
 });
 
 Route::Resource('categories' ,'CategoryController')->except(['show']);
+
+Auth::routes();
+
+// Admin Routes
+// TODO: add auth middlware
+Route::get('/admin/{any?}', 'AdminController@index')
+    ->where('any', '.*');

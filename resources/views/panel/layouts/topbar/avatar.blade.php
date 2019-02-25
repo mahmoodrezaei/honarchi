@@ -2,7 +2,7 @@
     m-dropdown-toggle="click" aria-expanded="true">
     <a href="#" class="m-nav__link m-dropdown__toggle">
 												<span class="m-topbar__userpic">
-													<img src="assets/user.jpg"
+													<img src="assets/images/user.jpg"
                                                          class="m--img-rounded m--marginless" alt="">
 												</span>
         <span class="m-topbar__username m--hide">Nick</span>
@@ -11,10 +11,10 @@
         <span class="m-dropdown__arrow m-dropdown__arrow--left m-dropdown__arrow--adjust" style="left: auto; right: 12.5px;"></span>
         <div class="m-dropdown__inner">
             <div class="m-dropdown__header m--align-center"
-                 style="background: url(assets/user_profile_bg.jpg); background-size: cover;">
+                 style="background: url(assets/images/bg/user_profile_bg.jpg); background-size: cover;">
                 <div class="m-card-user m-card-user--skin-dark">
                     <div class="m-card-user__pic">
-                        <img src="assets/user.jpg"
+                        <img src="assets/images/user.jpg"
                              class="m--img-rounded m--marginless" alt="">
 
                         <!--
