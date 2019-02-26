@@ -17,6 +17,6 @@ Route::get('/', function () {
 Auth::routes();
 
 // Admin Routes
-// TODO: add auth middlware
+// TODO: add auth middleware
 Route::get('/admin/{any?}', 'AdminController@index')
     ->where('any', '.*');
