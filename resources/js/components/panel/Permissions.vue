@@ -246,6 +246,7 @@
 
             save() {
                 this.permissions.push(this.item)
+                // TODO: here in the axios body you have to empty the body of new permission name
                 axios.post('/api/permissions', this.item)
                     .then(response => console.log(response.data))
             },
