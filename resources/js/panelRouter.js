@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
 import Users from "./components/panel/Users";
 import Permissions from "./components/panel/Permissions";
 import Categories from "./components/panel/Categories.vue";

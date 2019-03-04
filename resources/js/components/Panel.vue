@@ -20,14 +20,18 @@
       </div>-->
       <!-- END:: ContentSection -->
       <router-view></router-view>
+
+      <!-- displaying messages -->
+      <flash></flash>
     </div>
   </div>
 </template>
 
 <script>
 import CustomSidebar from "./layouts/CustomSidebar";
+import Flash from "./layouts/Flash";
 
 export default {
-  components: { CustomSidebar }
+  components: { CustomSidebar, Flash }
 };
 </script>

@@ -1,5 +1,4 @@
 import "./bootstrap";
-import Vue from "vue";
 import router from "./panelRouter";
 
 import vSelect from "vue-select";
