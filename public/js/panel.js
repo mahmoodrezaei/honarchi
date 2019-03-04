@@ -6727,7 +6727,7 @@ __webpack_require__.r(__webpack_exports__);
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "\n@media ( min-width: 768px ) {\n#custom-alert {\n        position: absolute;\n        width: 500px;\n        left: 50px;\n        top: 110px;\n}\n}\n", ""]);
+exports.push([module.i, "\n@media ( min-width: 768px ) {\n#custom-alert {\n        position: fixed;\n        width: 500px;\n        left: 50px;\n        top: 110px;\n}\n}\n@media ( max-width: 768px ) {\n#custom-alert {\n        position: fixed;\n        width: 100%;\n        left: 0;\n        top: 60px;\n}\n}\n", ""]);
 
 
 
