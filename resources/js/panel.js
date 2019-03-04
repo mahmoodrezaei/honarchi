@@ -1,11 +1,22 @@
-import './bootstrap'
-import Vue from 'vue'
-import router from './panelRouter'
+import "./bootstrap";
+import Vue from "vue";
+import router from "./panelRouter";
 
-import Panel from './components/Panel'
+import vSelect from "vue-select";
+import Panel from "./components/Panel";
+
+Vue.component("v-select", {
+    props: {
+        maxHeight: {
+            type: String,
+            default: "100px"
+        }
+    },
+    extends: vSelect
+});
 
 const panel = new Vue({
-    el: '#panel',
+    el: "#panel",
     render: h => h(Panel),
     router
 });

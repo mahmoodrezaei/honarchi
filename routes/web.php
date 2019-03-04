@@ -15,8 +15,6 @@ Route::get('/', function () {
     return view('panel.index');
 });
 
-Route::Resource('categories' ,'CategoryController')->except(['show']);
-
 Auth::routes();
 
 // Admin Routes

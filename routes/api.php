@@ -18,3 +18,5 @@ use Illuminate\Http\Request;
 });*/
 
 Route::apiResource('permissions', 'API\Admin\PermissionController');
+
+Route::Resource('categories' ,'CategoryController')->except(['show']);

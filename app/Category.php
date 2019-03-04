@@ -8,7 +8,6 @@ use function Symfony\Component\Debug\Tests\testHeader;
 class Category extends Model
 {
     protected $guarded = ['id'];
-    public $timestamps = false;
 
     public function parent()
     {
