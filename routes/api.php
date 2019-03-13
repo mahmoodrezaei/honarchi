@@ -21,4 +21,4 @@ Route::apiResource('permissions', 'API\Admin\PermissionController');
 
 Route::apiResource('roles', 'API\Admin\RoleController');
 
-Route::Resource('categories' ,'CategoryController')->except(['show']);
+Route::Resource('categories', 'API\Admin\CategoryController')->except(['show']);
