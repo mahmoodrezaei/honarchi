@@ -6,7 +6,7 @@
           <div class="m-portlet__head">
             <div class="m-portlet__head-caption">
               <div class="m-portlet__head-title">
-                <h3 class="m-portlet__head-text">مدیریت سطح دسترسی‌ها</h3>
+                <h3 class="m-portlet__head-text">مدیریت دسته بندی ها</h3>
               </div>
             </div>
 
@@ -136,6 +136,22 @@
                     <td class="m-datatable__cell">
                       <span style="width: 110px;">{{category.name}}</span>
                     </td>
+
+                    <td class="m-datatable__cell">
+                      <div style="width: 130px;" class="m-list-badge">
+                        <div class="m-list-badge__items">
+                          <div
+                            v-if="categories.filter(item => item.id == category.parent_id)[0]"
+                            style="margin: 10px;"
+                          >
+                            <span
+                              class="m-list-badge__item m-list-badge__item--brand"
+                            >{{ categories.filter(item => item.id == category.parent_id)[0].name }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
                     <td class="m-datatable__cell">
                       <span style="width: 110px;">{{category.created_at}}</span>
                     </td>
@@ -191,6 +207,7 @@ export default {
 
     let columns = [
       { label: "نام دسته بندی", name: "category" },
+      { label: "دسته بندی مادر", name: "parent" },
       { label: "تاریخ ایجاد", name: "created", type: "number" }
     ];
 

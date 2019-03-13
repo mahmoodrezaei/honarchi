@@ -83,6 +83,17 @@
             </a>
           </li>
 
+          <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
+            <a href="#" @click.prevent="$router.push('/admin/roles')" class="m-menu__link">
+              <i class="m-menu__link-icon flaticon-user-settings"></i>
+              <span class="m-menu__link-title">
+                <span class="m-menu__link-wrap">
+                  <span class="m-menu__link-text">نقش ها</span>
+                </span>
+              </span>
+            </a>
+          </li>
+
           <!-- setting section -->
           <li class="m-menu__section">
             <h4 class="m-menu__section-text">تنظیمات</h4>
