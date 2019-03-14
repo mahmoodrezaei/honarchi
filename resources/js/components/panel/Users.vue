@@ -1,9 +1,11 @@
 <template>
-    <ul>
-        <li v-for="(user, index) in usersList" :key="index">
-            {{ user }}
-        </li>
-    </ul>
+    <div>
+        <ul>
+            <li v-for="(user, index) in usersList" :key="index">
+                {{ user }}
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
