@@ -83,15 +83,13 @@ class GalleryTest extends TestCase
         $this->withExceptionHandling();
         $gallery = create('App\Gallery');
 
-        $data = [
-            'owner_id' => 10,
-            'gallery_name' => 'updated gallery name',
-            'first_name' => 'updated first',
-            'last_name' => 'updated last',
-            'location' => 'updated location'
-        ];
+        $gallery->owner_id = 10;
+        $gallery->first_name = 'updated first';
+        $gallery->last_name = 'updated last';
+        $gallery->location = 'updated location';
 
-        $this->patch('api/admin/galleries/' . $gallery->id, $data)
+
+        $this->patch('api/admin/galleries/' . $gallery->id, $gallery->toArray())
             ->assertStatus(200)
             ->assertJson(['gallery' => $gallery->refresh()->toArray()]);
 
@@ -151,4 +149,78 @@ class GalleryTest extends TestCase
             ->assertStatus(200)
             ->assertJsonCount(3, 'galleries');
     }
+
+
+    // Validation Tests
+
+    /** @test */
+    public function it_requires_gallery_name()
+    {
+        $gallery = make('App\Gallery', ['gallery_name' => '']);
+
+        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
+            ->assertStatus(422)
+            ->assertJson(['message' => 'The given data was invalid.']);
+    }
+
+    /** @test */
+    public function it_requires_first_name()
+    {
+        $gallery = make('App\Gallery', ['first_name' => '']);
+
+        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
+            ->assertStatus(422)
+            ->assertJson(['message' => 'The given data was invalid.']);
+    }
+
+    /** @test */
+    public function it_requires_last_name()
+    {
+        $gallery = make('App\Gallery', ['last_name' => '']);
+
+        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
+            ->assertStatus(422)
+            ->assertJson(['message' => 'The given data was invalid.']);
+    }
+
+    /** @test */
+    public function it_requires_email()
+    {
+        $gallery = make('App\Gallery', ['email' => '']);
+
+        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
+            ->assertStatus(422)
+            ->assertJson(['message' => 'The given data was invalid.']);
+    }
+
+    /** @test */
+    public function it_requires_phone_number()
+    {
+        $gallery = make('App\Gallery', ['phone_number' => '']);
+
+        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
+            ->assertStatus(422)
+            ->assertJson(['message' => 'The given data was invalid.']);
+    }
+
+    /** @test */
+    public function it_requires_location()
+    {
+        $gallery = make('App\Gallery', ['location' => '']);
+
+        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
+            ->assertStatus(422)
+            ->assertJson(['message' => 'The given data was invalid.']);
+    }
+
+    /** @test */
+    public function it_requires_type()
+    {
+        $gallery = make('App\Gallery', ['type' => '']);
+
+        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
+            ->assertStatus(422)
+            ->assertJson(['message' => 'The given data was invalid.']);
+    }
+
 }

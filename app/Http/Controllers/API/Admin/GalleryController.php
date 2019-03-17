@@ -82,9 +82,9 @@ class GalleryController extends Controller
             'gallery_name' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|unique:galleries,email,' . $gallery->id,
-            'phone_number' => 'required|unique:galleries,phone_number' . $gallery->idgit ,
             'location' => 'required',
+            'email' => 'required|unique:galleries,email,' . $gallery->id,
+            'phone_number' => 'required|unique:galleries,phone_number,' . $gallery->id,
             'type' => 'required'
         ]);
 
