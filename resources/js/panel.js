@@ -1,10 +1,10 @@
-import './bootstrap'
-import router from './panelRouter'
+import "./bootstrap";
+import router from "./panelRouter";
 
-import Panel from './components/Panel'
+import Panel from "./components/Panel";
 
 const panel = new Vue({
-    el: '#panel',
+    el: "#panel",
     render: h => h(Panel),
     router
 });
