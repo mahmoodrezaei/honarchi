@@ -2907,6 +2907,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7379,7 +7381,7 @@ __webpack_require__.r(__webpack_exports__);
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "\n@media ( min-width: 768px ) {\n#custom-alert {\n        position: absolute;\n        width: 500px;\n        left: 50px;\n        top: 110px;\n}\n}\n", ""]);
+exports.push([module.i, "\n@media ( min-width: 768px ) {\n#custom-alert {\n        position: fixed;\n        width: 500px;\n        left: 50px;\n        top: 110px;\n}\n}\n@media ( max-width: 768px ) {\n#custom-alert {\n        position: fixed;\n        width: 100%;\n        left: 0;\n        top: 60px;\n}\n}\n", ""]);
 
 
 
@@ -40412,15 +40414,17 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "ul",
-    _vm._l(_vm.usersList, function(user, index) {
-      return _c("li", { key: index }, [
-        _vm._v("\n        " + _vm._s(user) + "\n    ")
-      ])
-    }),
-    0
-  )
+  return _c("div", [
+    _c(
+      "ul",
+      _vm._l(_vm.usersList, function(user, index) {
+        return _c("li", { key: index }, [
+          _vm._v("\n            " + _vm._s(user) + "\n        ")
+        ])
+      }),
+      0
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
