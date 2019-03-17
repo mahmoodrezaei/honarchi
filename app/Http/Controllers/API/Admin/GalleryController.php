@@ -30,17 +30,17 @@ class GalleryController extends Controller
 
     public function store(Request $request)
     {
-        /*$request->validate([
+        $request->validate([
+            'owner_id' => 'unique:galleries',
             'gallery_name' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|email',
-            'phone_number' => 'required|phone',
+            'email' => 'unique:galleries|required|email',
+            'phone_number' => 'unique:galleries|required',
             'location' => 'required',
             'type' => 'required'
-        ]);*/
+        ]);
 
-//        $gallery = Gallery::create($request->all());
         $gallery = Gallery::create($request->only([
             'owner_id',
             'gallery_name',
@@ -78,9 +78,15 @@ class GalleryController extends Controller
 
     public function update(Request $request, Gallery $gallery)
     {
-        /*$request->validate([
-
-        ]);*/
+        $request->validate([
+            'gallery_name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|unique:galleries,email,' . $gallery->id,
+            'phone_number' => 'required|unique:galleries,phone_number' . $gallery->idgit ,
+            'location' => 'required',
+            'type' => 'required'
+        ]);
 
         $gallery->update($request->all());
 
@@ -118,6 +124,13 @@ class GalleryController extends Controller
 
     public function unblockGallery(Gallery $gallery)
     {
+        $gallery->update(['state' => 1]);
 
+        $data = [
+            'message' => 'Gallery is unblocked',
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
     }
 }

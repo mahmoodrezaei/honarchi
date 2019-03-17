@@ -16,11 +16,11 @@ class CreateGalleriesTable extends Migration
         Schema::create('galleries', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('owner_id')->nullable();
-            $table->string('gallery_name')->nullable();
+            $table->string('gallery_name')->nullable()->unique();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email');
-            $table->string('phone_number');
+            $table->string('email')->unique();
+            $table->string('phone_number')->unique();
             $table->string('location');
             $table->string('type');
             $table->text('samples')->nullable();

@@ -45,6 +45,17 @@ class GalleryTest extends TestCase
     }
 
     /** @test */
+    public function a_superadmin_can_unblock_a_gallery()
+    {
+        $gallery = create('App\Gallery');
+
+        $this->json('patch', 'api/admin/galleries/' . $gallery->id . '/unblock')
+            ->assertStatus(200)
+            ->assertJsonStructure(['message' => 'status_code'])
+            ->assertJson(['message' => 'Gallery is unblocked']);
+    }
+
+    /** @test */
     public function a_superadmin_can_create_gallery()
     {
         $this->withExceptionHandling();
@@ -74,6 +85,7 @@ class GalleryTest extends TestCase
 
         $data = [
             'owner_id' => 10,
+            'gallery_name' => 'updated gallery name',
             'first_name' => 'updated first',
             'last_name' => 'updated last',
             'location' => 'updated location'
@@ -95,7 +107,7 @@ class GalleryTest extends TestCase
     public function a_superadmin_can_see_a_single_gallery()
     {
         $gallery = create('App\Gallery');
-;
+
         $this->json('get', 'api/admin/galleries/' . $gallery->id)
             ->assertStatus(200)
             ->assertJson(['gallery' => $gallery->toArray()])
