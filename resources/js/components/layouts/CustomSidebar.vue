@@ -32,7 +32,7 @@
 
           <!-- request section -->
           <li class="m-menu__section">
-            <h4 class="m-menu__section-text">درخواست‌ها</h4>
+            <h4 class="m-menu__section-text">محصولات</h4>
             <i class="m-menu__section-icon flaticon-more-v2"></i>
           </li>
           <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
@@ -40,17 +40,34 @@
               <i class="m-menu__link-icon flaticon-add"></i>
               <span class="m-menu__link-title">
                 <span class="m-menu__link-wrap">
-                  <span class="m-menu__link-text">درخواست جدید</span>
+                  <span class="m-menu__link-text">لیست مخصولات</span>
                 </span>
               </span>
             </a>
           </li>
           <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
-            <a href="#" class="m-menu__link">
+            <a href="#" @click.prevent="$router.push('/admin/categories')" class="m-menu__link">
               <i class="m-menu__link-icon flaticon-notes"></i>
               <span class="m-menu__link-title">
                 <span class="m-menu__link-wrap">
-                  <span class="m-menu__link-text">سابقه درخواست‌ها</span>
+                  <span class="m-menu__link-text">دسته‌بندی‌ها</span>
+                </span>
+              </span>
+            </a>
+          </li>
+
+
+          <li class="m-menu__section">
+            <h4 class="m-menu__section-text">گالری‌ها</h4>
+            <i class="m-menu__section-icon flaticon-more-v2"></i>
+          </li>
+
+          <li class="m-menu__item m-menu__item--active" aria-haspopup="true">
+            <a href="#" class="m-menu__link">
+              <i class="m-menu__link-icon flaticon-line-graph"></i>
+              <span class="m-menu__link-title">
+                <span class="m-menu__link-wrap">
+                  <span class="m-menu__link-text">لیست گالری‌ها</span>
                 </span>
               </span>
             </a>
@@ -94,57 +111,6 @@
             </a>
           </li>
 
-          <!-- setting section -->
-          <li class="m-menu__section">
-            <h4 class="m-menu__section-text">تنظیمات</h4>
-            <i class="m-menu__section-icon flaticon-more-v2"></i>
-          </li>
-          <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
-            <a href="#" @click.prevent="$router.push('/admin/categories')" class="m-menu__link">
-              <i class="m-menu__link-icon flaticon-signs-1"></i>
-              <span class="m-menu__link-title">
-                <span class="m-menu__link-wrap">
-                  <span class="m-menu__link-text">دسته‌بندی‌ها</span>
-                </span>
-              </span>
-            </a>
-          </li>
-          <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
-            <a href="#" class="m-menu__link">
-              <i class="m-menu__link-icon flaticon-map-location"></i>
-              <span class="m-menu__link-title">
-                <span class="m-menu__link-wrap">
-                  <span class="m-menu__link-text">آدرس</span>
-                </span>
-              </span>
-            </a>
-          </li>
-          <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
-            <a href="#" class="m-menu__link">
-              <i class="m-menu__link-icon flaticon-car"></i>
-              <span class="m-menu__link-title">
-                <span class="m-menu__link-wrap">
-                  <span class="m-menu__link-text">خودروها</span>
-                </span>
-              </span>
-            </a>
-          </li>
-
-          <!-- credit section -->
-          <li class="m-menu__section">
-            <h4 class="m-menu__section-text">مالی</h4>
-            <i class="m-menu__section-icon flaticon-more-v2"></i>
-          </li>
-          <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
-            <a href="#" class="m-menu__link">
-              <i class="m-menu__link-icon flaticon-coins"></i>
-              <span class="m-menu__link-title">
-                <span class="m-menu__link-wrap">
-                  <span class="m-menu__link-text">اعتبار</span>
-                </span>
-              </span>
-            </a>
-          </li>
         </ul>
       </div>
 

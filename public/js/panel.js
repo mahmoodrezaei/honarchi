@@ -1936,40 +1936,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
@@ -3096,8 +3062,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< HEAD
-=======
 //
 //
 //
@@ -3561,7 +3525,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
->>>>>>> mohsen-dev
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -39346,9 +39309,41 @@ var render = function() {
                 _vm._v(" "),
                 _vm._m(3),
                 _vm._v(" "),
-                _vm._m(4),
+                _c(
+                  "li",
+                  {
+                    staticClass: "m-menu__item m-menu__item--submenu",
+                    attrs: { "aria-haspopup": "true" }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "m-menu__link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.$router.push("/admin/categories")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "m-menu__link-icon flaticon-notes"
+                        }),
+                        _vm._v(" "),
+                        _vm._m(4)
+                      ]
+                    )
+                  ]
+                ),
                 _vm._v(" "),
                 _vm._m(5),
+                _vm._v(" "),
+                _vm._m(6),
+                _vm._v(" "),
+                _vm._m(7),
                 _vm._v(" "),
                 _c(
                   "li",
@@ -39374,7 +39369,7 @@ var render = function() {
                           staticClass: "m-menu__link-icon flaticon-users"
                         }),
                         _vm._v(" "),
-                        _vm._m(6)
+                        _vm._m(8)
                       ]
                     )
                   ]
@@ -39405,7 +39400,7 @@ var render = function() {
                             "m-menu__link-icon flaticon-user-settings"
                         }),
                         _vm._v(" "),
-                        _vm._m(7)
+                        _vm._m(9)
                       ]
                     )
                   ]
@@ -39436,51 +39431,11 @@ var render = function() {
                             "m-menu__link-icon flaticon-user-settings"
                         }),
                         _vm._v(" "),
-                        _vm._m(8)
-                      ]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _vm._m(9),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    staticClass: "m-menu__item m-menu__item--submenu",
-                    attrs: { "aria-haspopup": "true" }
-                  },
-                  [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "m-menu__link",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.$router.push("/admin/categories")
-                          }
-                        }
-                      },
-                      [
-                        _c("i", {
-                          staticClass: "m-menu__link-icon flaticon-signs-1"
-                        }),
-                        _vm._v(" "),
                         _vm._m(10)
                       ]
                     )
                   ]
-                ),
-                _vm._v(" "),
-                _vm._m(11),
-                _vm._v(" "),
-                _vm._m(12),
-                _vm._v(" "),
-                _vm._m(13),
-                _vm._v(" "),
-                _vm._m(14)
+                )
               ]
             )
           ]
@@ -39539,7 +39494,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("li", { staticClass: "m-menu__section" }, [
-      _c("h4", { staticClass: "m-menu__section-text" }, [_vm._v("درخواست‌ها")]),
+      _c("h4", { staticClass: "m-menu__section-text" }, [_vm._v("محصولات")]),
       _vm._v(" "),
       _c("i", { staticClass: "m-menu__section-icon flaticon-more-v2" })
     ])
@@ -39561,7 +39516,7 @@ var staticRenderFns = [
           _c("span", { staticClass: "m-menu__link-title" }, [
             _c("span", { staticClass: "m-menu__link-wrap" }, [
               _c("span", { staticClass: "m-menu__link-text" }, [
-                _vm._v("درخواست جدید")
+                _vm._v("لیست مخصولات")
               ])
             ])
           ])
@@ -39573,20 +39528,42 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "m-menu__link-title" }, [
+      _c("span", { staticClass: "m-menu__link-wrap" }, [
+        _c("span", { staticClass: "m-menu__link-text" }, [
+          _vm._v("دسته‌بندی‌ها")
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "m-menu__section" }, [
+      _c("h4", { staticClass: "m-menu__section-text" }, [_vm._v("گالری‌ها")]),
+      _vm._v(" "),
+      _c("i", { staticClass: "m-menu__section-icon flaticon-more-v2" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c(
       "li",
       {
-        staticClass: "m-menu__item m-menu__item--submenu",
+        staticClass: "m-menu__item m-menu__item--active",
         attrs: { "aria-haspopup": "true" }
       },
       [
         _c("a", { staticClass: "m-menu__link", attrs: { href: "#" } }, [
-          _c("i", { staticClass: "m-menu__link-icon flaticon-notes" }),
+          _c("i", { staticClass: "m-menu__link-icon flaticon-line-graph" }),
           _vm._v(" "),
           _c("span", { staticClass: "m-menu__link-title" }, [
             _c("span", { staticClass: "m-menu__link-wrap" }, [
               _c("span", { staticClass: "m-menu__link-text" }, [
-                _vm._v("سابقه درخواست‌ها")
+                _vm._v("لیست گالری‌ها")
               ])
             ])
           ])
@@ -39639,111 +39616,6 @@ var staticRenderFns = [
         _c("span", { staticClass: "m-menu__link-text" }, [_vm._v("نقش ها")])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "m-menu__section" }, [
-      _c("h4", { staticClass: "m-menu__section-text" }, [_vm._v("تنظیمات")]),
-      _vm._v(" "),
-      _c("i", { staticClass: "m-menu__section-icon flaticon-more-v2" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "m-menu__link-title" }, [
-      _c("span", { staticClass: "m-menu__link-wrap" }, [
-        _c("span", { staticClass: "m-menu__link-text" }, [
-          _vm._v("دسته‌بندی‌ها")
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "m-menu__item m-menu__item--submenu",
-        attrs: { "aria-haspopup": "true" }
-      },
-      [
-        _c("a", { staticClass: "m-menu__link", attrs: { href: "#" } }, [
-          _c("i", { staticClass: "m-menu__link-icon flaticon-map-location" }),
-          _vm._v(" "),
-          _c("span", { staticClass: "m-menu__link-title" }, [
-            _c("span", { staticClass: "m-menu__link-wrap" }, [
-              _c("span", { staticClass: "m-menu__link-text" }, [_vm._v("آدرس")])
-            ])
-          ])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "m-menu__item m-menu__item--submenu",
-        attrs: { "aria-haspopup": "true" }
-      },
-      [
-        _c("a", { staticClass: "m-menu__link", attrs: { href: "#" } }, [
-          _c("i", { staticClass: "m-menu__link-icon flaticon-car" }),
-          _vm._v(" "),
-          _c("span", { staticClass: "m-menu__link-title" }, [
-            _c("span", { staticClass: "m-menu__link-wrap" }, [
-              _c("span", { staticClass: "m-menu__link-text" }, [
-                _vm._v("خودروها")
-              ])
-            ])
-          ])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "m-menu__section" }, [
-      _c("h4", { staticClass: "m-menu__section-text" }, [_vm._v("مالی")]),
-      _vm._v(" "),
-      _c("i", { staticClass: "m-menu__section-icon flaticon-more-v2" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "m-menu__item m-menu__item--submenu",
-        attrs: { "aria-haspopup": "true" }
-      },
-      [
-        _c("a", { staticClass: "m-menu__link", attrs: { href: "#" } }, [
-          _c("i", { staticClass: "m-menu__link-icon flaticon-coins" }),
-          _vm._v(" "),
-          _c("span", { staticClass: "m-menu__link-title" }, [
-            _c("span", { staticClass: "m-menu__link-wrap" }, [
-              _c("span", { staticClass: "m-menu__link-text" }, [
-                _vm._v("اعتبار")
-              ])
-            ])
-          ])
-        ])
-      ]
-    )
   }
 ]
 render._withStripped = true
