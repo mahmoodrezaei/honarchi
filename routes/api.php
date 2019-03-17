@@ -18,6 +18,9 @@ use Illuminate\Http\Request;
 });*/
 
 Route::apiResource('permissions', 'API\Admin\PermissionController');
+Route::apiResource('roles', 'API\Admin\RoleController');
+Route::Resource('categories', 'API\Admin\CategoryController')->except(['show']);
+
 Route::get('admin/galleries', 'API\Admin\GalleryController@index');
 Route::post('admin/galleries', 'API\Admin\GalleryController@store');
 Route::get('admin/galleries/{gallery}', 'API\Admin\GalleryController@show');

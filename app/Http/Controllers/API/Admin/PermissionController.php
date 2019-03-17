@@ -13,7 +13,7 @@ class PermissionController extends Controller
     {
         $permissions = Permission::all();
 
-        return $permissions;
+        return response()->json($permissions, 200);
     }
 
     public function store(Request $request)
@@ -22,11 +22,11 @@ class PermissionController extends Controller
             'name' => 'required',
         ]);
 
-        Permission::create([
+        $permission = Permission::create([
             'name' => $request['name']
         ]);
 
-        return response(['message' => 'successful']);
+        return response()->json($permission, 201);
     }
 
     public function update(Request $request, Permission $permission)
@@ -35,19 +35,18 @@ class PermissionController extends Controller
             'name' => 'required',
         ]);
 
-        $response =$permission->update([
+        $response = $permission->update([
             'name' => $request['name']
         ]);
 
-        if ($request) {
-            return response(['message' => 'Permission Updated']);
-        }
+
+        return response()->json($response, 200);
     }
 
-    public function destroy($id)
+    public function destroy(Permission $permission)
     {
-        if (Permission::destroy($id)) {
-            return response(['message' => 'Permission deleted successfully']);
-        }
+        $permission->delete();
+
+        return response()->json(null, 204);
     }
 }
