@@ -48,6 +48,7 @@
 @yield('js')
 
 <script src="{{ asset('js/panel.js') }}"></script>
+{{-- <script src="{{ asset('js/sweetAlert/sweetalert2.js') }}"></script> --}}
 
 <!-- end:: Page Scripts -->
 

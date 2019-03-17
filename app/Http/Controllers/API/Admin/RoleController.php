@@ -10,9 +10,9 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::all();
+        $roles = Role::with('permissions')->get();
 
-        return $roles;
+        return response()->json($roles, 200);
     }
 
     public function store(Request $request)
@@ -26,10 +26,10 @@ class RoleController extends Controller
         ]);
 
         if ($request->has('permissions')) {
-            $role->givePermissionTo(collect($request['permissions'])->pluck('id')->toArray());
+            $role->givePermissionTo($request['permissions']);
         }
 
-        return response(['message' => 'Role Created']);
+        return response()->json($role, 201);
     }
 
     public function update(Request $request, Role $role)
@@ -43,14 +43,16 @@ class RoleController extends Controller
         ]);
 
         if ($request->has('permissions')) {
-            $role->syncPermissions(collect($request['permissions'])->pluck('id')->toArray());
+            $role->syncPermissions($request['permissions']);
         }
 
-        return response(['message' => 'Role Updated']);
+        return response()->json($role, 200);
     }
 
     public function destroy($id)
     {
-        return Role::destroy($id);
+        Role::destroy($id);
+
+        return response()->json(null, 204);
     }
 }
