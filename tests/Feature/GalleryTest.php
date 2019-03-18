@@ -51,7 +51,7 @@ class GalleryTest extends TestCase
 
         $this->json('patch', 'api/admin/galleries/' . $gallery->id . '/unblock')
             ->assertStatus(200)
-            ->assertJsonStructure(['message' => 'status_code'])
+            ->assertJsonStructure(['message', 'status_code'])
             ->assertJson(['message' => 'Gallery is unblocked']);
     }
 
@@ -69,9 +69,7 @@ class GalleryTest extends TestCase
 
 
         $this->assertDatabaseHas('galleries', [
-            'first_name' => $gallery->first_name,
-            'last_name' => $gallery->last_name,
-            'phone_number' => $gallery->phone_number,
+            'gallery_name' => $gallery->gallery_name,
             'location' => $gallery->location,
             'state' => 1
         ]);
@@ -84,8 +82,7 @@ class GalleryTest extends TestCase
         $gallery = create('App\Gallery');
 
         $gallery->owner_id = 10;
-        $gallery->first_name = 'updated first';
-        $gallery->last_name = 'updated last';
+        $gallery->gallery_name = 'updated name';
         $gallery->location = 'updated location';
 
 
@@ -95,8 +92,7 @@ class GalleryTest extends TestCase
 
         $this->assertDatabaseHas('galleries', [
             'owner_id' => 10,
-            'first_name' => 'updated first',
-            'last_name' => 'updated last',
+            'gallery_name' => 'updated name',
             'location' => 'updated location'
         ]);
     }
@@ -115,7 +111,7 @@ class GalleryTest extends TestCase
     /** @test */
     public function a_superadmin_can_see_gallery_list()
     {
-        $galleries = factory('App\Gallery', 10)->create();
+        $galleries = factory('App\Gallery', 5)->create();
 
         $this->json('GET', 'api/admin/galleries')
             ->assertStatus(200)
@@ -143,8 +139,6 @@ class GalleryTest extends TestCase
         $unapprovedGalleries[] = factory('App\Gallery')->create(['state' => 1]);
         $unapprovedGalleries[] = factory('App\Gallery')->create(['state' => -1]);
 
-//        dd($unapprovedGalleries->toArray());
-
         $this->json('GET', 'api/admin/galleries?unapproved=1')
             ->assertStatus(200)
             ->assertJsonCount(3, 'galleries');
@@ -157,46 +151,6 @@ class GalleryTest extends TestCase
     public function it_requires_gallery_name()
     {
         $gallery = make('App\Gallery', ['gallery_name' => '']);
-
-        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
-            ->assertStatus(422)
-            ->assertJson(['message' => 'The given data was invalid.']);
-    }
-
-    /** @test */
-    public function it_requires_first_name()
-    {
-        $gallery = make('App\Gallery', ['first_name' => '']);
-
-        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
-            ->assertStatus(422)
-            ->assertJson(['message' => 'The given data was invalid.']);
-    }
-
-    /** @test */
-    public function it_requires_last_name()
-    {
-        $gallery = make('App\Gallery', ['last_name' => '']);
-
-        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
-            ->assertStatus(422)
-            ->assertJson(['message' => 'The given data was invalid.']);
-    }
-
-    /** @test */
-    public function it_requires_email()
-    {
-        $gallery = make('App\Gallery', ['email' => '']);
-
-        $this->json('POST', 'api/admin/galleries', $gallery->toArray())
-            ->assertStatus(422)
-            ->assertJson(['message' => 'The given data was invalid.']);
-    }
-
-    /** @test */
-    public function it_requires_phone_number()
-    {
-        $gallery = make('App\Gallery', ['phone_number' => '']);
 
         $this->json('POST', 'api/admin/galleries', $gallery->toArray())
             ->assertStatus(422)
