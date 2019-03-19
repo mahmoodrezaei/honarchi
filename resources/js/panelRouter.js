@@ -1,8 +1,9 @@
-import Vue from "vue";
 import VueRouter from "vue-router";
 import Users from "./components/panel/Users";
 import Permissions from "./components/panel/Permissions";
 import Categories from "./components/panel/Categories.vue";
+import Roles from "./components/panel/Roles.vue";
+import Galleries from "./components/panel/Galleries";
 
 Vue.use(VueRouter);
 
@@ -20,6 +21,16 @@ let routes = [
     {
         path: "/admin/categories",
         component: Categories
+    },
+
+    {
+        path: "/admin/roles",
+        component: Roles
+    },
+
+    {
+        path: "/admin/galleries",
+        component: Galleries
     }
 ];
 

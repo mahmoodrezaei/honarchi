@@ -6,7 +6,7 @@
           <div class="m-portlet__head">
             <div class="m-portlet__head-caption">
               <div class="m-portlet__head-title">
-                <h3 class="m-portlet__head-text">مدیریت سطح دسترسی‌ها</h3>
+                <h3 class="m-portlet__head-text">مدیریت دسته بندی ها</h3>
               </div>
             </div>
 
@@ -36,7 +36,12 @@
                   placeholder="نام دسته بندی جدید"
                   v-model="item.name"
                 >
-                <v-select style="margin-top:10px;" :options="categories.map(item => item.name)"></v-select>
+                <model-select
+                  placeholder="دسته بندی مادر"
+                  style="margin-top:10px;"
+                  :options="options"
+                  v-model="item.parent_id"
+                ></model-select>
               </template>
               <template #footer>
                 <button
@@ -131,6 +136,22 @@
                     <td class="m-datatable__cell">
                       <span style="width: 110px;">{{category.name}}</span>
                     </td>
+
+                    <td class="m-datatable__cell">
+                      <div style="width: 130px;" class="m-list-badge">
+                        <div class="m-list-badge__items">
+                          <div
+                            v-if="categories.filter(item => item.id == category.parent_id)[0]"
+                            style="margin: 10px;"
+                          >
+                            <span
+                              class="m-list-badge__item m-list-badge__item--brand"
+                            >{{ categories.filter(item => item.id == category.parent_id)[0].name }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
                     <td class="m-datatable__cell">
                       <span style="width: 110px;">{{category.created_at}}</span>
                     </td>
@@ -176,15 +197,17 @@
 import DataTable from "./DataTable";
 import Pagination from "./Pagination";
 import Modal from "./Modal.vue";
+import { ModelSelect } from "vue-search-select";
 
 export default {
-  components: { DataTable, Pagination, Modal },
+  components: { DataTable, Pagination, Modal, ModelSelect },
 
   data() {
     let sortOrders = {};
 
     let columns = [
       { label: "نام دسته بندی", name: "category" },
+      { label: "دسته بندی مادر", name: "parent" },
       { label: "تاریخ ایجاد", name: "created", type: "number" }
     ];
 
@@ -205,7 +228,7 @@ export default {
 
       sortOrders: sortOrders,
 
-      item: { name: "" },
+      item: { name: "", parent_id: 0 },
 
       // how many items per page
       perPage: 10,
@@ -275,7 +298,6 @@ export default {
     },
 
     save() {
-      console;
       axios
         .post("/api/categories", this.item)
         .then(response => {
@@ -285,6 +307,15 @@ export default {
         })
         .catch(error => {
           if (error.response.status == 422) {
+            swal({
+              text: error.response.data.message,
+              type: "error",
+
+              confirmButtonText:
+                "<span><i class='la'></i><span>متوجه شدم</span></span>",
+              confirmButtonClass:
+                "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+            });
             console.log(error.response.data);
           }
         });
@@ -301,7 +332,15 @@ export default {
         })
         .catch(error => {
           if (error.response.status == 422) {
-            console.log(error.response.data);
+            swal({
+              text: error.response.data.message,
+              type: "error",
+
+              confirmButtonText:
+                "<span><i class='la'></i><span>متوجه شدم</span></span>",
+              confirmButtonClass:
+                "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+            });
           }
         });
     },
@@ -320,9 +359,24 @@ export default {
       }).then(answer => {
         console.log(answer);
         if (answer.value === true) {
-          axios.delete("/api/categories/" + category.id).then(response => {
-            this.categories.splice(index, 1);
-          });
+          axios
+            .delete("/api/categories/" + category.id)
+            .then(response => {
+              this.categories.splice(index, 1);
+            })
+            .catch(error => {
+              if (error.response.status == 500) {
+                swal({
+                  text: "ابتدا زیر مجموعه های این دسته بندی را تغییر دهید.",
+                  type: "error",
+
+                  confirmButtonText:
+                    "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                  confirmButtonClass:
+                    "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+                });
+              }
+            });
         }
       });
 
@@ -337,6 +391,17 @@ export default {
   },
 
   computed: {
+    options() {
+      let options = [];
+      if (this.categories.length > 0)
+        this.categories.forEach(item => {
+          let name = item.name || null;
+          let id = item.id || null;
+          options.push({ text: name, value: id });
+        });
+      return options;
+    },
+
     filteredcategories() {
       let categories = this.categories;
 

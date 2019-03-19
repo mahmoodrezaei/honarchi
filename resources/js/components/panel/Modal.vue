@@ -27,7 +27,7 @@
         </main>
         <div class="modal-footer">
           <slot name="footer">
-            <button data-dismiss="modal" type="submit" class="btn btn-primary">Submit</button>
+            <button data-dismiss="modal" type="submit" class="btn btn-primary">ثبت</button>
           </slot>
         </div>
         <!--</form>-->

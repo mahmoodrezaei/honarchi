@@ -17,10 +17,6 @@ class CreateGalleriesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('owner_id')->nullable();
             $table->string('gallery_name')->nullable()->unique();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
-            $table->string('phone_number')->unique();
             $table->string('location');
             $table->string('type');
             $table->text('samples')->nullable();

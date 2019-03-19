@@ -31,12 +31,7 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'owner_id' => 'unique:galleries',
             'gallery_name' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'unique:galleries|required|email',
-            'phone_number' => 'unique:galleries|required',
             'location' => 'required',
             'type' => 'required'
         ]);
@@ -44,10 +39,6 @@ class GalleryController extends Controller
         $gallery = Gallery::create($request->only([
             'owner_id',
             'gallery_name',
-            'first_name',
-            'last_name',
-            'email',
-            'phone_number',
             'location',
             'type'
         ]));
@@ -80,10 +71,6 @@ class GalleryController extends Controller
     {
         $request->validate([
             'gallery_name' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|unique:galleries,email,' . $gallery->id,
-            'phone_number' => 'required|unique:galleries,phone_number' . $gallery->idgit ,
             'location' => 'required',
             'type' => 'required'
         ]);

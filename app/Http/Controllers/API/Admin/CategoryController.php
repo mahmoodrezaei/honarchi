@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\Admin;
 
 use App\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 
 class CategoryController extends Controller
 {
@@ -36,7 +38,6 @@ class CategoryController extends Controller
         $category = Category::create($request->all());
 
         return response()->json($category, 201);
-
     }
 
     /**
@@ -57,7 +58,6 @@ class CategoryController extends Controller
         $category->update($request->all());
 
         return response()->json($category, 200);
-
     }
 
     /**

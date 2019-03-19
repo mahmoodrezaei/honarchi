@@ -48841,6 +48841,7 @@ try {
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+window.axios.defaults.headers.common["accept"] = "Application/json";
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
@@ -48899,8 +48900,8 @@ window.flash = function (message) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/my_projects/3_Doing/Honarchi/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/html/my_projects/3_Doing/Honarchi/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/ehsan/projects/honarchi/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/ehsan/projects/honarchi/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
