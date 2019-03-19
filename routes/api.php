@@ -19,7 +19,6 @@ use Illuminate\Http\Request;
 
 Route::apiResource('permissions', 'API\Admin\PermissionController');
 
-
 Route::apiResource('roles', 'API\Admin\RoleController');
 
 Route::Resource('categories', 'API\Admin\CategoryController')->except(['show']);
@@ -33,5 +32,4 @@ Route::patch('admin/galleries/{gallery}', 'API\Admin\GalleryController@update');
 Route::patch('admin/galleries/{gallery}/approve', 'API\Admin\GalleryController@approveGallery');
 Route::patch('admin/galleries/{gallery}/block', 'API\Admin\GalleryController@blockGallery');
 Route::patch('admin/galleries/{gallery}/unblock', 'API\Admin\GalleryController@unblockGallery');
-
-
+Route::patch('admin/galleries/{gallery}/unblock', 'API\Admin\GalleryController@unblockGallery');
