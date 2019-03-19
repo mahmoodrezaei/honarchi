@@ -31,7 +31,7 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'gallery_name' => 'required',
+            'gallery_name' => 'required|unique:galleries',
             'location' => 'required',
             'type' => 'required'
         ]);
@@ -49,7 +49,7 @@ class GalleryController extends Controller
         ]);
 
         $data = [
-            'message' => 'Gallery created',
+            'message' => 'گالری با موفقیت ایجاد شد',
             'status_code' => 201,
             'gallery' => $gallery
         ];

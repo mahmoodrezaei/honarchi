@@ -2677,6 +2677,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2712,8 +2734,10 @@ __webpack_require__.r(__webpack_exports__);
       sortKey: "gallery_name",
       search: "",
       newItem: {
+        owner_id: '',
         gallery_name: '',
         location: '',
+        type: '',
         state: '',
         created_at: ''
       },
@@ -2738,11 +2762,46 @@ __webpack_require__.r(__webpack_exports__);
       this.newItem = {};
       $('#create_gallery_modal').modal('show');
     },
-    getGalleries: function getGalleries() {
+    store: function store() {
       var _this = this;
 
+      axios.post('/api/admin/galleries', this.newItem).then(function (response) {
+        if (response.data.status_code === 201) {
+          swal({
+            type: 'success',
+            text: response.data.message,
+            timer: 2500
+          });
+          _this.newItem.gallery_name = response.data.gallery.gallery_name;
+          _this.newItem.location = response.data.gallery.location;
+          _this.newItem.state = response.data.gallery.state;
+          _this.newItem.created_at = response.data.gallery.created_at;
+
+          _this.galleries.push(_this.newItem);
+
+          _this.pagination.total = _this.galleries.length;
+        }
+
+        console.log(response.data.gallery);
+      }).catch(function (error) {
+        if (error.response.status === 422) {
+          var errors = error.response.data.errors;
+          console.log(Object.keys(errors)); // errors.forEach((key, value) => console.log(value));
+
+          swal({
+            html: '<p v-for="key in Object.keys(errors)">' + errors[key] + '</p>',
+            type: 'error',
+            timer: 3000
+          });
+        }
+      });
+    },
+    getGalleries: function getGalleries() {
+      var _this2 = this;
+
       axios.get("/api/admin/galleries").then(function (response) {
-        _this.galleries = response.data.galleries;
+        _this2.galleries = response.data.galleries;
+        _this2.pagination.total = _this2.galleries.length;
       }).catch(function (error) {
         return console.log(error);
       });
@@ -2789,14 +2848,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     filteredroles: function filteredroles() {
-      var _this2 = this;
+      var _this3 = this;
 
       var galleries = this.galleries;
 
       if (this.search) {
         galleries = galleries.filter(function (row) {
           return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(_this2.search.toLowerCase()) > -1;
+            return String(row[key]).toLowerCase().indexOf(_this3.search.toLowerCase()) > -1;
           });
         });
       }
@@ -2806,14 +2865,14 @@ __webpack_require__.r(__webpack_exports__);
 
       if (sortKey) {
         galleries = galleries.slice().sort(function (a, b) {
-          var index = _this2.getIndex(_this2.columns, "name", sortKey);
+          var index = _this3.getIndex(_this3.columns, "name", sortKey);
 
           a = String(a[sortKey]).toLowerCase();
           b = String(b[sortKey]).toLowerCase();
 
-          if (_this2.columns[index].type && _this2.columns[index].type === "date") {
+          if (_this3.columns[index].type && _this3.columns[index].type === "date") {
             return (a === b ? 0 : new Date(a).getTime() > new Date(b).getTime() ? 1 : -1) * order;
-          } else if (_this2.columns[index].type && _this2.columns[index].type === "number") {
+          } else if (_this3.columns[index].type && _this3.columns[index].type === "number") {
             return (+a === +b ? 0 : +a > +b ? 1 : -1) * order;
           } else {
             return (a === b ? 0 : a > b ? 1 : -1) * order;
@@ -40727,35 +40786,137 @@ var render = function() {
                       key: "body",
                       fn: function() {
                         return [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.gallery_name,
-                                expression: "newItem.gallery_name"
-                              }
-                            ],
-                            staticClass: "form-control m-input",
-                            attrs: {
-                              id: "name",
-                              type: "text",
-                              placeholder: "نام گالری جدید"
-                            },
-                            domProps: { value: _vm.newItem.gallery_name },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                          _c(
+                            "div",
+                            { staticClass: "form-group m-form__group" },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.newItem.gallery_name,
+                                    expression: "newItem.gallery_name"
+                                  }
+                                ],
+                                staticClass: "form-control m-input",
+                                attrs: {
+                                  id: "gallery_name",
+                                  type: "text",
+                                  placeholder: "نام گالری جدید"
+                                },
+                                domProps: { value: _vm.newItem.gallery_name },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.newItem,
+                                      "gallery_name",
+                                      $event.target.value
+                                    )
+                                  }
                                 }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "gallery_name",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "form-group m-form__group" },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.newItem.location,
+                                    expression: "newItem.location"
+                                  }
+                                ],
+                                staticClass: "form-control m-input",
+                                attrs: {
+                                  id: "location",
+                                  type: "text",
+                                  placeholder: "محل تولید"
+                                },
+                                domProps: { value: _vm.newItem.location },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.newItem,
+                                      "location",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "form-group m-form__group" },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.newItem.type,
+                                    expression: "newItem.type"
+                                  }
+                                ],
+                                staticClass: "form-control m-input",
+                                attrs: {
+                                  id: "type",
+                                  type: "text",
+                                  placeholder: "نوع دست ساخته"
+                                },
+                                domProps: { value: _vm.newItem.type },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.newItem,
+                                      "type",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]
+                          )
+                        ]
+                      },
+                      proxy: true
+                    },
+                    {
+                      key: "footer",
+                      fn: function() {
+                        return [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: {
+                                "data-dismiss": "modal",
+                                type: "submit"
+                              },
+                              on: { click: _vm.store }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                ثبت\n                            "
+                              )
+                            ]
+                          )
                         ]
                       },
                       proxy: true
@@ -40992,7 +41153,8 @@ var render = function() {
                                         },
                                         [_vm._v(_vm._s(gallery.state))]
                                       )
-                                    : _c(
+                                    : gallery.state === "تایید شده"
+                                    ? _c(
                                         "span",
                                         {
                                           staticClass:
@@ -41000,6 +41162,7 @@ var render = function() {
                                         },
                                         [_vm._v(_vm._s(gallery.state))]
                                       )
+                                    : _vm._e()
                                 ])
                               ]),
                               _vm._v(" "),

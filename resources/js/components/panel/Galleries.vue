@@ -22,14 +22,36 @@
                             </ul>
                         </div>
 
+                        <!-- modal for creating new gallery -->
                         <Modal id="create_gallery_modal">
                             <template #header>
                                 <h5 class="modal-title" id="exampleModalLabel">ایجاد گالری جدید</h5>
                             </template>
                             <template #body>
-                                <input  id="name" class="form-control m-input" type="text"
-                                        placeholder="نام گالری جدید"
-                                        v-model="newItem.gallery_name">
+                                <div class="form-group m-form__group">
+                                    <input id="gallery_name" class="form-control m-input" type="text"
+                                           placeholder="نام گالری جدید"
+                                           v-model="newItem.gallery_name">
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <input id="location" class="form-control m-input" type="text"
+                                           placeholder="محل تولید"
+                                           v-model="newItem.location">
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <input id="type" class="form-control m-input" type="text"
+                                           placeholder="نوع دست ساخته"
+                                           v-model="newItem.type">
+                                </div>
+                            </template>
+                            <template #footer>
+                                <button
+                                        @click="store"
+                                        data-dismiss="modal"
+                                        type="submit"
+                                        class="btn btn-primary">
+                                    ثبت
+                                </button>
                             </template>
                         </Modal>
 
@@ -110,7 +132,7 @@
                                                 <div style="width: 110px;">
                                                     <span v-if="gallery.state === 'بلاک' " class="m-badge m-badge--danger m-badge--wide">{{ gallery.state }}</span>
                                                     <span v-else-if="gallery.state === 'تایید نشده' " class="m-badge m-badge--warning m-badge--wide">{{ gallery.state }}</span>
-                                                    <span v-else="gallery.state === 'تایید شده' " class="m-badge m-badge--success m-badge--wide">{{ gallery.state }}</span>
+                                                    <span v-else-if="gallery.state === 'تایید شده' " class="m-badge m-badge--success m-badge--wide">{{ gallery.state }}</span>
                                                 </div>
                                             </td>
                                             <td class="m-datatable__cell">
@@ -190,8 +212,10 @@
                 search: "",
 
                 newItem: {
+                    owner_id: '',
                     gallery_name: '',
                     location: '',
+                    type: '',
                     state: '',
                     created_at: ''
                 },
@@ -222,11 +246,42 @@
                 $('#create_gallery_modal').modal('show')
             },
 
+            store() {
+                axios.post('/api/admin/galleries', this.newItem)
+                    .then(response => {
+                        if (response.data.status_code === 201) {
+                            swal({ type: 'success', text: response.data.message, timer: 2500});
+                            this.newItem.gallery_name = response.data.gallery.gallery_name;
+                            this.newItem.location = response.data.gallery.location;
+                            this.newItem.state = response.data.gallery.state;
+                            this.newItem.created_at = response.data.gallery.created_at;
+                            this.galleries.push(this.newItem);
+                            this.pagination.total = this.galleries.length;
+                        }
+                        console.log(response.data.gallery)
+                    })
+                    .catch(error => {
+                        if (error.response.status === 422) {
+                            const errors = error.response.data.errors;
+
+                            console.log(Object.keys(errors));
+
+                            // errors.forEach((key, value) => console.log(value));
+                            swal({
+                                html: '<p v-for="key in Object.keys(errors)">'+ errors[key] +'</p>',
+                                type: 'error',
+                                timer: 3000,
+                            });
+                        }
+                    })
+            },
+
             getGalleries() {
                 axios
                     .get("/api/admin/galleries")
                     .then(response => {
                         this.galleries = response.data.galleries;
+                        this.pagination.total = this.galleries.length
                     })
                     .catch(error => console.log(error));
             },
