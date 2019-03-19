@@ -65,10 +65,19 @@
 <style>
     @media ( min-width: 768px ) {
         #custom-alert {
-            position: absolute;
+            position: fixed;
             width: 500px;
             left: 50px;
             top: 110px;
+        }
+    }
+
+    @media ( max-width: 768px ) {
+        #custom-alert {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            top: 60px;
         }
     }
 </style>
