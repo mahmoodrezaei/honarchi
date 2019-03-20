@@ -36,11 +36,11 @@
             <i class="m-menu__section-icon flaticon-more-v2"></i>
           </li>
           <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
-            <a href="#" class="m-menu__link">
+            <a href="#" @click.prevent="$router.push('/admin/products')" class="m-menu__link">
               <i class="m-menu__link-icon flaticon-add"></i>
               <span class="m-menu__link-title">
                 <span class="m-menu__link-wrap">
-                  <span class="m-menu__link-text">لیست مخصولات</span>
+                  <span class="m-menu__link-text">لیست محصولات</span>
                 </span>
               </span>
             </a>
@@ -55,7 +55,6 @@
               </span>
             </a>
           </li>
-
 
           <li class="m-menu__section">
             <h4 class="m-menu__section-text">گالری‌ها</h4>
@@ -110,7 +109,6 @@
               </span>
             </a>
           </li>
-
         </ul>
       </div>
 

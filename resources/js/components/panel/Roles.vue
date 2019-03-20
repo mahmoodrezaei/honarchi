@@ -29,20 +29,23 @@
                 <h5 class="modal-title" id="exampleModalLabel">ایجاد نقش جدید</h5>
               </template>
               <template #body>
-                <input
-                  id="name"
-                  class="form-control m-input"
-                  type="text"
-                  placeholder="نام نقش جدید"
-                  v-model="item.name"
-                >
-                <multi-select
-                  placeholder="دسترسی ها"
-                  style="margin-top:10px;"
-                  :selected-options="selectedPermissions"
-                  @select="permissionOnSelect"
-                  :options="options"
-                ></multi-select>
+                <div class="form-group m-form-group">
+                  <input
+                    id="name"
+                    class="form-control m-input"
+                    type="text"
+                    placeholder="نام نقش جدید"
+                    v-model="item.name"
+                  >
+                </div>
+                <div class="form-group m-form-group">
+                  <multi-select
+                    placeholder="دسترسی ها"
+                    :selected-options="selectedPermissions"
+                    @select="permissionOnSelect"
+                    :options="options"
+                  ></multi-select>
+                </div>
               </template>
               <template #footer>
                 <button
@@ -52,7 +55,7 @@
                   type="submit"
                   class="btn btn-primary"
                 >ثبت کن</button>
-
+                
                 <button
                   v-show="modalType == 'edit'"
                   @click="update(item)"
@@ -194,282 +197,282 @@
 </template>
 
 <script>
-    import DataTable from "./DataTable";
-    import Pagination from "./Pagination";
-    import Modal from "./Modal.vue";
-    import {MultiSelect} from "vue-search-select";
+import DataTable from "./DataTable";
+import Pagination from "./Pagination";
+import Modal from "./Modal.vue";
+import { MultiSelect } from "vue-search-select";
 
-    export default {
-        components: {DataTable, Pagination, Modal, MultiSelect},
+export default {
+  components: { DataTable, Pagination, Modal, MultiSelect },
 
-        data() {
-            let sortOrders = {};
+  data() {
+    let sortOrders = {};
 
-            let columns = [
-                {label: "نام نقش", name: "role"},
-                {label: "دسترسی ها", name: "permissions"},
-                {label: "تاریخ ایجاد", name: "created", type: "number"}
-            ];
+    let columns = [
+      { label: "نام نقش", name: "role" },
+      { label: "دسترسی ها", name: "permissions" },
+      { label: "تاریخ ایجاد", name: "created", type: "number" }
+    ];
 
-            columns.forEach(column => {
-                sortOrders[column.name] = -1;
-            });
+    columns.forEach(column => {
+      sortOrders[column.name] = -1;
+    });
 
-            return {
-                modalType: "create",
+    return {
+      modalType: "create",
 
-                roles: [],
+      roles: [],
 
-                permissions: [],
-                selectedPermissions: [],
+      permissions: [],
+      selectedPermissions: [],
 
-                columns,
+      columns,
 
-                sortKey: "role",
+      sortKey: "role",
 
-                search: "",
+      search: "",
 
-                sortOrders: sortOrders,
+      sortOrders: sortOrders,
 
-                item: {name: "", permissions: []},
+      item: { name: "", permissions: [] },
 
-                // how many items per page
-                perPage: 10,
+      // how many items per page
+      perPage: 10,
 
-                pagination: {
-                    currentPage: 1,
-                    total: "",
-                    nextPage: "",
-                    prevPage: "",
-                    from: "",
-                    to: ""
-                }
-            };
-        },
-
-        created() {
-            this.getroles();
-            this.getpermissions();
-        },
-
-        methods: {
-            editModal(item) {
-                this.selectedPermissions = item.permissions.map(x => {
-                    return {text: x.name, value: x.id};
-                });
-                this.item = {
-                    id: item.id,
-                    name: item.name,
-                    permissions: this.selectedPermissions.map(x => x.text)
-                };
-                $("#role_modal").modal("show");
-                this.modalType = "edit";
-            },
-
-            createModal(item) {
-                this.selectedPermissions = [];
-                this.item = {name: "", permissions: []};
-                $("#role_modal").modal("show");
-                this.modalType = "create";
-            },
-
-            getroles() {
-                axios
-                    .get("/api/roles")
-                    .then(response => {
-                        this.roles = response.data;
-                        this.pagination.total = this.roles.length;
-                    })
-                    .catch(error => console.log(error));
-            },
-
-            getpermissions() {
-                axios
-                    .get("/api/permissions")
-                    .then(response => {
-                        this.permissions = response.data;
-                    })
-                    .catch(error => console.log(error));
-            },
-
-            paginate(data, perPage, pageNumber) {
-                this.pagination.from = data.length ? (pageNumber - 1) * perPage + 1 : " ";
-                this.pagination.to =
-                    pageNumber * perPage > data.length ? data.length : pageNumber * perPage;
-                this.pagination.prevPage = pageNumber > 1 ? pageNumber : "";
-                this.pagination.nextPage =
-                    data.length > this.pagination.to ? pageNumber + 1 : "";
-                return data.slice((pageNumber - 1) * perPage, pageNumber * perPage);
-            },
-
-            resetPagination() {
-                this.pagination.currentPage = 1;
-                this.pagination.prevPage = "";
-                this.pagination.nextPage = "";
-            },
-
-            sortBy(key) {
-                this.resetPagination();
-                this.sortKey = key;
-                this.sortOrders[key] = this.sortOrders[key] * -1;
-            },
-
-            getIndex(array, key, value) {
-                return array.findIndex(i => i[key] == value);
-            },
-
-            save() {
-                axios
-                    .post("/api/roles", this.item)
-                    .then(response => {
-                        this.roles.push(response.data);
-                        this.pagination.total = this.roles.length;
-                    })
-                    .catch(error => {
-                        if (error.response.status == 422) {
-                            swal({
-                                text: error.response.data.message,
-                                type: "error",
-
-                                confirmButtonText:
-                                    "<span><i class='la'></i><span>متوجه شدم</span></span>",
-                                confirmButtonClass:
-                                    "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
-                            });
-                            console.log(error.response.data);
-                        }
-                    });
-            },
-
-            update(role) {
-                const index = this.roles.findIndex(item => item.id == role.id);
-                console.log(index);
-                axios
-                    .put("/api/roles/" + role.id, this.item)
-                    .then(response => {
-                        this.$set(this.roles, index, response.data);
-                        console.log(this.roles);
-                    })
-                    .catch(error => {
-                        if (error.response.status == 422) {
-                            swal({
-                                text: error.response.data.message,
-                                type: "error",
-
-                                confirmButtonText:
-                                    "<span><i class='la'></i><span>متوجه شدم</span></span>",
-                                confirmButtonClass:
-                                    "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
-                            });
-                        }
-                    });
-            },
-
-            remove(role) {
-                const index = this.roles.indexOf(role);
-                swal({
-                    text: "آیا اطمینان دارید که میخواهید این مورد را حذف کنید؟",
-                    type: "warning",
-                    confirmButtonText: "<span><i class='la'></i><span>بله</span></span>",
-                    confirmButtonClass:
-                        "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon",
-                    showCancelButton: !0,
-                    cancelButtonText: "<span><i class='la'></i><span>خیر</span></span>",
-                    cancelButtonClass: "btn btn-secondary m-btn m-btn--pill m-btn--icon"
-                }).then(answer => {
-                    console.log(answer);
-                    if (answer.value === true) {
-                        axios
-                            .delete("/api/roles/" + role.id)
-                            .then(response => {
-                                this.roles.splice(index, 1);
-                            })
-                            .catch(error => {
-                                if (error.response.status == 500) {
-                                    swal({
-                                        text: "ابتدا زیر مجموعه های این نقش را تغییر دهید.",
-                                        type: "error",
-
-                                        confirmButtonText:
-                                            "<span><i class='la'></i><span>متوجه شدم</span></span>",
-                                        confirmButtonClass:
-                                            "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
-                                    });
-                                }
-                            });
-                    }
-                });
-            },
-
-            permissionOnSelect(items, lastSelectItem) {
-                this.selectedPermissions = items;
-                this.item.permissions = items.map(item => item.text);
-            }
-        },
-
-        computed: {
-            options() {
-                let options = [];
-
-                this.permissions.forEach(item => {
-                    let name = item.name || null;
-                    let id = item.id || null;
-                    options.push({text: name, value: id});
-                });
-                return options;
-            },
-
-            filteredroles() {
-                let roles = this.roles;
-
-                if (this.search) {
-                    roles = roles.filter(row => {
-                        return Object.keys(row).some(key => {
-                            return (
-                                String(row[key])
-                                    .toLowerCase()
-                                    .indexOf(this.search.toLowerCase()) > -1
-                            );
-                        });
-                    });
-                }
-
-                let sortKey = this.sortKey;
-                let order = this.sortOrders[sortKey] || 1;
-                if (sortKey) {
-                    roles = roles.slice().sort((a, b) => {
-                        let index = this.getIndex(this.columns, "name", sortKey);
-                        a = String(a[sortKey]).toLowerCase();
-                        b = String(b[sortKey]).toLowerCase();
-                        if (this.columns[index].type && this.columns[index].type === "date") {
-                            return (
-                                (a === b
-                                    ? 0
-                                    : new Date(a).getTime() > new Date(b).getTime()
-                                        ? 1
-                                        : -1) * order
-                            );
-                        } else if (
-                            this.columns[index].type &&
-                            this.columns[index].type === "number"
-                        ) {
-                            return (+a === +b ? 0 : +a > +b ? 1 : -1) * order;
-                        } else {
-                            return (a === b ? 0 : a > b ? 1 : -1) * order;
-                        }
-                    });
-                }
-
-                return roles;
-            },
-
-            paginated() {
-                return this.paginate(
-                    this.filteredroles,
-                    this.perPage,
-                    this.pagination.currentPage
-                );
-            }
-        }
+      pagination: {
+        currentPage: 1,
+        total: "",
+        nextPage: "",
+        prevPage: "",
+        from: "",
+        to: ""
+      }
     };
+  },
+
+  created() {
+    this.getroles();
+    this.getpermissions();
+  },
+
+  methods: {
+    editModal(item) {
+      this.selectedPermissions = item.permissions.map(x => {
+        return { text: x.name, value: x.id };
+      });
+      this.item = {
+        id: item.id,
+        name: item.name,
+        permissions: this.selectedPermissions.map(x => x.text)
+      };
+      $("#role_modal").modal("show");
+      this.modalType = "edit";
+    },
+
+    createModal(item) {
+      this.selectedPermissions = [];
+      this.item = { name: "", permissions: [] };
+      $("#role_modal").modal("show");
+      this.modalType = "create";
+    },
+
+    getroles() {
+      axios
+        .get("/api/roles")
+        .then(response => {
+          this.roles = response.data;
+          this.pagination.total = this.roles.length;
+        })
+        .catch(error => console.log(error));
+    },
+
+    getpermissions() {
+      axios
+        .get("/api/permissions")
+        .then(response => {
+          this.permissions = response.data;
+        })
+        .catch(error => console.log(error));
+    },
+
+    paginate(data, perPage, pageNumber) {
+      this.pagination.from = data.length ? (pageNumber - 1) * perPage + 1 : " ";
+      this.pagination.to =
+        pageNumber * perPage > data.length ? data.length : pageNumber * perPage;
+      this.pagination.prevPage = pageNumber > 1 ? pageNumber : "";
+      this.pagination.nextPage =
+        data.length > this.pagination.to ? pageNumber + 1 : "";
+      return data.slice((pageNumber - 1) * perPage, pageNumber * perPage);
+    },
+
+    resetPagination() {
+      this.pagination.currentPage = 1;
+      this.pagination.prevPage = "";
+      this.pagination.nextPage = "";
+    },
+
+    sortBy(key) {
+      this.resetPagination();
+      this.sortKey = key;
+      this.sortOrders[key] = this.sortOrders[key] * -1;
+    },
+
+    getIndex(array, key, value) {
+      return array.findIndex(i => i[key] == value);
+    },
+
+    save() {
+      axios
+        .post("/api/roles", this.item)
+        .then(response => {
+          this.roles.push(response.data);
+          this.pagination.total = this.roles.length;
+        })
+        .catch(error => {
+          if (error.response.status == 422) {
+            swal({
+              text: error.response.data.message,
+              type: "error",
+
+              confirmButtonText:
+                "<span><i class='la'></i><span>متوجه شدم</span></span>",
+              confirmButtonClass:
+                "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+            });
+            console.log(error.response.data);
+          }
+        });
+    },
+
+    update(role) {
+      const index = this.roles.findIndex(item => item.id == role.id);
+      console.log(index);
+      axios
+        .put("/api/roles/" + role.id, this.item)
+        .then(response => {
+          this.$set(this.roles, index, response.data);
+          console.log(this.roles);
+        })
+        .catch(error => {
+          if (error.response.status == 422) {
+            swal({
+              text: error.response.data.message,
+              type: "error",
+
+              confirmButtonText:
+                "<span><i class='la'></i><span>متوجه شدم</span></span>",
+              confirmButtonClass:
+                "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+            });
+          }
+        });
+    },
+
+    remove(role) {
+      const index = this.roles.indexOf(role);
+      swal({
+        text: "آیا اطمینان دارید که میخواهید این مورد را حذف کنید؟",
+        type: "warning",
+        confirmButtonText: "<span><i class='la'></i><span>بله</span></span>",
+        confirmButtonClass:
+          "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon",
+        showCancelButton: !0,
+        cancelButtonText: "<span><i class='la'></i><span>خیر</span></span>",
+        cancelButtonClass: "btn btn-secondary m-btn m-btn--pill m-btn--icon"
+      }).then(answer => {
+        console.log(answer);
+        if (answer.value === true) {
+          axios
+            .delete("/api/roles/" + role.id)
+            .then(response => {
+              this.roles.splice(index, 1);
+            })
+            .catch(error => {
+              if (error.response.status == 500) {
+                swal({
+                  text: "ابتدا زیر مجموعه های این نقش را تغییر دهید.",
+                  type: "error",
+
+                  confirmButtonText:
+                    "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                  confirmButtonClass:
+                    "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+                });
+              }
+            });
+        }
+      });
+    },
+
+    permissionOnSelect(items, lastSelectItem) {
+      this.selectedPermissions = items;
+      this.item.permissions = items.map(item => item.text);
+    }
+  },
+
+  computed: {
+    options() {
+      let options = [];
+
+      this.permissions.forEach(item => {
+        let name = item.name || null;
+        let id = item.id || null;
+        options.push({ text: name, value: id });
+      });
+      return options;
+    },
+
+    filteredroles() {
+      let roles = this.roles;
+
+      if (this.search) {
+        roles = roles.filter(row => {
+          return Object.keys(row).some(key => {
+            return (
+              String(row[key])
+                .toLowerCase()
+                .indexOf(this.search.toLowerCase()) > -1
+            );
+          });
+        });
+      }
+
+      let sortKey = this.sortKey;
+      let order = this.sortOrders[sortKey] || 1;
+      if (sortKey) {
+        roles = roles.slice().sort((a, b) => {
+          let index = this.getIndex(this.columns, "name", sortKey);
+          a = String(a[sortKey]).toLowerCase();
+          b = String(b[sortKey]).toLowerCase();
+          if (this.columns[index].type && this.columns[index].type === "date") {
+            return (
+              (a === b
+                ? 0
+                : new Date(a).getTime() > new Date(b).getTime()
+                ? 1
+                : -1) * order
+            );
+          } else if (
+            this.columns[index].type &&
+            this.columns[index].type === "number"
+          ) {
+            return (+a === +b ? 0 : +a > +b ? 1 : -1) * order;
+          } else {
+            return (a === b ? 0 : a > b ? 1 : -1) * order;
+          }
+        });
+      }
+
+      return roles;
+    },
+
+    paginated() {
+      return this.paginate(
+        this.filteredroles,
+        this.perPage,
+        this.pagination.currentPage
+      );
+    }
+  }
+};
 </script>

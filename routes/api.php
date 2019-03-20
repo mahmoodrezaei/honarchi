@@ -23,6 +23,8 @@ Route::apiResource('roles', 'API\Admin\RoleController');
 
 Route::Resource('categories', 'API\Admin\CategoryController')->except(['show']);
 
+Route::get('features', 'FeatureController@index');
+
 Route::apiResource('products', 'API\Admin\ProductController');
 
 Route::get('admin/galleries', 'API\Admin\GalleryController@index');

@@ -29,19 +29,22 @@
                 <h5 class="modal-title" id="exampleModalLabel">ایجاد دسته بندی جدید</h5>
               </template>
               <template #body>
-                <input
-                  id="name"
-                  class="form-control m-input"
-                  type="text"
-                  placeholder="نام دسته بندی جدید"
-                  v-model="item.name"
-                >
-                <model-select
-                  placeholder="دسته بندی مادر"
-                  style="margin-top:10px;"
-                  :options="options"
-                  v-model="item.parent_id"
-                ></model-select>
+                <div class="form-group m-form-group">
+                  <input
+                    id="name"
+                    class="form-control m-input"
+                    type="text"
+                    placeholder="نام دسته بندی جدید"
+                    v-model="item.name"
+                  >
+                </div>
+                <div class="form-group m-form-group">
+                  <model-select
+                    placeholder="دسته بندی مادر"
+                    :options="options"
+                    v-model="item.parent_id"
+                  ></model-select>
+                </div>
               </template>
               <template #footer>
                 <button

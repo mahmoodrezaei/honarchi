@@ -7,7 +7,7 @@
     style="display: none;"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-sm" role="document">
+    <div :class="'modal-dialog modal-'+size" role="document">
       <div class="modal-content">
         <header class="modal-header">
           <slot name="header" class="modal-title" id="exampleModalLabel">
@@ -38,6 +38,12 @@
 
 <script>
 export default {
-  name: "modal"
+  name: "modal",
+  props: {
+    size: {
+      type: String,
+      default: "sm"
+    }
+  }
 };
 </script>

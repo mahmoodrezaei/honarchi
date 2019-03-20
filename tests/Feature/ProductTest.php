@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     private $table  = 'products';
 
@@ -35,10 +35,14 @@ class ProductTest extends TestCase
                         'major_price' => (string) $faker->numberBetween(1000, 9000),
                         'no' => $faker->randomNumber(),
                         'major_no' => $faker->randomNumber(2),
-                        'features' => [
+                        'features' => json_encode([
                             'color' => $faker->colorName,
-                            'material' => $faker->firstName
-                        ],
+                            'material' => json_encode([
+                                'id' => 1,
+                                'value' => $faker->firstName
+                            ])
+
+                        ]),
                         'location' => $faker->city,
                         'pics' => [
                             UploadedFile::fake()->image('image1.jpg'),
@@ -99,7 +103,10 @@ class ProductTest extends TestCase
 
         $response = $this->json('POST', route('products.store'), $product);
 
+        dd('d');
         $product['pics'] = json_decode($response->content())->pics;
+
+
 
         $response->assertStatus(201);
         $response->assertJsonStructure([
@@ -140,9 +147,16 @@ class ProductTest extends TestCase
             'pics' => $product['pics']
         ]);
 
+        // remove url
+        $product['pics'] = array_map(function ($item){
+            return basename($item);
+        },$product['pics']);
+
+
         foreach ($product['pics'] as $pic){
             $this->assertFileExists(storage_path('app/public/products/').$pic);
         }
+
 
         $product['pics'] = json_encode($product['pics']);
         $product['features'] =  json_encode($product['features']);
@@ -163,7 +177,7 @@ class ProductTest extends TestCase
 
         // Delete first image
         $deletePics = [
-            $oldProduct->pics[0]
+            basename($oldProduct->pics[0])
         ];
         $updatedProduct['pics'] = array_merge($updatedProduct['pics'], $deletePics);
 
@@ -211,6 +225,11 @@ class ProductTest extends TestCase
             'pics' => $updatedProduct['pics']
         ]);
 
+        // remove url
+        $updatedProduct['pics'] = array_map(function ($item){
+            return basename($item);
+        },$updatedProduct['pics']);
+
         foreach ($updatedProduct['pics'] as $pic){
             $this->assertFileExists(storage_path('app/public/products/').$pic);
         }
@@ -240,16 +259,21 @@ class ProductTest extends TestCase
         $response->assertStatus(204)
             ->assertSee(null);
 
+        $product_pics = array_map(function ($item){
+            return basename($item);
+        },$product['pics']);
 
-        foreach ($product->pics as $pic){
+
+        foreach ($product_pics as $pic){
             $this->assertFileNotExists(storage_path('app/public/products/').$pic);
         }
 
-
-        $product->pics = json_encode($product['pics']);
         $product->features =  json_encode($product['features']);
 
-        $this->assertDatabaseMissing($this->table, $product->toArray());
+        $product = $product->toArray();
+        $product['pics'] = json_encode($product_pics);
+
+        $this->assertDatabaseMissing($this->table, $product);
     }
 
 

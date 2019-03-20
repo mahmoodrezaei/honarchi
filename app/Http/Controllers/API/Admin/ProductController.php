@@ -8,6 +8,7 @@ use App\Http\Requests\Product\StoreProduct;
 use App\Http\Requests\Product\UpdateProduct;
 use File;
 use App\Product;
+use DB;
 
 class ProductController extends Controller
 {
@@ -19,7 +20,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with(['category','gallery'])->get();
 
         return response()->json($products, 200);
     }
@@ -32,9 +33,19 @@ class ProductController extends Controller
      */
     public function store(StoreProduct $request)
     {
+
         $request->validated();
 
+
         $product = Product::create($request->all());
+
+        foreach ($request['features'] as $key => $feature){
+            if ($feature['type'] == 'linked' ){
+
+                $product->linked_features()->attach($feature['value']);
+            }
+        }
+
 
         return response()->json($product, 201);
     }
@@ -49,8 +60,18 @@ class ProductController extends Controller
      */
     public function update(UpdateProduct $request, Product $product)
     {
+        DB::table('feature_product')->where('product_id', $product->id)->delete();
 
         $product = $product->update($request->all());
+
+
+        foreach ($request['features'] as $key => $feature){
+            if ($feature['type'] == 'linked' ){
+
+
+                $product->linked_features()->attach($feature['value']);
+            }
+        }
 
         return response()->json($product, 200);
     }
@@ -67,7 +88,7 @@ class ProductController extends Controller
             $product->delete();
 
             foreach ($product->pics as $pic){
-                File::delete(storage_path('app/public/products/').$pic);
+                File::delete(storage_path('app/public/products/').basename($pic));
             }
 
         return response()->json(null, 204);

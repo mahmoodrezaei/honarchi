@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use SplFileInfo;
 use File;
 
@@ -18,7 +20,9 @@ class Product extends Model
         'pics',
         'rate',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'category',
+        'gallery'
     ];
 
     protected $casts = [
@@ -26,14 +30,47 @@ class Product extends Model
         'features' => 'array'
     ];
 
+    public function getPicsAttribute($value)
+    {
+        $value = json_decode($value, TRUE);
+
+       $value =  array_map(function ($item){
+           return Storage::url('products/').$item;
+        },$value);
+
+        return $value;
+    }
+
+    public function category()
+    {
+       return $this->belongsTo('App\Category');
+    }
+
+    public function gallery()
+    {
+        return $this->belongsTo('App\Gallery');
+    }
+
+    public function linked_features()
+    {
+        return $this->belongsToMany(Feature::class);
+    }
 
     public static function create(array $attributes = [])
     {
         $pics = array();
         foreach ($attributes['pics'] as  $pic){
-            $pic_name = str_replace(['/','.'],'0',bcrypt($pic->getClientOriginalName())).'.'.$pic->getClientOriginalExtension();
-            $pics[] = $pic_name;
-            $pic->move(storage_path('app/public/products'), $pic_name);
+            if(preg_match('/data:(.*)/', $pic)){
+
+                $data = explode( ',', $pic );
+                $file = base64_decode($data[1]);
+
+                $pic_name = md5(time().str_random()).'.'.explode('/', substr($data[0], 0, strpos($data[0], ';')))[1];
+                $pics[] = $pic_name;
+
+                file_put_contents(storage_path('app/public/products/').$pic_name, $file);
+
+            }
         }
 
         $model = Product::make($attributes);
@@ -49,25 +86,45 @@ class Product extends Model
         $pics = array();
         if (isset($attributes['pics']) && is_array($attributes['pics']) && !empty($attributes['pics']) )
         {
+            // remove url
+            $this_pics = [];
+            foreach ($this->pics as $pic){
+                $this_pics[] = basename($pic);
+            }
+
+            Log::info($this_pics);
+
+
             foreach ($attributes['pics'] as  $pic)
             {
-                if($pic instanceof SplFileInfo){
-                    $pic_name = str_replace(['/','.'],'0',bcrypt($pic->getClientOriginalName())).'.'.$pic->getClientOriginalExtension();
+
+                if(preg_match('/data:(.*)/', $pic)){
+
+                    $data = explode( ',', $pic );
+                    $file = base64_decode($data[1]);
+
+                    $pic_name = md5(time().str_random()).'.'.explode('/', substr($data[0], 0, strpos($data[0], ';')))[1];
                     $pics[] = $pic_name;
-                    $pic->move(storage_path('app/public/products'), $pic_name);
+
+                    file_put_contents(storage_path('app/public/products/').$pic_name, $file);
+
                 } elseif (is_string($pic)){
+                    foreach ($this_pics as $index => $this_pic){
 
-                    if ($index = array_search($pic, $this->pics) !== false){
-                        $this_pics = $this->pics;
-                        array_splice($this_pics, 0, $index);
-                        $this->pics = $this_pics;
+                        if ($this_pic == basename($pic)){
+                            $tmp = $this_pics;
+                            array_splice($tmp, 0, $index);
+                            $this_pics = $tmp;
 
-                        File::delete(storage_path('app/public/products/').$pic);
-                    };
+                            File::delete(storage_path('app/public/products/').basename($pic));
+                        }
+                    }
                 }
             }
+            $this->pics = array_merge($this_pics, $pics);
         }
-        $this->pics = array_merge($this->pics, $pics);
+
+        Log::info($this->pics);
 
         Parent::update($attributes, $options);
 
