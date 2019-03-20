@@ -22,9 +22,6 @@ class categoryTest extends TestCase
     {
         $categories[] = factory(Category::class)->create()->toArray();
         $categories[] = factory(Category::class)->create()->toArray();
-        $categoriesNames =  array_map(function ($arr) {
-            return $arr['name'];
-        }, $categories);
 
         $response = $this->json('GET', route('categories.index'));
 
