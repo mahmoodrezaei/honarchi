@@ -624,15 +624,11 @@ export default {
 
     save() {
       this.item.pics = window.pics;
-      console.log("ds");
-      this.item.features.forEach(i => {
-        console.log("ds");
-      });
+
       for (let i in this.item.features) {
         i = this.item.features[i];
-        console.log(i);
+
         if (i["type"] == "linked") {
-          console.log(this.features.features_values);
           for (let feature in this.features.features_values) {
             feature = this.features.features_values[feature];
             if (i["value"] == feature["id"]) {
