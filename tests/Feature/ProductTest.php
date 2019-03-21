@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductTest extends TestCase
 {
-//    use RefreshDatabase;
+    use RefreshDatabase;
 
     private $table  = 'products';
 

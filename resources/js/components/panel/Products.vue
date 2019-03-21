@@ -275,7 +275,7 @@
                   type="submit"
                   class="btn btn-primary"
                 >ثبت کن</button>
-                
+
                 <button
                   v-show="modalType == 'edit'"
                   @click="update(item)"
@@ -624,6 +624,19 @@ export default {
 
     save() {
       this.item.pics = window.pics;
+
+      for (i in this.item.features.map) {
+        if (i["type"] == "linked") {
+          console.log($vm.features.features_values);
+          for (feature in $vm.features.features_values) {
+            if (i["value"] == feature["id"]) {
+              i["feature"] = feature;
+            }
+          }
+        }
+      }
+      console.log(this.item);
+
       axios
         .post("/api/products", this.item)
         .then(response => {

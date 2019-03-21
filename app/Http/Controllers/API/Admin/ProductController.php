@@ -60,8 +60,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProduct $request, Product $product)
     {
-        DB::table('feature_product')->where('product_id', $product->id)->delete();
-
+        $product->linked_features()->detach();
         $product = $product->update($request->all());
 
 
@@ -86,6 +85,8 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
             $product->delete();
+
+            $product->linked_features()->detach();
 
             foreach ($product->pics as $pic){
                 File::delete(storage_path('app/public/products/').basename($pic));

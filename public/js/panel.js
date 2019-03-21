@@ -4032,6 +4032,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this5 = this;
 
       this.item.pics = window.pics;
+
+      for (i in this.item.features.map) {
+        if (i["type"] == "linked") {
+          console.log($vm.features.features_values);
+
+          for (feature in $vm.features.features_values) {
+            if (i["value"] == feature["id"]) {
+              i["feature"] = feature;
+            }
+          }
+        }
+      }
+
+      console.log(this.item);
       axios.post("/api/products", this.item).then(function (response) {
         _this5.products.push(response.data);
 
