@@ -4032,14 +4032,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this5 = this;
 
       this.item.pics = window.pics;
+      console.log("ds");
+      this.item.features.forEach(function (i) {
+        console.log("ds");
+      });
 
-      for (i in this.item.features.map) {
+      for (var i in this.item.features) {
+        i = this.item.features[i];
+        console.log(i);
+
         if (i["type"] == "linked") {
-          console.log($vm.features.features_values);
+          console.log(this.features.features_values);
 
-          for (feature in $vm.features.features_values) {
+          for (var feature in this.features.features_values) {
+            feature = this.features.features_values[feature];
+
             if (i["value"] == feature["id"]) {
-              i["feature"] = feature;
+              this.item.features[this.item.features.indexOf(i)]["feature"] = feature;
             }
           }
         }
