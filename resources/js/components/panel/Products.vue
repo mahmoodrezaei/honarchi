@@ -668,6 +668,22 @@ export default {
     update(product) {
       this.item.pics = window.pics;
 
+      for (let i in this.item.features) {
+        i = this.item.features[i];
+
+        if (i["type"] == "linked") {
+          for (let feature in this.features.features_values) {
+            feature = this.features.features_values[feature];
+            if (i["value"] == feature["id"]) {
+              this.item.features[this.item.features.indexOf(i)][
+                "feature"
+              ] = feature;
+            }
+          }
+        }
+      }
+      console.log(this.item);
+
       const index = this.products.findIndex(item => item.id == product.id);
 
       axios

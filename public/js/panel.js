@@ -4032,18 +4032,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this5 = this;
 
       this.item.pics = window.pics;
-      console.log("ds");
-      this.item.features.forEach(function (i) {
-        console.log("ds");
-      });
 
       for (var i in this.item.features) {
         i = this.item.features[i];
-        console.log(i);
 
         if (i["type"] == "linked") {
-          console.log(this.features.features_values);
-
           for (var feature in this.features.features_values) {
             feature = this.features.features_values[feature];
 
@@ -4076,6 +4069,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this6 = this;
 
       this.item.pics = window.pics;
+
+      for (var i in this.item.features) {
+        i = this.item.features[i];
+
+        if (i["type"] == "linked") {
+          for (var feature in this.features.features_values) {
+            feature = this.features.features_values[feature];
+
+            if (i["value"] == feature["id"]) {
+              this.item.features[this.item.features.indexOf(i)]["feature"] = feature;
+            }
+          }
+        }
+      }
+
+      console.log(this.item);
       var index = this.products.findIndex(function (item) {
         return item.id == product.id;
       });
