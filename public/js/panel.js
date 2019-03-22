@@ -4183,7 +4183,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.features.features_values.length > 0) this.features.features_values.forEach(function (item) {
         var name = item.name || null;
         var id = item.id || null;
+        var key_id = item.key_id || null;
         options.features.features_values.push({
+          key_id: key_id,
           text: name,
           value: id
         });
@@ -43581,9 +43583,16 @@ var render = function() {
                                                 ],
                                                 attrs: {
                                                   placeholder: "مقدار",
-                                                  options:
-                                                    _vm.options.features
-                                                      .features_values
+                                                  options: _vm.options.features.features_values.filter(
+                                                    function(i) {
+                                                      return (
+                                                        i.key_id ==
+                                                        _vm.item.features[
+                                                          index
+                                                        ]["name"]
+                                                      )
+                                                    }
+                                                  )
                                                 },
                                                 model: {
                                                   value:

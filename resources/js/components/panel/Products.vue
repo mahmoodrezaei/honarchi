@@ -240,7 +240,7 @@
                               <model-select
                                 v-show="row.type == 'linked'"
                                 placeholder="مقدار"
-                                :options="options.features.features_values"
+                                :options="options.features.features_values.filter(i => i.key_id == item.features[index]['name'])"
                                 v-model="item.features[index]['value']"
                               ></model-select>
                             </td>
@@ -795,7 +795,10 @@ export default {
         this.features.features_values.forEach(item => {
           let name = item.name || null;
           let id = item.id || null;
+          let key_id = item.key_id || null;
+
           options.features.features_values.push({
+            key_id: key_id,
             text: name,
             value: id
           });
