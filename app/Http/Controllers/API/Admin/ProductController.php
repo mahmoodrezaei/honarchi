@@ -46,6 +46,8 @@ class ProductController extends Controller
             }
         }
 
+        $product->load(['category','gallery']);
+
 
         return response()->json($product, 201);
     }
@@ -71,6 +73,7 @@ class ProductController extends Controller
                 $product->linked_features()->attach($feature['value']);
             }
         }
+        $product->load(['category','gallery']);
 
         return response()->json($product, 200);
     }

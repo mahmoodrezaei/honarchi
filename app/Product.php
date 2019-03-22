@@ -86,6 +86,7 @@ class Product extends Model
         $pics = array();
         if (isset($attributes['pics']) && is_array($attributes['pics']) && !empty($attributes['pics']) )
         {
+            Log::info($attributes['pics']);
             // remove url
             $this_pics = [];
             foreach ($this->pics as $pic){
@@ -110,7 +111,7 @@ class Product extends Model
 
                 } elseif (is_string($pic)){
                     foreach ($this_pics as $index => $this_pic){
-
+                        Log::info(basename($pic));
                         if ($this_pic == basename($pic)){
                             $tmp = $this_pics;
                             array_splice($tmp, 0, $index);
