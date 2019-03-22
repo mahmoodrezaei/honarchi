@@ -165,12 +165,7 @@
                       >
                     </div>
                   </div>
-                  <div class="form-group m-form__group row">
-                    <div class="col-12">
-                      <input type="file" id="file" ref="file" v-on:change="handleFileUpload()">
-                      ‌
-                    </div>
-                  </div>
+
                   <div class="form-group m-form__group row">
                     <div class="col-12">
                       <div
@@ -197,6 +192,20 @@
                         </div>
                       </div>
                     </div>
+                    <div class="d-flex justify-content-center col-12">
+                      <label for="file-upload" class="btn btn-primary">
+                        <i class="fa fa-cloud-upload-alt"></i> آپلود عکس
+                      </label>
+
+                      <input
+                        type="file"
+                        style="display: none;"
+                        id="file-upload"
+                        ref="file"
+                        v-on:change="handleFileUpload()"
+                      >
+                      ‌
+                    </div>
                   </div>
                   <div class="form-group m-form__group row">
                     <div class="col-12">
@@ -204,10 +213,10 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            <td>
+                            <td style="width: 44%">
                               <strong>ویژگی</strong>
                             </td>
-                            <td>
+                            <td style="width: 44%">
                               <strong>مقدار</strong>
                             </td>
 
@@ -218,7 +227,9 @@
                           <tr v-for="(row, index) in item.features" :key="index">
                             <td>
                               <input
+                                class="col-12 form-control m-input"
                                 v-show="row.type == 'normal'"
+                                placeholder="ویژگی"
                                 type="text"
                                 v-model="item.features[index]['name']"
                               >
@@ -232,7 +243,9 @@
                             </td>
                             <td>
                               <input
+                                class="col-12 form-control m-input"
                                 v-show="row.type == 'normal'"
+                                placeholder="مقدار"
                                 type="text"
                                 v-model="item.features[index]['value']"
                               >
@@ -251,13 +264,16 @@
                           </tr>
                         </tbody>
                       </table>
-                      <div>
+                      <div class="col-12 d-flex justify-content-center">
                         <button
-                          class="button btn-primary"
+                          type="button"
+                          class="col-3 m-1 btn btn-primary"
                           @click.prevent="addRow('linked')"
                         >اضافه کردن ویژگی لینک شده</button>
+
                         <button
-                          class="button btn-primary"
+                          type="button"
+                          class="col-3 m-1 btn btn-primary"
                           @click.prevent="addRow('normal')"
                         >اضافه کردن ویژگی معمولی</button>
                       </div>

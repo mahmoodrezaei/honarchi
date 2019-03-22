@@ -3842,6 +3842,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -43332,27 +43348,6 @@ var render = function() {
                               { staticClass: "form-group m-form__group row" },
                               [
                                 _c("div", { staticClass: "col-12" }, [
-                                  _c("input", {
-                                    ref: "file",
-                                    attrs: { type: "file", id: "file" },
-                                    on: {
-                                      change: function($event) {
-                                        return _vm.handleFileUpload()
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(
-                                    "\n                    ‌\n                  "
-                                  )
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "form-group m-form__group row" },
-                              [
-                                _c("div", { staticClass: "col-12" }, [
                                   _c(
                                     "div",
                                     {
@@ -43412,7 +43407,49 @@ var render = function() {
                                     }),
                                     0
                                   )
-                                ])
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "d-flex justify-content-center col-12"
+                                  },
+                                  [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "btn btn-primary",
+                                        attrs: { for: "file-upload" }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fa fa-cloud-upload-alt"
+                                        }),
+                                        _vm._v(
+                                          " آپلود عکس\n                    "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      ref: "file",
+                                      staticStyle: { display: "none" },
+                                      attrs: {
+                                        type: "file",
+                                        id: "file-upload"
+                                      },
+                                      on: {
+                                        change: function($event) {
+                                          return _vm.handleFileUpload()
+                                        }
+                                      }
+                                    }),
+                                    _vm._v(
+                                      "\n                    ‌\n                  "
+                                    )
+                                  ]
+                                )
                               ]
                             ),
                             _vm._v(" "),
@@ -43424,13 +43461,17 @@ var render = function() {
                                   _c("table", { staticClass: "table" }, [
                                     _c("thead", [
                                       _c("tr", [
-                                        _c("td", [
-                                          _c("strong", [_vm._v("ویژگی")])
-                                        ]),
+                                        _c(
+                                          "td",
+                                          { staticStyle: { width: "44%" } },
+                                          [_c("strong", [_vm._v("ویژگی")])]
+                                        ),
                                         _vm._v(" "),
-                                        _c("td", [
-                                          _c("strong", [_vm._v("مقدار")])
-                                        ]),
+                                        _c(
+                                          "td",
+                                          { staticStyle: { width: "44%" } },
+                                          [_c("strong", [_vm._v("مقدار")])]
+                                        ),
                                         _vm._v(" "),
                                         _c("td")
                                       ])
@@ -43466,7 +43507,12 @@ var render = function() {
                                                       "item.features[index]['name']"
                                                   }
                                                 ],
-                                                attrs: { type: "text" },
+                                                staticClass:
+                                                  "col-12 form-control m-input",
+                                                attrs: {
+                                                  placeholder: "ویژگی",
+                                                  type: "text"
+                                                },
                                                 domProps: {
                                                   value:
                                                     _vm.item.features[index][
@@ -43548,7 +43594,12 @@ var render = function() {
                                                       "item.features[index]['value']"
                                                   }
                                                 ],
-                                                attrs: { type: "text" },
+                                                staticClass:
+                                                  "col-12 form-control m-input",
+                                                attrs: {
+                                                  placeholder: "مقدار",
+                                                  type: "text"
+                                                },
                                                 domProps: {
                                                   value:
                                                     _vm.item.features[index][
@@ -43639,35 +43690,46 @@ var render = function() {
                                     )
                                   ]),
                                   _vm._v(" "),
-                                  _c("div", [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass: "button btn-primary",
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.addRow("linked")
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "col-12 d-flex justify-content-center"
+                                    },
+                                    [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "col-3 m-1 btn btn-primary",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.addRow("linked")
+                                            }
                                           }
-                                        }
-                                      },
-                                      [_vm._v("اضافه کردن ویژگی لینک شده")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass: "button btn-primary",
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.addRow("normal")
+                                        },
+                                        [_vm._v("اضافه کردن ویژگی لینک شده")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "col-3 m-1 btn btn-primary",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.addRow("normal")
+                                            }
                                           }
-                                        }
-                                      },
-                                      [_vm._v("اضافه کردن ویژگی معمولی")]
-                                    )
-                                  ])
+                                        },
+                                        [_vm._v("اضافه کردن ویژگی معمولی")]
+                                      )
+                                    ]
+                                  )
                                 ])
                               ]
                             )
