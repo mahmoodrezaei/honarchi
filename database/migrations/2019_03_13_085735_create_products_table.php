@@ -27,9 +27,9 @@ class CreateProductsTable extends Migration
             $table->string('major_price');
             $table->integer('no');
             $table->integer('major_no');
-            $table->json('features');
+            $table->json('features')->nullable();
             $table->string('location');
-            $table->json('pics');
+            $table->json('pics')->nullable();
             $table->float('rate',2,2)->default(00.00);
             $table->integer('max_purchase_per_rate')->default(0);
             $table->timestamps();

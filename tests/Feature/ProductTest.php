@@ -275,5 +275,5 @@ class ProductTest extends TestCase
 
         $this->assertDatabaseMissing($this->table, $product);
     }
-    
+
 }

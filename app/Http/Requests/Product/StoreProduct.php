@@ -35,10 +35,10 @@ class StoreProduct extends FormRequest
             'major_price' => 'required|string',
             'no' => 'required|integer',
             'major_no' => 'required|integer',
-//            'features' => 'required|array',
+            'features' => 'nullable|array',
             'location' => 'required|string',
-            'pics' => 'required',
-//            'pics.*' => 'image|mimes:jpeg,png,jpg,svg',
+            'pics' => 'nullable|array',
+            'pics.*' => 'image|mimes:jpeg,png,jpg,svg',
             'max_purchase_per_rate' => 'required|integer',
         ];
     }
