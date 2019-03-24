@@ -40,12 +40,12 @@
               <template #footer>
                 <button
                   v-show="modalType == 'create'"
-                  @click="save"
+                  @click="store"
                   data-dismiss="modal"
                   type="submit"
                   class="btn btn-primary"
                 >ثبت کن</button>
-                
+
                 <button
                   v-show="modalType == 'edit'"
                   @click="update(item)"
@@ -239,7 +239,7 @@ export default {
 
     getpermissions() {
       axios
-        .get("/api/permissions")
+        .get("/api/admin/permissions")
         .then(response => {
           this.permissions = response.data;
           this.pagination.total = this.permissions.length;
@@ -273,9 +273,9 @@ export default {
       return array.findIndex(i => i[key] == value);
     },
 
-    save() {
+    store() {
       axios
-        .post("/api/permissions", this.item)
+        .post("/api/admin/permissions", this.item)
         .then(response => {
           this.permissions.push(response.data);
           this.pagination.total = this.permissions.length;
@@ -283,8 +283,25 @@ export default {
         })
         .catch(error => {
           if (error.response.status == 422) {
+            error.response.data.errors = Object.values(
+              error.response.data.errors
+            )
+              .map(item => {
+                return item
+                  .map(i => {
+                    return i;
+                  })
+                  .join("<hr/>");
+              })
+              .join("<br/>");
+
+            console.log(error.response.data);
+
             swal({
-              text: error.response.data.message,
+              html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
               type: "error",
 
               confirmButtonText:
@@ -292,7 +309,6 @@ export default {
               confirmButtonClass:
                 "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
             });
-            console.log(error.response.data);
           }
         });
     },
@@ -303,15 +319,32 @@ export default {
       );
 
       axios
-        .put("/api/permissions/" + permission.id, this.item)
+        .put("/api/admin/permissions/" + permission.id, this.item)
         .then(response => {
           this.$set(this.permissions, index, this.item);
           console.log(response.data);
         })
         .catch(error => {
           if (error.response.status == 422) {
+            error.response.data.errors = Object.values(
+              error.response.data.errors
+            )
+              .map(item => {
+                return item
+                  .map(i => {
+                    return i;
+                  })
+                  .join("<hr/>");
+              })
+              .join("<br/>");
+
+            console.log(error.response.data);
+
             swal({
-              text: error.response.data.message,
+              html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
               type: "error",
 
               confirmButtonText:
@@ -338,7 +371,7 @@ export default {
         console.log(answer);
         if (answer.value === true) {
           axios
-            .delete("/api/permissions/" + permission.id)
+            .delete("/api/admin/permissions/" + permission.id)
             .then(response => {
               this.permissions.splice(index, 1);
             })
@@ -357,14 +390,6 @@ export default {
             });
         }
       });
-
-      // const index = this.permissions.indexOf(permission);
-      // console.log(permission);
-      // if (confirm("آیا اطمینان داری، این سطح دسترسی حذف شود؟")) {
-      //   axios.delete("/api/permissions/" + permission.id).then(response => {
-      //     this.permissions.splice(index, 1);
-      //   });
-      // }
     }
   },
 

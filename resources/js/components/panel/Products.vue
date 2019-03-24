@@ -286,7 +286,7 @@
               <template #footer>
                 <button
                   v-show="modalType == 'create'"
-                  @click="save"
+                  @click="store"
                   data-dismiss="modal"
                   type="submit"
                   class="btn btn-primary"
@@ -468,7 +468,6 @@ export default {
     });
 
     return {
-      mohsen: [],
       rowType: "",
 
       imgLoacation: window.origin + "/storage/products/",
@@ -577,7 +576,7 @@ export default {
 
     getproducts() {
       axios
-        .get("/api/products")
+        .get("/api/admin/products")
         .then(response => {
           this.products = response.data;
           this.pagination.total = this.products.length;
@@ -587,7 +586,7 @@ export default {
 
     getcategories() {
       axios
-        .get("/api/categories")
+        .get("/api/admin/categories")
         .then(response => {
           this.categories = response.data;
         })
@@ -605,9 +604,17 @@ export default {
 
     getfeatures() {
       axios
-        .get("/api/features")
+        .get("/api/admin/features")
         .then(response => {
-          this.features = response.data;
+          response.data.forEach(
+            function(item) {
+              if (item.key_id) {
+                this.features["features_values"].push(item);
+              } else {
+                this.features["features_names"].push(item);
+              }
+            }.bind(this)
+          );
         })
         .catch(error => console.log(error));
     },
@@ -638,7 +645,7 @@ export default {
       return array.findIndex(i => i[key] == value);
     },
 
-    save() {
+    store() {
       this.item.pics = window.pics;
 
       for (let i in this.item.features) {
@@ -658,17 +665,36 @@ export default {
       console.log(this.item);
 
       axios
-        .post("/api/products", this.item)
+        .post("/api/admin/products", this.item)
         .then(response => {
           this.products.push(response.data);
           this.pagination.total = this.products.length;
-
+          swal({
+            type: "success",
+            text: "محصول با موفقیت اضافه شد",
+            timer: 2500
+          });
           console.log(response.data);
         })
         .catch(error => {
           if (error.response.status == 422) {
+            error.response.data.errors = Object.values(
+              error.response.data.errors
+            )
+              .map(item => {
+                return item
+                  .map(i => {
+                    return i;
+                  })
+                  .join("<hr/>");
+              })
+              .join("<br/>");
+
             swal({
-              text: error.response.data.message,
+              html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
               type: "error",
 
               confirmButtonText:
@@ -703,18 +729,35 @@ export default {
       const index = this.products.findIndex(item => item.id == product.id);
 
       axios
-        .put("/api/products/" + product.id, this.item)
+        .put("/api/admin/products/" + product.id, this.item)
         .then(response => {
           this.$set(this.products, index, response.data);
-
+          swal({
+            type: "success",
+            text: "محصول با موفقیت به روز شد",
+            timer: 2500
+          });
           console.log(this.products);
         })
         .catch(error => {
           if (error.response.status == 422) {
-            console.log(error.response.data);
+            error.response.data.errors = Object.values(
+              error.response.data.errors
+            )
+              .map(item => {
+                return item
+                  .map(i => {
+                    return i;
+                  })
+                  .join("<hr/>");
+              })
+              .join("<br/>");
 
             swal({
-              text: error.response.data.message,
+              html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
               type: "error",
 
               confirmButtonText:
@@ -741,14 +784,19 @@ export default {
         console.log(answer);
         if (answer.value === true) {
           axios
-            .delete("/api/products/" + product.id)
+            .delete("/api/admin/products/" + product.id)
             .then(response => {
               this.products.splice(index, 1);
+              swal({
+                type: "success",
+                text: "محصول با موفقیت حذف شد",
+                timer: 2500
+              });
             })
             .catch(error => {
               if (error.response.status == 500) {
                 swal({
-                  text: "ابتدا زیر مجموعه های این محصول را تغییر دهید.",
+                  text: "خطایی رخ داده!",
                   type: "error",
 
                   confirmButtonText:
@@ -760,14 +808,6 @@ export default {
             });
         }
       });
-
-      // const index = this.products.indexOf(product);
-      // console.log(product);
-      // if (confirm("آیا اطمینان داری، این محصول حذف شود؟")) {
-      //   axios.delete("/api/products/" + product.id).then(response => {
-      //     this.products.splice(index, 1);
-      //   });
-      // }
     }
   },
 
