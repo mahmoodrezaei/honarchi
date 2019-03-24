@@ -49,12 +49,12 @@
               <template #footer>
                 <button
                   v-show="modalType == 'create'"
-                  @click="save"
+                  @click="store"
                   data-dismiss="modal"
                   type="submit"
                   class="btn btn-primary"
                 >ثبت کن</button>
-                
+
                 <button
                   v-show="modalType == 'edit'"
                   @click="update(item)"
@@ -266,7 +266,7 @@ export default {
 
     getcategories() {
       axios
-        .get("/api/categories")
+        .get("/api/admin/categories")
         .then(response => {
           this.categories = response.data;
           this.pagination.total = this.categories.length;
@@ -300,9 +300,9 @@ export default {
       return array.findIndex(i => i[key] == value);
     },
 
-    save() {
+    store() {
       axios
-        .post("/api/categories", this.item)
+        .post("/api/admin/categories", this.item)
         .then(response => {
           this.categories.push(response.data);
           this.pagination.total = this.categories.length;
@@ -310,8 +310,25 @@ export default {
         })
         .catch(error => {
           if (error.response.status == 422) {
+            error.response.data.errors = Object.values(
+              error.response.data.errors
+            )
+              .map(item => {
+                return item
+                  .map(i => {
+                    return i;
+                  })
+                  .join("<hr/>");
+              })
+              .join("<br/>");
+
+            console.log(error.response.data);
+
             swal({
-              text: error.response.data.message,
+              html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
               type: "error",
 
               confirmButtonText:
@@ -319,7 +336,6 @@ export default {
               confirmButtonClass:
                 "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
             });
-            console.log(error.response.data);
           }
         });
     },
@@ -328,15 +344,32 @@ export default {
       const index = this.categories.findIndex(item => item.id == category.id);
       console.log(index);
       axios
-        .put("/api/categories/" + category.id, this.item)
+        .put("/api/admin/categories/" + category.id, this.item)
         .then(response => {
           this.$set(this.categories, index, response.data);
           console.log(this.categories);
         })
         .catch(error => {
           if (error.response.status == 422) {
+            error.response.data.errors = Object.values(
+              error.response.data.errors
+            )
+              .map(item => {
+                return item
+                  .map(i => {
+                    return i;
+                  })
+                  .join("<hr/>");
+              })
+              .join("<br/>");
+
+            console.log(error.response.data);
+
             swal({
-              text: error.response.data.message,
+              html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
               type: "error",
 
               confirmButtonText:
@@ -363,33 +396,56 @@ export default {
         console.log(answer);
         if (answer.value === true) {
           axios
-            .delete("/api/categories/" + category.id)
+            .delete("/api/admin/categories/" + category.id)
             .then(response => {
               this.categories.splice(index, 1);
             })
             .catch(error => {
-              if (error.response.status == 500) {
-                swal({
-                  text: "ابتدا زیر مجموعه های این دسته بندی را تغییر دهید.",
-                  type: "error",
+              switch (error.response.status) {
+                case 422: {
+                  error.response.data.errors = Object.values(
+                    error.response.data.errors
+                  )
+                    .map(item => {
+                      return item
+                        .map(i => {
+                          return i;
+                        })
+                        .join("<hr/>");
+                    })
+                    .join("<br/>");
 
-                  confirmButtonText:
-                    "<span><i class='la'></i><span>متوجه شدم</span></span>",
-                  confirmButtonClass:
-                    "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
-                });
+                  console.log(error.response.data);
+
+                  swal({
+                    html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
+                    type: "error",
+
+                    confirmButtonText:
+                      "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                    confirmButtonClass:
+                      "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+                  });
+                  break;
+                }
+                case 500: {
+                  swal({
+                    text: "خطایی رخ داده!",
+                    type: "error",
+
+                    confirmButtonText:
+                      "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                    confirmButtonClass:
+                      "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+                  });
+                }
               }
             });
         }
       });
-
-      // const index = this.categories.indexOf(category);
-      // console.log(category);
-      // if (confirm("آیا اطمینان داری، این دسته بندی حذف شود؟")) {
-      //   axios.delete("/api/categories/" + category.id).then(response => {
-      //     this.categories.splice(index, 1);
-      //   });
-      // }
     }
   },
 

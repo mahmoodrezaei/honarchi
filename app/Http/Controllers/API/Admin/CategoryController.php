@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Admin;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 
 class CategoryController extends Controller
@@ -69,7 +70,17 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        Validator::make($category->toArray(), [
+            'id' => function ($attribute, $value, $fail) use ($category) {
+                if ($category->hasChildren()) {
+                    $fail(trans('validation.A_number_of_entities_are_related', ['entities' => trans('validation.entities.category.plural'), 'entity' => trans('validation.entities.category.singular')]));
+
+                }
+            }
+        ])->validate();
+
         $category->delete();
+
 
         return response()->json(null, 204);
     }

@@ -27,6 +27,7 @@ class StoreProduct extends FormRequest
             'category_id' => 'nullable|integer|min:1|exists:categories,id',
             'gallery_id' => 'nullable|integer|min:1|exists:galleries,id',
             'name' => 'required|max:50',
+            'location' => 'required|string',
             'intro' => 'required|max:255',
             'description' => 'required|string',
             'purchase_price' => 'required|string',
@@ -36,9 +37,7 @@ class StoreProduct extends FormRequest
             'no' => 'required|integer',
             'major_no' => 'required|integer',
             'features' => 'nullable|array',
-            'location' => 'required|string',
             'pics' => 'nullable|array',
-            'pics.*' => 'image|mimes:jpeg,png,jpg,svg',
             'max_purchase_per_rate' => 'required|integer',
         ];
     }

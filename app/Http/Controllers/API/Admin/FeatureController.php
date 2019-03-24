@@ -77,7 +77,5 @@ class FeatureController extends Controller
         $feature->delete();
 
         return response()->json(null, 204);
-
-
     }
 }

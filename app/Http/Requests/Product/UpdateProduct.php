@@ -28,6 +28,7 @@ class UpdateProduct extends FormRequest
             'gallery_id' => 'nullable|integer|min:1|exists:galleries,id',
             'name' => 'required|max:50',
             'intro' => 'required|max:255',
+            'location' => 'required|string',
             'description' => 'required|string',
             'purchase_price' => 'required|string',
             'price' => 'required|string',
@@ -36,9 +37,7 @@ class UpdateProduct extends FormRequest
             'no' => 'required|integer',
             'major_no' => 'required|integer',
             'features' => 'nullable|array',
-            'location' => 'required|string',
             'pics' => 'nullable|array',
-            'pics.*' => 'image|mimes:jpeg,png,jpg,svg',
             'max_purchase_per_rate' => 'required|integer',
         ];
     }
