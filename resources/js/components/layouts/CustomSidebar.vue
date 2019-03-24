@@ -45,6 +45,18 @@
               </span>
             </a>
           </li>
+
+          <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
+            <a href="#" @click.prevent="$router.push('/admin/features')" class="m-menu__link">
+              <i class="m-menu__link-icon flaticon-line-graph"></i>
+              <span class="m-menu__link-title">
+                <span class="m-menu__link-wrap">
+                  <span class="m-menu__link-text">ویژگی های لینک شده</span>
+                </span>
+              </span>
+            </a>
+          </li>
+
           <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
             <a href="#" @click.prevent="$router.push('/admin/categories')" class="m-menu__link">
               <i class="m-menu__link-icon flaticon-notes"></i>
