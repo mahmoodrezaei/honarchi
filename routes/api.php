@@ -17,15 +17,15 @@ use Illuminate\Http\Request;
     return $request->user();
 });*/
 
-Route::apiResource('permissions', 'API\Admin\PermissionController');
+Route::apiResource('admin/permissions', 'API\Admin\PermissionController');
 
-Route::apiResource('roles', 'API\Admin\RoleController');
+Route::apiResource('admin/roles', 'API\Admin\RoleController');
 
-Route::Resource('categories', 'API\Admin\CategoryController')->except(['show']);
+Route::apiResource('admin/categories', 'API\Admin\CategoryController')->except(['show']);
 
-Route::get('features', 'FeatureController@index');
+Route::apiResource('admin/features', 'API\Admin\FeatureController')->except(['show']);
 
-Route::apiResource('products', 'API\Admin\ProductController');
+Route::apiResource('admin/products', 'API\Admin\ProductController');
 
 Route::get('admin/galleries', 'API\Admin\GalleryController@index');
 Route::post('admin/galleries', 'API\Admin\GalleryController@store');
