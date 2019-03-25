@@ -672,7 +672,8 @@ export default {
           swal({
             type: "success",
             text: "محصول با موفقیت اضافه شد",
-            timer: 2500
+            timer: 2500,
+            showConfirmButton: false
           });
           console.log(response.data);
         })
@@ -735,7 +736,8 @@ export default {
           swal({
             type: "success",
             text: "محصول با موفقیت به روز شد",
-            timer: 2500
+            timer: 2500,
+            showConfirmButton: false
           });
           console.log(this.products);
         })

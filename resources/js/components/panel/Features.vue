@@ -306,6 +306,12 @@ export default {
         .then(response => {
           this.features.push(response.data);
           this.pagination.total = this.features.length;
+          swal({
+            type: "success",
+            text: "ویژگی با موفقیت اضافه شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
           console.log(response.data);
         })
         .catch(error => {
@@ -347,6 +353,12 @@ export default {
         .put("/api/admin/features/" + feature.id, this.item)
         .then(response => {
           this.$set(this.features, index, response.data);
+          swal({
+            type: "success",
+            text: "ویژگی با موفقیت به روز شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
           console.log(this.features);
         })
         .catch(error => {

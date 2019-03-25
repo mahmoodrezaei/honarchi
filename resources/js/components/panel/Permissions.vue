@@ -279,6 +279,12 @@ export default {
         .then(response => {
           this.permissions.push(response.data);
           this.pagination.total = this.permissions.length;
+          swal({
+            type: "success",
+            text: "اجازه دسترسی با موفقیت اضافه شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
           console.log(response.data);
         })
         .catch(error => {
@@ -322,6 +328,12 @@ export default {
         .put("/api/admin/permissions/" + permission.id, this.item)
         .then(response => {
           this.$set(this.permissions, index, this.item);
+          swal({
+            type: "success",
+            text: "اجازه دسترسی به موفقیت بروز شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
           console.log(response.data);
         })
         .catch(error => {

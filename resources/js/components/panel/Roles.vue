@@ -327,6 +327,12 @@ export default {
         .then(response => {
           this.roles.push(response.data);
           this.pagination.total = this.roles.length;
+          swal({
+            type: "success",
+            text: "نقش با موفقیت اضافه شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
         })
         .catch(error => {
           if (error.response.status == 422) {
@@ -367,6 +373,12 @@ export default {
         .put("/api/admin/roles/" + role.id, this.item)
         .then(response => {
           this.$set(this.roles, index, response.data);
+          swal({
+            type: "success",
+            text: "نقش به موفقیت به روز شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
           console.log(this.roles);
         })
         .catch(error => {

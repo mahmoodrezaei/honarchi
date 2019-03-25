@@ -69,7 +69,7 @@ class FeatureController extends Controller
         Validator::make($feature->toArray(), [
             'id' => function ($attribute, $value, $fail) use ($feature) {
                 if ($feature->hasChildren()) {
-                    $fail(trans('validation.A_number_of_entities_are_related', ['entities' => trans('validation.entities.features.answer.plural'), 'entity' => trans('validation.entities.features.singular')]));
+                    $fail(trans('validation.A_number_of_entities_are_related', ['entities' => trans('validation.entities.value.plural'), 'entity' => trans('validation.entities.feature.singular')]));
                 }
             }
         ])->validate();

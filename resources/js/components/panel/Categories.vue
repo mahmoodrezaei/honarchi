@@ -306,6 +306,12 @@ export default {
         .then(response => {
           this.categories.push(response.data);
           this.pagination.total = this.categories.length;
+          swal({
+            type: "success",
+            text: "دسته بندی با موفقیت اضافه شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
           console.log(response.data);
         })
         .catch(error => {
@@ -347,6 +353,12 @@ export default {
         .put("/api/admin/categories/" + category.id, this.item)
         .then(response => {
           this.$set(this.categories, index, response.data);
+          swal({
+            type: "success",
+            text: "دسته بندی با موفقیت به روز شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
           console.log(this.categories);
         })
         .catch(error => {
