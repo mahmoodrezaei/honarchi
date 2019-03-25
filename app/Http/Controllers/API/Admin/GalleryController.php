@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Admin;
 use App\Gallery;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GalleryController extends Controller
 {
@@ -90,7 +91,7 @@ class GalleryController extends Controller
         $gallery->update(['state' => 1]);
 
         $data = [
-            'message' => 'Gallery approved',
+            'message' => 'گالری با موفقیت تایید شد',
             'status_code' => 200
         ];
 
@@ -102,7 +103,7 @@ class GalleryController extends Controller
         $gallery->update(['state' => -1]);
 
         $data = [
-            'message' => 'Gallery is blocked',
+            'message' => 'گالری با موفقیت مسدود شد',
             'status_code' => 200
         ];
 
@@ -114,7 +115,7 @@ class GalleryController extends Controller
         $gallery->update(['state' => 1]);
 
         $data = [
-            'message' => 'Gallery is unblocked',
+            'message' => 'گالری با موفقیت باز شد',
             'status_code' => 200
         ];
 

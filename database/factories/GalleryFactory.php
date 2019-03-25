@@ -8,6 +8,6 @@ $factory->define(App\Gallery::class, function (Faker $faker) {
         'gallery_name' => $faker->name,
 
         'location' => $faker->city,
-        'type' => $faker->shuffleArray(['چوب', 'چرم', 'سفال']),
+        'type' => ['چوب', 'چرم', 'سفال'],
     ];
 });

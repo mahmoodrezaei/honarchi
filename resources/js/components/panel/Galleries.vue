@@ -39,9 +39,12 @@
                                            v-model="newItem.location">
                                 </div>
                                 <div class="form-group m-form__group">
-                                    <input id="type" class="form-control m-input" type="text"
-                                           placeholder="نوع دست ساخته"
-                                           v-model="newItem.type">
+                                    <multi-select
+                                            placeholder="نوع دست ساخته"
+                                            :selected-options="selectedTypes"
+                                            @select="onSelectedTypes"
+                                            :options="typeOptions"
+                                    ></multi-select>
                                 </div>
                             </template>
                             <template #footer>
@@ -116,34 +119,37 @@
                                     :sortOrders="sortOrders"
                                     @sort="sortBy">
                                 <tbody class="m-datatable__body">
-                                    <tr v-for="gallery in paginated"
-                                        :key="gallery.id"
-                                        class="m-datatable__row m-datatable__row"
-                                        style="left: 0px;">
-                                            <td class="m-datatable__cell">
-                                                <span style="width: 110px;">{{ gallery.gallery_name }}</span>
-                                            </td>
-                                            <td class="m-datatable__cell">
-                                                <div style="width: 110px;">
-                                                    {{ gallery.location }}
-                                                </div>
-                                            </td>
-                                            <td class="m-datatable__cell">
-                                                <div style="width: 110px;">
-                                                    <span v-if="gallery.state === 'بلاک' " class="m-badge m-badge--danger m-badge--wide">{{ gallery.state }}</span>
-                                                    <span v-else-if="gallery.state === 'تایید نشده' " class="m-badge m-badge--warning m-badge--wide">{{ gallery.state }}</span>
-                                                    <span v-else-if="gallery.state === 'تایید شده' " class="m-badge m-badge--success m-badge--wide">{{ gallery.state }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="m-datatable__cell">
-                                                <span style="width: 110px;">{{gallery.created_at}}</span>
-                                            </td>
-                                            <td class="m-datatable__cell">
+                                <tr v-for="gallery in paginated"
+                                    :key="gallery.id"
+                                    class="m-datatable__row m-datatable__row"
+                                    style="left: 0px;">
+                                    <td class="m-datatable__cell">
+                                        <span style="width: 110px;">{{ gallery.gallery_name }}</span>
+                                    </td>
+                                    <td class="m-datatable__cell">
+                                        <div style="width: 110px;">
+                                            {{ gallery.location }}
+                                        </div>
+                                    </td>
+                                    <td class="m-datatable__cell">
+                                        <div style="width: 110px;">
+                                            <span v-if="gallery.state === 'مسدود' "
+                                                  class="m-badge m-badge--danger m-badge--wide">{{ gallery.state }}</span>
+                                            <span v-else-if="gallery.state === 'تایید نشده' "
+                                                  class="m-badge m-badge--warning m-badge--wide">{{ gallery.state }}</span>
+                                            <span v-else-if="gallery.state === 'تایید شده' "
+                                                  class="m-badge m-badge--success m-badge--wide">{{ gallery.state }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="m-datatable__cell">
+                                        <span style="width: 110px;">{{gallery.created_at}}</span>
+                                    </td>
+                                    <td class="m-datatable__cell">
                                                 <span style="overflow: visible; position: relative; width: 110px;">
                                                     <button
                                                             @click=""
                                                             class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill"
-                                                            title="ویرایش"><i class="la la-edit"></i>
+                                                            title="نمایش جزییات"><i class="la la-edit"></i>
                                                     </button>
                                                     <button
                                                             @click="approve(gallery)"
@@ -152,13 +158,20 @@
                                                             title="تایید"><i class="la la-check-circle"></i>
                                                     </button>
                                                     <button
-                                                            @click=""
+                                                            v-show="gallery.state === 'تایید شده'"
+                                                            @click="block(gallery)"
                                                             class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                            title="بلاک"><i class="la la-unlock"></i>
+                                                            title="مسدود"><i class="fa fa-lock"></i>
+                                                    </button>
+                                                    <button
+                                                            v-show="gallery.state === 'مسدود'"
+                                                            @click="unblock(gallery)"
+                                                            class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill"
+                                                            title="باز کردن"><i class="fa fa-lock-open"></i>
                                                     </button>
                                                 </span>
-                                            </td>
-                                    </tr>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </data-table>
 
@@ -182,9 +195,10 @@
     import DataTable from "./DataTable";
     import Pagination from "./Pagination";
     import Modal from './Modal'
+    import {MultiSelect} from 'vue-search-select'
 
     export default {
-        components: {DataTable, Pagination, Modal},
+        components: {DataTable, Pagination, Modal, MultiSelect},
 
         data() {
             let sortOrders = {};
@@ -200,10 +214,22 @@
                 sortOrders[column.name] = -1;
             });
 
-            return {
-                modalType: "create",
+            let typeOptions = [
+                {text: 'چوب', value: 'چوب'},
+                {text: 'چرم', value: 'چرم'},
+                {text: 'سفال', value: 'سفال'},
+                {text: 'سرامیک', value: 'سرامیک'},
+                {text: 'منسوجات و بافته‌ها', value: 'منسوجات و بافته‌ها'},
+                {text: 'طراحی و نقاشی', value: 'طراحی و نقاشی'},
+                {text: 'سایر', value: 'سایر'}
+            ];
 
+            return {
                 galleries: [],
+
+                typeOptions: typeOptions,
+
+                selectedTypes: [],
 
                 columns,
 
@@ -215,7 +241,7 @@
                     owner_id: '',
                     gallery_name: '',
                     location: '',
-                    type: '',
+                    type: [],
                     state: '',
                     created_at: ''
                 },
@@ -242,15 +268,28 @@
 
         methods: {
             showCreateModal() {
-                this.newItem = {};
+                this.newItem = {
+                    owner_id: '',
+                    gallery_name: '',
+                    location: '',
+                    type: [],
+                    state: '',
+                    created_at: ''
+                };
                 $('#create_gallery_modal').modal('show')
+            },
+
+            onSelectedTypes(items, lastSelectItem) {
+                this.selectedTypes = items;
+                this.newItem.type = items.map(item => item.text);
+                console.log(this.newItem)
             },
 
             store() {
                 axios.post('/api/admin/galleries', this.newItem)
                     .then(response => {
                         if (response.data.status_code === 201) {
-                            swal({ type: 'success', text: response.data.message, timer: 2500});
+                            swal({type: 'success', text: response.data.message, timer: 2500});
                             this.newItem.gallery_name = response.data.gallery.gallery_name;
                             this.newItem.location = response.data.gallery.location;
                             this.newItem.state = response.data.gallery.state;
@@ -268,7 +307,7 @@
 
                             // errors.forEach((key, value) => console.log(value));
                             swal({
-                                html: '<p v-for="key in Object.keys(errors)">'+ errors[key] +'</p>',
+                                html: '<p v-for="item in Object.keys(errors)">{{ errors[item] }}</p>',
                                 type: 'error',
                                 timer: 3000,
                             });
@@ -278,34 +317,68 @@
 
             getGalleries() {
                 axios
-                    .get("/api/admin/galleries")
+                    .get('/api/admin/galleries')
                     .then(response => {
                         this.galleries = response.data.galleries;
                         this.pagination.total = this.galleries.length
                     })
-                    .catch(error => console.log(error));
+                    .catch(error => console.log(error.response));
             },
 
             approve(gallery) {
 
                 const index = this.galleries.findIndex(
-                    item => item.id == gallery.id
+                    item => item.id === gallery.id
                 );
 
-                axios.patch('api/admin/galleries/' + gallery.id + '/approve')
+                axios.patch(`/api/admin/galleries/${gallery.id}/approve`)
                     .then(response => {
-                        console.log(response)
-                    });
-                    // .catch(error => {
-                    //     swal({
-                    //         text: error.response.data.message,
-                    //         timer: 3000,
-                    //         type: "error"
-                    //     })
-                    // });
+                        this.galleries[index].state = 'تایید شده';
+                        swal({
+                            text: response.data.message,
+                            type: 'success',
+                            timer: 2500,
+                            showConfirmButton: false,
+                        });
+                    }).catch(error);
+            },
 
-                console.log(index);
-                console.log(gallery.id);
+            block(gallery) {
+
+                const index = this.galleries.findIndex(
+                    item => item.id === gallery.id
+                );
+
+                axios.patch(`/api/admin/galleries/${gallery.id}/block`)
+                    .then(response => {
+                        this.galleries[index].state = 'مسدود';
+                        swal({
+                            text: response.data.message,
+                            type: 'success',
+                            timer: 2500,
+                            showConfirmButton: false,
+                        });
+                    })
+                    .catch(error);
+            },
+
+            unblock(gallery) {
+
+                const index = this.galleries.findIndex(
+                    item => item.id === gallery.id
+                );
+
+                axios.patch(`/api/admin/galleries/${gallery.id}/unblock`)
+                    .then(response => {
+                        this.galleries[index].state = 'تایید شده';
+                        swal({
+                            text: response.data.message,
+                            type: 'success',
+                            timer: 2500,
+                            showConfirmButton: false,
+                        });
+                    })
+                    .catch(error);
             },
 
             paginate(data, perPage, pageNumber) {

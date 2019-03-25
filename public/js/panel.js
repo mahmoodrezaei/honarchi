@@ -2519,6 +2519,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DataTable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DataTable */ "./resources/js/components/panel/DataTable.vue");
 /* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pagination */ "./resources/js/components/panel/Pagination.vue");
 /* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Modal */ "./resources/js/components/panel/Modal.vue");
+/* harmony import */ var vue_search_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-search-select */ "./node_modules/vue-search-select/publish/vue-search-select.js");
+/* harmony import */ var vue_search_select__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_search_select__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -2699,6 +2701,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2706,7 +2722,8 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     DataTable: _DataTable__WEBPACK_IMPORTED_MODULE_0__["default"],
     Pagination: _Pagination__WEBPACK_IMPORTED_MODULE_1__["default"],
-    Modal: _Modal__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Modal: _Modal__WEBPACK_IMPORTED_MODULE_2__["default"],
+    MultiSelect: vue_search_select__WEBPACK_IMPORTED_MODULE_3__["MultiSelect"]
   },
   data: function data() {
     var sortOrders = {};
@@ -2727,9 +2744,32 @@ __webpack_require__.r(__webpack_exports__);
     columns.forEach(function (column) {
       sortOrders[column.name] = -1;
     });
+    var typeOptions = [{
+      text: 'چوب',
+      value: 'چوب'
+    }, {
+      text: 'چرم',
+      value: 'چرم'
+    }, {
+      text: 'سفال',
+      value: 'سفال'
+    }, {
+      text: 'سرامیک',
+      value: 'سرامیک'
+    }, {
+      text: 'منسوجات و بافته‌ها',
+      value: 'منسوجات و بافته‌ها'
+    }, {
+      text: 'طراحی و نقاشی',
+      value: 'طراحی و نقاشی'
+    }, {
+      text: 'سایر',
+      value: 'سایر'
+    }];
     return {
-      modalType: "create",
       galleries: [],
+      typeOptions: typeOptions,
+      selectedTypes: [],
       columns: columns,
       sortKey: "gallery_name",
       search: "",
@@ -2737,7 +2777,7 @@ __webpack_require__.r(__webpack_exports__);
         owner_id: '',
         gallery_name: '',
         location: '',
-        type: '',
+        type: [],
         state: '',
         created_at: ''
       },
@@ -2759,8 +2799,22 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     showCreateModal: function showCreateModal() {
-      this.newItem = {};
+      this.newItem = {
+        owner_id: '',
+        gallery_name: '',
+        location: '',
+        type: [],
+        state: '',
+        created_at: ''
+      };
       $('#create_gallery_modal').modal('show');
+    },
+    onSelectedTypes: function onSelectedTypes(items, lastSelectItem) {
+      this.selectedTypes = items;
+      this.newItem.type = items.map(function (item) {
+        return item.text;
+      });
+      console.log(this.newItem);
     },
     store: function store() {
       var _this = this;
@@ -2789,7 +2843,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(Object.keys(errors)); // errors.forEach((key, value) => console.log(value));
 
           swal({
-            html: '<p v-for="key in Object.keys(errors)">' + errors[key] + '</p>',
+            html: '<p v-for="item in Object.keys(errors)">{{ errors[item] }}</p>',
             type: 'error',
             timer: 3000
           });
@@ -2799,29 +2853,60 @@ __webpack_require__.r(__webpack_exports__);
     getGalleries: function getGalleries() {
       var _this2 = this;
 
-      axios.get("/api/admin/galleries").then(function (response) {
+      axios.get('/api/admin/galleries').then(function (response) {
         _this2.galleries = response.data.galleries;
         _this2.pagination.total = _this2.galleries.length;
       }).catch(function (error) {
-        return console.log(error);
+        return console.log(error.response);
       });
     },
     approve: function approve(gallery) {
-      var index = this.galleries.findIndex(function (item) {
-        return item.id == gallery.id;
-      });
-      axios.patch('api/admin/galleries/' + gallery.id + '/approve').then(function (response) {
-        console.log(response);
-      }); // .catch(error => {
-      //     swal({
-      //         text: error.response.data.message,
-      //         timer: 3000,
-      //         type: "error"
-      //     })
-      // });
+      var _this3 = this;
 
-      console.log(index);
-      console.log(gallery.id);
+      var index = this.galleries.findIndex(function (item) {
+        return item.id === gallery.id;
+      });
+      axios.patch("/api/admin/galleries/".concat(gallery.id, "/approve")).then(function (response) {
+        _this3.galleries[index].state = 'تایید شده';
+        swal({
+          text: response.data.message,
+          type: 'success',
+          timer: 2500,
+          showConfirmButton: false
+        });
+      }).catch(error);
+    },
+    block: function block(gallery) {
+      var _this4 = this;
+
+      var index = this.galleries.findIndex(function (item) {
+        return item.id === gallery.id;
+      });
+      axios.patch("/api/admin/galleries/".concat(gallery.id, "/block")).then(function (response) {
+        _this4.galleries[index].state = 'مسدود';
+        swal({
+          text: response.data.message,
+          type: 'success',
+          timer: 2500,
+          showConfirmButton: false
+        });
+      }).catch(error);
+    },
+    unblock: function unblock(gallery) {
+      var _this5 = this;
+
+      var index = this.galleries.findIndex(function (item) {
+        return item.id === gallery.id;
+      });
+      axios.patch("/api/admin/galleries/".concat(gallery.id, "/unblock")).then(function (response) {
+        _this5.galleries[index].state = 'تایید شده';
+        swal({
+          text: response.data.message,
+          type: 'success',
+          timer: 2500,
+          showConfirmButton: false
+        });
+      }).catch(error);
     },
     paginate: function paginate(data, perPage, pageNumber) {
       this.pagination.from = data.length ? (pageNumber - 1) * perPage + 1 : " ";
@@ -2848,14 +2933,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     filteredroles: function filteredroles() {
-      var _this3 = this;
+      var _this6 = this;
 
       var galleries = this.galleries;
 
       if (this.search) {
         galleries = galleries.filter(function (row) {
           return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(_this3.search.toLowerCase()) > -1;
+            return String(row[key]).toLowerCase().indexOf(_this6.search.toLowerCase()) > -1;
           });
         });
       }
@@ -2865,14 +2950,14 @@ __webpack_require__.r(__webpack_exports__);
 
       if (sortKey) {
         galleries = galleries.slice().sort(function (a, b) {
-          var index = _this3.getIndex(_this3.columns, "name", sortKey);
+          var index = _this6.getIndex(_this6.columns, "name", sortKey);
 
           a = String(a[sortKey]).toLowerCase();
           b = String(b[sortKey]).toLowerCase();
 
-          if (_this3.columns[index].type && _this3.columns[index].type === "date") {
+          if (_this6.columns[index].type && _this6.columns[index].type === "date") {
             return (a === b ? 0 : new Date(a).getTime() > new Date(b).getTime() ? 1 : -1) * order;
-          } else if (_this3.columns[index].type && _this3.columns[index].type === "number") {
+          } else if (_this6.columns[index].type && _this6.columns[index].type === "number") {
             return (+a === +b ? 0 : +a > +b ? 1 : -1) * order;
           } else {
             return (a === b ? 0 : a > b ? 1 : -1) * order;
@@ -40862,36 +40947,16 @@ var render = function() {
                             "div",
                             { staticClass: "form-group m-form__group" },
                             [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.newItem.type,
-                                    expression: "newItem.type"
-                                  }
-                                ],
-                                staticClass: "form-control m-input",
+                              _c("multi-select", {
                                 attrs: {
-                                  id: "type",
-                                  type: "text",
-                                  placeholder: "نوع دست ساخته"
+                                  placeholder: "نوع دست ساخته",
+                                  "selected-options": _vm.selectedTypes,
+                                  options: _vm.typeOptions
                                 },
-                                domProps: { value: _vm.newItem.type },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.newItem,
-                                      "type",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
+                                on: { select: _vm.onSelectedTypes }
                               })
-                            ]
+                            ],
+                            1
                           )
                         ]
                       },
@@ -41126,16 +41191,16 @@ var render = function() {
                               _c("td", { staticClass: "m-datatable__cell" }, [
                                 _c("div", { staticStyle: { width: "110px" } }, [
                                   _vm._v(
-                                    "\n                                                " +
+                                    "\n                                        " +
                                       _vm._s(gallery.location) +
-                                      "\n                                            "
+                                      "\n                                    "
                                   )
                                 ])
                               ]),
                               _vm._v(" "),
                               _c("td", { staticClass: "m-datatable__cell" }, [
                                 _c("div", { staticStyle: { width: "110px" } }, [
-                                  gallery.state === "بلاک"
+                                  gallery.state === "مسدود"
                                     ? _c(
                                         "span",
                                         {
@@ -41190,7 +41255,7 @@ var render = function() {
                                       {
                                         staticClass:
                                           "m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill",
-                                        attrs: { title: "ویرایش" },
+                                        attrs: { title: "نمایش جزییات" },
                                         on: { click: function($event) {} }
                                       },
                                       [_c("i", { staticClass: "la la-edit" })]
@@ -41228,12 +41293,54 @@ var render = function() {
                                     _c(
                                       "button",
                                       {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value:
+                                              gallery.state === "تایید شده",
+                                            expression:
+                                              "gallery.state === 'تایید شده'"
+                                          }
+                                        ],
                                         staticClass:
                                           "m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill",
-                                        attrs: { title: "بلاک" },
-                                        on: { click: function($event) {} }
+                                        attrs: { title: "مسدود" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.block(gallery)
+                                          }
+                                        }
                                       },
-                                      [_c("i", { staticClass: "la la-unlock" })]
+                                      [_c("i", { staticClass: "fa fa-lock" })]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: gallery.state === "مسدود",
+                                            expression:
+                                              "gallery.state === 'مسدود'"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill",
+                                        attrs: { title: "باز کردن" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.unblock(gallery)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fa fa-lock-open"
+                                        })
+                                      ]
                                     )
                                   ]
                                 )

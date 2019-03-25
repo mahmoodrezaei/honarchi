@@ -17,7 +17,7 @@ class Gallery extends Model
 
     public function getStateAttribute($state)
     {
-        if ($state === -1) return 'بلاک';
+        if ($state === -1) return 'مسدود';
         else if ($state === 0) return 'تایید نشده';
         else if ($state === 1) return 'تایید شده';
     }
