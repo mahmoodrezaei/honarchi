@@ -117,6 +117,7 @@ return [
 
     'feature_key_id_should_not_assign_to_a_feature_value' => 'فیلد کلید نباید به یک مقدار نسبت داده شود',
     'A_number_of_entities_are_related' => 'تعدادی از :entities به این :entity وابسته هستند.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -175,7 +176,7 @@ return [
         'size'                  => 'اندازه',
         'terms'                 => 'شرایط',
         'province'              => 'استان',
-        'location'              => 'محل تولید',
+
         'intro'                 => 'توضیحات کوتاه',
         'purchase_price'        => 'قیمت خرید',
         'price'                 => 'قیمت فروش',
@@ -186,6 +187,9 @@ return [
         'features'              => 'ویژگی ها',
         'pics'                  => 'عکس ها',
         'max_purchase_per_rate' => 'حداقل تعداد فروش برای هر ستاره',
+        'gallery_name'          => 'گالری',
+        'location'              => 'محل تولید',
+        'type'                  => 'نوع دست ساخته'
     ],
 
     'entities' => [

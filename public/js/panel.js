@@ -2568,6 +2568,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DataTable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DataTable */ "./resources/js/components/panel/DataTable.vue");
 /* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pagination */ "./resources/js/components/panel/Pagination.vue");
+<<<<<<< HEAD
 /* harmony import */ var _Modal_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Modal.vue */ "./resources/js/components/panel/Modal.vue");
 /* harmony import */ var vue_search_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-search-select */ "./node_modules/vue-search-select/publish/vue-search-select.js");
 /* harmony import */ var vue_search_select__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_search_select__WEBPACK_IMPORTED_MODULE_3__);
@@ -2575,6 +2576,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+=======
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Modal */ "./resources/js/components/panel/Modal.vue");
+/* harmony import */ var vue_search_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-search-select */ "./node_modules/vue-search-select/publish/vue-search-select.js");
+/* harmony import */ var vue_search_select__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_search_select__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -2622,6 +2627,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+>>>>>>> ehsan-dev
 //
 //
 //
@@ -2773,6 +2779,54 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2781,8 +2835,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   components: {
     DataTable: _DataTable__WEBPACK_IMPORTED_MODULE_0__["default"],
     Pagination: _Pagination__WEBPACK_IMPORTED_MODULE_1__["default"],
+<<<<<<< HEAD
     Modal: _Modal_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     ModelSelect: vue_search_select__WEBPACK_IMPORTED_MODULE_3__["ModelSelect"]
+=======
+    Modal: _Modal__WEBPACK_IMPORTED_MODULE_2__["default"],
+    MultiSelect: vue_search_select__WEBPACK_IMPORTED_MODULE_3__["MultiSelect"]
+>>>>>>> ehsan-dev
   },
   data: function data() {
     var sortOrders = {};
@@ -2800,12 +2859,51 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     columns.forEach(function (column) {
       sortOrders[column.name] = -1;
     });
+    var typeOptions = [{
+      text: 'چوب',
+      value: 'چوب'
+    }, {
+      text: 'چرم',
+      value: 'چرم'
+    }, {
+      text: 'سفال',
+      value: 'سفال'
+    }, {
+      text: 'سرامیک',
+      value: 'سرامیک'
+    }, {
+      text: 'منسوجات و بافته‌ها',
+      value: 'منسوجات و بافته‌ها'
+    }, {
+      text: 'طراحی و نقاشی',
+      value: 'طراحی و نقاشی'
+    }, {
+      text: 'سایر',
+      value: 'سایر'
+    }];
     return {
+<<<<<<< HEAD
       modalType: "create",
       features: [],
+=======
+      galleries: [],
+      typeOptions: typeOptions,
+      selectedTypes: [],
+>>>>>>> ehsan-dev
       columns: columns,
       sortKey: "feature",
       search: "",
+<<<<<<< HEAD
+=======
+      newItem: {
+        owner_id: '',
+        gallery_name: '',
+        location: '',
+        type: [],
+        state: '',
+        created_at: ''
+      },
+>>>>>>> ehsan-dev
       sortOrders: sortOrders,
       item: {
         name: "",
@@ -2827,6 +2925,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.getfeatures();
   },
   methods: {
+<<<<<<< HEAD
     editModal: function editModal(item) {
       this.item = _objectSpread({}, item);
       $("#feature_modal").modal("show");
@@ -2845,10 +2944,178 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get("/api/admin/features").then(function (response) {
         _this.features = response.data;
         _this.pagination.total = _this.features.length;
+=======
+    showCreateModal: function showCreateModal() {
+      this.newItem = {
+        id: '',
+        owner_id: '',
+        gallery_name: '',
+        location: '',
+        type: [],
+        state: '',
+        created_at: ''
+      };
+      this.selectedTypes = [];
+      $('#create_gallery_modal').modal('show');
+    },
+    showDetailModal: function showDetailModal(gallery) {
+      $('#gallery_detail_modal').modal('show');
+      this.selectedTypes = gallery.type.map(function (item) {
+        return {
+          text: item,
+          value: item
+        };
+      });
+      this.newItem = {
+        id: gallery.id,
+        owner_id: '',
+        gallery_name: gallery.gallery_name,
+        location: gallery.location,
+        type: this.selectedTypes.map(function (item) {
+          return item.text;
+        })
+      };
+    },
+    onSelectedTypes: function onSelectedTypes(items, lastSelectItem) {
+      this.selectedTypes = items;
+      this.newItem.type = items.map(function (item) {
+        return item.text;
+      });
+      console.log(this.newItem);
+    },
+    store: function store() {
+      var _this = this;
+
+      axios.post('/api/admin/galleries', this.newItem).then(function (response) {
+        if (response.data.status_code === 201) {
+          swal({
+            type: 'success',
+            text: response.data.message,
+            timer: 2500
+          });
+          _this.newItem = {
+            gallery_name: response.data.gallery.gallery_name,
+            location: response.data.gallery.location,
+            state: response.data.gallery.state,
+            created_at: response.data.gallery.created_at
+          };
+
+          _this.galleries.push(_this.newItem);
+
+          _this.pagination.total = _this.galleries.length;
+        }
+>>>>>>> ehsan-dev
       }).catch(function (error) {
-        return console.log(error);
+        if (error.response.status === 422) {
+          var errors = error.response.data.errors;
+          console.log(Object.keys(errors)); // errors.forEach((key, value) => console.log(value));
+
+          swal({
+            html: '<p v-for="item in Object.keys(errors)">{{ errors[item] }}</p>',
+            type: 'error',
+            timer: 3000
+          });
+        }
       });
     },
+    update: function update(gallery) {
+      var _this2 = this;
+
+      var index = this.galleries.findIndex(function (item) {
+        return item.id === gallery.id;
+      });
+      console.log(gallery);
+      console.log('index: ' + index);
+      axios.patch("/api/admin/galleries/".concat(gallery.id), this.newItem).then(function (response) {
+        if (response.data.status_code === 200) {
+          swal({
+            type: 'success',
+            text: response.data.message,
+            timer: 2500
+          });
+          _this2.newItem = {
+            gallery_name: response.data.gallery.gallery_name,
+            location: response.data.gallery.location,
+            state: response.data.gallery.state,
+            created_at: response.data.gallery.created_at
+          };
+
+          _this2.$set(_this2.galleries, index, _this2.newItem);
+        }
+      }).catch(function (error) {
+        if (error.response.status === 422) {
+          var errors = error.response.data.errors;
+          console.log(Object.keys(errors)); // errors.forEach((key, value) => console.log(value));
+
+          swal({
+            html: '<p v-for="item in Object.keys(errors)">{{ errors[item] }}</p>',
+            type: 'error',
+            timer: 3000
+          });
+        }
+      });
+    },
+    getGalleries: function getGalleries() {
+      var _this3 = this;
+
+      axios.get('/api/admin/galleries').then(function (response) {
+        _this3.galleries = response.data.galleries;
+        _this3.pagination.total = _this3.galleries.length;
+      }).catch(function (error) {
+        return console.log(error.response);
+      });
+    },
+<<<<<<< HEAD
+=======
+    approve: function approve(gallery) {
+      var _this4 = this;
+
+      var index = this.galleries.findIndex(function (item) {
+        return item.id === gallery.id;
+      });
+      axios.patch("/api/admin/galleries/".concat(gallery.id, "/approve")).then(function (response) {
+        _this4.galleries[index].state = 'تایید شده';
+        swal({
+          text: response.data.message,
+          type: 'success',
+          timer: 2500,
+          showConfirmButton: false
+        });
+      }).catch(error);
+    },
+    block: function block(gallery) {
+      var _this5 = this;
+
+      var index = this.galleries.findIndex(function (item) {
+        return item.id === gallery.id;
+      });
+      axios.patch("/api/admin/galleries/".concat(gallery.id, "/block")).then(function (response) {
+        _this5.galleries[index].state = 'مسدود';
+        swal({
+          text: response.data.message,
+          type: 'success',
+          timer: 2500,
+          showConfirmButton: false
+        });
+      }).catch(error);
+    },
+    unblock: function unblock(gallery) {
+      var _this6 = this;
+
+      var index = this.galleries.findIndex(function (item) {
+        return item.id === gallery.id;
+      });
+      axios.patch("/api/admin/galleries/".concat(gallery.id, "/unblock")).then(function (response) {
+        _this6.galleries[index].state = 'تایید شده';
+        swal({
+          text: response.data.message,
+          type: 'success',
+          timer: 2500,
+          showConfirmButton: false
+        });
+      }).catch(error);
+    },
+>>>>>>> ehsan-dev
     paginate: function paginate(data, perPage, pageNumber) {
       this.pagination.from = data.length ? (pageNumber - 1) * perPage + 1 : " ";
       this.pagination.to = pageNumber * perPage > data.length ? data.length : pageNumber * perPage;
@@ -2989,6 +3256,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   computed: {
+<<<<<<< HEAD
     options: function options() {
       var options = [];
       if (this.features.length > 0) this.features.forEach(function (item) {
@@ -3003,13 +3271,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     filteredfeatures: function filteredfeatures() {
       var _this5 = this;
+=======
+    filteredroles: function filteredroles() {
+      var _this7 = this;
+>>>>>>> ehsan-dev
 
       var features = this.features;
 
       if (this.search) {
         features = features.filter(function (row) {
           return Object.keys(row).some(function (key) {
+<<<<<<< HEAD
             return String(row[key]).toLowerCase().indexOf(_this5.search.toLowerCase()) > -1;
+=======
+            return String(row[key]).toLowerCase().indexOf(_this7.search.toLowerCase()) > -1;
+>>>>>>> ehsan-dev
           });
         });
       }
@@ -3018,15 +3294,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var order = this.sortOrders[sortKey] || 1;
 
       if (sortKey) {
+<<<<<<< HEAD
         features = features.slice().sort(function (a, b) {
           var index = _this5.getIndex(_this5.columns, "name", sortKey);
+=======
+        galleries = galleries.slice().sort(function (a, b) {
+          var index = _this7.getIndex(_this7.columns, "name", sortKey);
+>>>>>>> ehsan-dev
 
           a = String(a[sortKey]).toLowerCase();
           b = String(b[sortKey]).toLowerCase();
 
+<<<<<<< HEAD
           if (_this5.columns[index].type && _this5.columns[index].type === "date") {
             return (a === b ? 0 : new Date(a).getTime() > new Date(b).getTime() ? 1 : -1) * order;
           } else if (_this5.columns[index].type && _this5.columns[index].type === "number") {
+=======
+          if (_this7.columns[index].type && _this7.columns[index].type === "date") {
+            return (a === b ? 0 : new Date(a).getTime() > new Date(b).getTime() ? 1 : -1) * order;
+          } else if (_this7.columns[index].type && _this7.columns[index].type === "number") {
+>>>>>>> ehsan-dev
             return (+a === +b ? 0 : +a > +b ? 1 : -1) * order;
           } else {
             return (a === b ? 0 : a > b ? 1 : -1) * order;
@@ -42835,219 +43122,398 @@ var render = function() {
     [
       _c("div", { staticClass: "m-content" }, [
         _c("div", { staticClass: "m-portlet m-portlet--mobile" }, [
-          _c("div", { staticClass: "col col-lg" }, [
-            _c(
-              "div",
-              { staticClass: "m-portlet__head" },
-              [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("div", { staticClass: "m-portlet__head-tools" }, [
-                  _c("ul", { staticClass: "m-portlet__nav" }, [
-                    _c("li", { staticClass: "m-portlet__nav-item" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill",
-                          attrs: { "data-toggle": "modal" },
-                          on: {
-                            click: function($event) {
-                              return _vm.showCreateModal()
-                            }
-                          }
-                        },
-                        [_c("i", { staticClass: "fa fa-plus" })]
-                      )
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("Modal", {
-                  attrs: { id: "create_gallery_modal" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "header",
-                      fn: function() {
-                        return [
-                          _c(
-                            "h5",
-                            {
-                              staticClass: "modal-title",
-                              attrs: { id: "exampleModalLabel" }
-                            },
-                            [_vm._v("ایجاد گالری جدید")]
-                          )
-                        ]
-                      },
-                      proxy: true
-                    },
-                    {
-                      key: "body",
-                      fn: function() {
-                        return [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.gallery_name,
-                                expression: "newItem.gallery_name"
-                              }
-                            ],
-                            staticClass: "form-control m-input",
-                            attrs: {
-                              id: "name",
-                              type: "text",
-                              placeholder: "نام گالری جدید"
-                            },
-                            domProps: { value: _vm.newItem.gallery_name },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "gallery_name",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ]
-                      },
-                      proxy: true
-                    }
-                  ])
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "m-portlet__body" }, [
+          _c(
+            "div",
+            { staticClass: "col col-lg" },
+            [
               _c(
                 "div",
-                {
-                  staticClass:
-                    "m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30"
-                },
+                { staticClass: "m-portlet__head" },
                 [
-                  _c("div", { staticClass: "row align-items-center" }, [
-                    _c("div", { staticClass: "col-xl-8 order-2 order-xl-1" }, [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "m-portlet__head-tools" }, [
+                    _c("ul", { staticClass: "m-portlet__nav" }, [
+                      _c("li", { staticClass: "m-portlet__nav-item" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill",
+                            attrs: { "data-toggle": "modal" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showCreateModal()
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fa fa-plus" })]
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("Modal", {
+                    attrs: { id: "create_gallery_modal" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "header",
+                        fn: function() {
+                          return [
+                            _c(
+                              "h5",
+                              {
+                                staticClass: "modal-title",
+                                attrs: { id: "exampleModalLabel" }
+                              },
+                              [_vm._v("ایجاد گالری جدید")]
+                            )
+                          ]
+                        },
+                        proxy: true
+                      },
+                      {
+                        key: "body",
+                        fn: function() {
+                          return [
+                            _c(
+                              "div",
+                              { staticClass: "form-group m-form__group" },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newItem.gallery_name,
+                                      expression: "newItem.gallery_name"
+                                    }
+                                  ],
+                                  staticClass: "form-control m-input",
+                                  attrs: {
+                                    id: "gallery_name",
+                                    type: "text",
+                                    placeholder: "نام گالری جدید"
+                                  },
+                                  domProps: { value: _vm.newItem.gallery_name },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.newItem,
+                                        "gallery_name",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "form-group m-form__group" },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newItem.location,
+                                      expression: "newItem.location"
+                                    }
+                                  ],
+                                  staticClass: "form-control m-input",
+                                  attrs: {
+                                    id: "location",
+                                    type: "text",
+                                    placeholder: "محل تولید"
+                                  },
+                                  domProps: { value: _vm.newItem.location },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.newItem,
+                                        "location",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "form-group m-form__group" },
+                              [
+                                _c("multi-select", {
+                                  attrs: {
+                                    placeholder: "نوع دست ساخته",
+                                    "selected-options": _vm.selectedTypes,
+                                    options: _vm.typeOptions
+                                  },
+                                  on: { select: _vm.onSelectedTypes }
+                                })
+                              ],
+                              1
+                            )
+                          ]
+                        },
+                        proxy: true
+                      },
+                      {
+                        key: "footer",
+                        fn: function() {
+                          return [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: {
+                                  "data-dismiss": "modal",
+                                  type: "submit"
+                                },
+                                on: { click: _vm.store }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                ثبت\n                            "
+                                )
+                              ]
+                            )
+                          ]
+                        },
+                        proxy: true
+                      }
+                    ])
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "m-portlet__body" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30"
+                  },
+                  [
+                    _c("div", { staticClass: "row align-items-center" }, [
                       _c(
                         "div",
-                        {
-                          staticClass:
-                            "form-group m-form__group row align-items-center"
-                        },
+                        { staticClass: "col-xl-8 order-2 order-xl-1" },
                         [
                           _c(
                             "div",
-                            { staticClass: "col-md-4 m--align-right" },
+                            {
+                              staticClass:
+                                "form-group m-form__group row align-items-center"
+                            },
                             [
                               _c(
                                 "div",
-                                {
-                                  staticClass: "m-input-icon m-input-icon--left"
-                                },
+                                { staticClass: "col-md-4 m--align-right" },
                                 [
-                                  _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.search,
-                                        expression: "search"
-                                      }
-                                    ],
-                                    staticClass:
-                                      "form-control m-input m-input--solid",
-                                    attrs: {
-                                      type: "text",
-                                      placeholder: "Search...",
-                                      id: "generalSearch"
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "m-input-icon m-input-icon--left"
                                     },
-                                    domProps: { value: _vm.search },
-                                    on: {
-                                      input: [
-                                        function($event) {
-                                          if ($event.target.composing) {
-                                            return
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.search,
+                                            expression: "search"
                                           }
-                                          _vm.search = $event.target.value
+                                        ],
+                                        staticClass:
+                                          "form-control m-input m-input--solid",
+                                        attrs: {
+                                          type: "text",
+                                          placeholder: "Search...",
+                                          id: "generalSearch"
                                         },
-                                        _vm.resetPagination
-                                      ]
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _vm._m(1)
+                                        domProps: { value: _vm.search },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.search = $event.target.value
+                                            },
+                                            _vm.resetPagination
+                                          ]
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _vm._m(1)
+                                    ]
+                                  )
                                 ]
                               )
                             ]
                           )
                         ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "col-xl-4 order-1 order-xl-2 m--align-right"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "form-group m-form__group row" },
+                            [
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "col-9 col-form-label-sm",
+                                  attrs: { for: "perPage" }
+                                },
+                                [_vm._v("تعداد رکوردها")]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "col-3" }, [
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.perPage,
+                                        expression: "perPage"
+                                      }
+                                    ],
+                                    staticClass:
+                                      "custom-select custom-select-sm form-control form-control-sm m-input m-datatable__pager-size",
+                                    attrs: { id: "perPage" },
+                                    on: {
+                                      change: [
+                                        function($event) {
+                                          var $$selectedVal = Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function(o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function(o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                          _vm.perPage = $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        },
+                                        function($event) {
+                                          return _vm.resetPagination()
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  [
+                                    _c("option", { attrs: { value: "10" } }, [
+                                      _vm._v("10")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "25" } }, [
+                                      _vm._v("25")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "50" } }, [
+                                      _vm._v("50")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "100" } }, [
+                                      _vm._v("100")
+                                    ])
+                                  ]
+                                )
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", {
+                            staticClass:
+                              "m-separator m-separator--dashed d-xl-none"
+                          })
+                        ]
                       )
-                    ]),
-                    _vm._v(" "),
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "m_datatable m-datatable m-datatable--default m-datatable--loaded",
+                    attrs: { id: "local_data" }
+                  },
+                  [
                     _c(
-                      "div",
+                      "data-table",
                       {
-                        staticClass:
-                          "col-xl-4 order-1 order-xl-2 m--align-right"
+                        attrs: {
+                          columns: _vm.columns,
+                          sortKey: _vm.sortKey,
+                          sortOrders: _vm.sortOrders
+                        },
+                        on: { sort: _vm.sortBy }
                       },
                       [
                         _c(
-                          "div",
-                          { staticClass: "form-group m-form__group row" },
-                          [
-                            _c(
-                              "label",
+                          "tbody",
+                          { staticClass: "m-datatable__body" },
+                          _vm._l(_vm.paginated, function(gallery) {
+                            return _c(
+                              "tr",
                               {
-                                staticClass: "col-9 col-form-label-sm",
-                                attrs: { for: "perPage" }
+                                key: gallery.id,
+                                staticClass:
+                                  "m-datatable__row m-datatable__row",
+                                staticStyle: { left: "0px" }
                               },
-                              [_vm._v("تعداد رکوردها")]
-                            ),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-3" }, [
-                              _c(
-                                "select",
-                                {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.perPage,
-                                      expression: "perPage"
-                                    }
-                                  ],
-                                  staticClass:
-                                    "custom-select custom-select-sm form-control form-control-sm m-input m-datatable__pager-size",
-                                  attrs: { id: "perPage" },
-                                  on: {
-                                    change: [
-                                      function($event) {
-                                        var $$selectedVal = Array.prototype.filter
-                                          .call($event.target.options, function(
-                                            o
-                                          ) {
-                                            return o.selected
-                                          })
-                                          .map(function(o) {
-                                            var val =
-                                              "_value" in o ? o._value : o.value
-                                            return val
-                                          })
-                                        _vm.perPage = $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      },
-                                      function($event) {
-                                        return _vm.resetPagination()
-                                      }
+                              [
+                                _c("td", { staticClass: "m-datatable__cell" }, [
+                                  _c(
+                                    "span",
+                                    { staticStyle: { width: "110px" } },
+                                    [_vm._v(_vm._s(gallery.gallery_name))]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", { staticClass: "m-datatable__cell" }, [
+                                  _c(
+                                    "div",
+                                    { staticStyle: { width: "110px" } },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(gallery.location) +
+                                          "\n                                    "
+                                      )
                                     ]
+<<<<<<< HEAD
                                   }
                                 },
                                 [
@@ -43132,133 +43598,343 @@ var render = function() {
                                   gallery.state === "بلاک"
                                     ? _c(
                                         "span",
+=======
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", { staticClass: "m-datatable__cell" }, [
+                                  _c(
+                                    "div",
+                                    { staticStyle: { width: "110px" } },
+                                    [
+                                      gallery.state === "مسدود"
+                                        ? _c(
+                                            "span",
+                                            {
+                                              staticClass:
+                                                "m-badge m-badge--danger m-badge--wide"
+                                            },
+                                            [_vm._v(_vm._s(gallery.state))]
+                                          )
+                                        : gallery.state === "تایید نشده"
+                                        ? _c(
+                                            "span",
+                                            {
+                                              staticClass:
+                                                "m-badge m-badge--warning m-badge--wide"
+                                            },
+                                            [_vm._v(_vm._s(gallery.state))]
+                                          )
+                                        : gallery.state === "تایید شده"
+                                        ? _c(
+                                            "span",
+                                            {
+                                              staticClass:
+                                                "m-badge m-badge--success m-badge--wide"
+                                            },
+                                            [_vm._v(_vm._s(gallery.state))]
+                                          )
+                                        : _vm._e()
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", { staticClass: "m-datatable__cell" }, [
+                                  _c(
+                                    "span",
+                                    { staticStyle: { width: "110px" } },
+                                    [_vm._v(_vm._s(gallery.created_at))]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", { staticClass: "m-datatable__cell" }, [
+                                  _c(
+                                    "span",
+                                    {
+                                      staticStyle: {
+                                        overflow: "visible",
+                                        position: "relative",
+                                        width: "110px"
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "button",
+>>>>>>> ehsan-dev
                                         {
                                           staticClass:
-                                            "m-badge m-badge--danger m-badge--wide"
+                                            "m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill",
+                                          attrs: { title: "نمایش جزییات" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.showDetailModal(
+                                                gallery
+                                              )
+                                            }
+                                          }
                                         },
-                                        [_vm._v(_vm._s(gallery.state))]
-                                      )
-                                    : gallery.state === "تایید نشده"
-                                    ? _c(
-                                        "span",
+                                        [_c("i", { staticClass: "la la-edit" })]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
                                         {
+                                          directives: [
+                                            {
+                                              name: "show",
+                                              rawName: "v-show",
+                                              value:
+                                                gallery.state === "تایید نشده",
+                                              expression:
+                                                "gallery.state === 'تایید نشده'"
+                                            }
+                                          ],
                                           staticClass:
-                                            "m-badge m-badge--warning m-badge--wide"
+                                            "m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill",
+                                          attrs: { title: "تایید" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.approve(gallery)
+                                            }
+                                          }
                                         },
+<<<<<<< HEAD
                                         [_vm._v(_vm._s(gallery.state))]
                                       )
                                     : gallery.state === "تایید شده"
                                     ? _c(
                                         "span",
+=======
+                                        [
+                                          _c("i", {
+                                            staticClass: "la la-check-circle"
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+>>>>>>> ehsan-dev
                                         {
+                                          directives: [
+                                            {
+                                              name: "show",
+                                              rawName: "v-show",
+                                              value:
+                                                gallery.state === "تایید شده",
+                                              expression:
+                                                "gallery.state === 'تایید شده'"
+                                            }
+                                          ],
                                           staticClass:
-                                            "m-badge m-badge--success m-badge--wide"
+                                            "m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill",
+                                          attrs: { title: "مسدود" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.block(gallery)
+                                            }
+                                          }
                                         },
-                                        [_vm._v(_vm._s(gallery.state))]
+                                        [_c("i", { staticClass: "fa fa-lock" })]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+                                        {
+                                          directives: [
+                                            {
+                                              name: "show",
+                                              rawName: "v-show",
+                                              value: gallery.state === "مسدود",
+                                              expression:
+                                                "gallery.state === 'مسدود'"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill",
+                                          attrs: { title: "باز کردن" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.unblock(gallery)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fa fa-lock-open"
+                                          })
+                                        ]
                                       )
+<<<<<<< HEAD
                                     : _vm._e()
+=======
+                                    ]
+                                  )
+>>>>>>> ehsan-dev
                                 ])
-                              ]),
-                              _vm._v(" "),
-                              _c("td", { staticClass: "m-datatable__cell" }, [
-                                _c(
-                                  "span",
-                                  { staticStyle: { width: "110px" } },
-                                  [_vm._v(_vm._s(gallery.created_at))]
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", { staticClass: "m-datatable__cell" }, [
-                                _c(
-                                  "span",
-                                  {
-                                    staticStyle: {
-                                      overflow: "visible",
-                                      position: "relative",
-                                      width: "110px"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill",
-                                        attrs: { title: "ویرایش" },
-                                        on: { click: function($event) {} }
-                                      },
-                                      [_c("i", { staticClass: "la la-edit" })]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "button",
-                                      {
-                                        directives: [
-                                          {
-                                            name: "show",
-                                            rawName: "v-show",
-                                            value:
-                                              gallery.state === "تایید نشده",
-                                            expression:
-                                              "gallery.state === 'تایید نشده'"
-                                          }
-                                        ],
-                                        staticClass:
-                                          "m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill",
-                                        attrs: { title: "تایید" },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.approve(gallery)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("i", {
-                                          staticClass: "la la-check-circle"
-                                        })
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill",
-                                        attrs: { title: "بلاک" },
-                                        on: { click: function($event) {} }
-                                      },
-                                      [_c("i", { staticClass: "la la-unlock" })]
-                                    )
-                                  ]
-                                )
-                              ])
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("pagination", {
-                    attrs: {
-                      pagination: _vm.pagination,
-                      filtered: _vm.filteredroles
-                    },
-                    on: {
-                      prev: function($event) {
-                        --_vm.pagination.currentPage
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("pagination", {
+                      attrs: {
+                        pagination: _vm.pagination,
+                        filtered: _vm.filteredroles
                       },
-                      next: function($event) {
-                        ++_vm.pagination.currentPage
+                      on: {
+                        prev: function($event) {
+                          --_vm.pagination.currentPage
+                        },
+                        next: function($event) {
+                          ++_vm.pagination.currentPage
+                        }
                       }
-                    }
-                  })
-                ],
-                1
-              )
-            ])
-          ])
+                    })
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("Modal", {
+                attrs: { id: "gallery_detail_modal" },
+                scopedSlots: _vm._u([
+                  {
+                    key: "header",
+                    fn: function() {
+                      return [
+                        _c(
+                          "h5",
+                          {
+                            staticClass: "modal-title",
+                            attrs: { id: "exampleModalLabel2" }
+                          },
+                          [_vm._v("ایجاد گالری جدید")]
+                        )
+                      ]
+                    },
+                    proxy: true
+                  },
+                  {
+                    key: "body",
+                    fn: function() {
+                      return [
+                        _c("div", { staticClass: "form-group m-form__group" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.newItem.gallery_name,
+                                expression: "newItem.gallery_name"
+                              }
+                            ],
+                            staticClass: "form-control m-input",
+                            attrs: {
+                              name: "gallery_name",
+                              type: "text",
+                              placeholder: "نام گالری جدید"
+                            },
+                            domProps: { value: _vm.newItem.gallery_name },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.newItem,
+                                  "gallery_name",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group m-form__group" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.newItem.location,
+                                expression: "newItem.location"
+                              }
+                            ],
+                            staticClass: "form-control m-input",
+                            attrs: {
+                              type: "text",
+                              name: "location",
+                              placeholder: "محل تولید"
+                            },
+                            domProps: { value: _vm.newItem.location },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.newItem,
+                                  "location",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group m-form__group" },
+                          [
+                            _c("multi-select", {
+                              attrs: {
+                                placeholder: "نوع دست ساخته",
+                                "selected-options": _vm.selectedTypes,
+                                options: _vm.typeOptions
+                              },
+                              on: { select: _vm.onSelectedTypes }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    },
+                    proxy: true
+                  },
+                  {
+                    key: "footer",
+                    fn: function() {
+                      return [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { "data-dismiss": "modal", type: "submit" },
+                            on: {
+                              click: function($event) {
+                                return _vm.update(_vm.newItem)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            بروزرسانی\n                        "
+                            )
+                          ]
+                        )
+                      ]
+                    },
+                    proxy: true
+                  }
+                ])
+              })
+            ],
+            1
+          )
         ])
       ])
     ]
