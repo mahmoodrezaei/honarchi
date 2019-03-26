@@ -22,6 +22,8 @@ class ProductTest extends TestCase
 
         $product = function() {
             $faker = Faker::create();
+            $image1 = UploadedFile::fake()->image('image1.jpg');
+            $image2 = UploadedFile::fake()->image('image2.jpg');
 
             return [
                         'category_id' => null,
@@ -35,18 +37,31 @@ class ProductTest extends TestCase
                         'major_price' => (string) $faker->numberBetween(1000, 9000),
                         'no' => $faker->randomNumber(),
                         'major_no' => $faker->randomNumber(2),
-                        'features' => json_encode([
-                            'color' => $faker->colorName,
-                            'material' => json_encode([
-                                'id' => 1,
-                                'value' => $faker->firstName
-                            ])
-
-                        ]),
+                        'features' => array (
+                                [
+                                    'type' => 'linked',
+                                    'name' => 1,
+                                    'value' => 2,
+                                    'feature' =>
+                                        [
+                                            'id' => 2,
+                                            'key_id' => 1,
+                                            'name' => 'silver',
+                                            'slug' => 'silver',
+                                            'created_at' => NULL,
+                                            'updated_at' => NULL,
+                                        ]
+                                ],
+                                [
+                                    'type' => 'normal',
+                                    'name' => 'color',
+                                    'value' => 'red',
+                                ]
+                        ),
                         'location' => $faker->city,
                         'pics' => [
-                            UploadedFile::fake()->image('image1.jpg'),
-                            UploadedFile::fake()->image('image2.jpg'),
+                            "data:image/{$image1->getClientOriginalExtension()};base64,".base64_encode($image1->get()),
+                            "data:image/{$image2->getClientOriginalExtension()};base64,".base64_encode($image2->get()),
                         ],
                         'max_purchase_per_rate' => 10,
             ];
@@ -100,10 +115,8 @@ class ProductTest extends TestCase
      */
     public function store_a_product($product)
     {
-
         $response = $this->json('POST', route('products.store'), $product);
 
-        dd('d');
         $product['pics'] = json_decode($response->content())->pics;
 
 
