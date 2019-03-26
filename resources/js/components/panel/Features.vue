@@ -6,7 +6,7 @@
           <div class="m-portlet__head">
             <div class="m-portlet__head-caption">
               <div class="m-portlet__head-title">
-                <h3 class="m-portlet__head-text">مدیریت نقش ها</h3>
+                <h3 class="m-portlet__head-text">مدیریت دسته بندی ها</h3>
               </div>
             </div>
 
@@ -24,9 +24,9 @@
               </ul>
             </div>
 
-            <Modal id="role_modal">
+            <Modal id="feature_modal">
               <template #header>
-                <h5 class="modal-title" id="exampleModalLabel">ایجاد نقش جدید</h5>
+                <h5 class="modal-title" id="exampleModalLabel">ایجاد دسته بندی جدید</h5>
               </template>
               <template #body>
                 <div class="form-group m-form-group">
@@ -34,17 +34,16 @@
                     id="name"
                     class="form-control m-input"
                     type="text"
-                    placeholder="نام نقش جدید"
+                    placeholder="نام دسته بندی جدید"
                     v-model="item.name"
                   >
                 </div>
                 <div class="form-group m-form-group">
-                  <multi-select
-                    placeholder="دسترسی ها"
-                    :selected-options="selectedPermissions"
-                    @select="permissionOnSelect"
+                  <model-select
+                    placeholder="دسته بندی مادر"
                     :options="options"
-                  ></multi-select>
+                    v-model="item.key_id"
+                  ></model-select>
                 </div>
               </template>
               <template #footer>
@@ -132,43 +131,44 @@
               >
                 <tbody style class="m-datatable__body">
                   <tr
-                    v-for="role in paginated"
-                    :key="role.id"
+                    v-for="feature in paginated"
+                    :key="feature.id"
                     class="m-datatable__row m-datatable__row"
                     style="left: 0px;"
                   >
                     <td class="m-datatable__cell">
-                      <span style="width: 110px;">{{role.name}}</span>
+                      <span style="width: 110px;">{{feature.name}}</span>
                     </td>
+
                     <td class="m-datatable__cell">
-                      <div style="width: 110px;" class="m-list-badge">
+                      <div style="width: 130px;" class="m-list-badge">
                         <div class="m-list-badge__items">
                           <div
+                            v-if="features.filter(item => item.id == feature.key_id)[0]"
                             style="margin: 10px;"
-                            v-for="permission in role.permissions"
-                            :key="permission.id"
                           >
                             <span
                               class="m-list-badge__item m-list-badge__item--brand"
-                            >{{permission.name}}</span>
+                            >{{ features.filter(item => item.id == feature.key_id)[0].name }}</span>
                           </div>
                         </div>
                       </div>
                     </td>
+
                     <td class="m-datatable__cell">
-                      <span style="width: 110px;">{{role.created_at}}</span>
+                      <span style="width: 110px;">{{feature.created_at}}</span>
                     </td>
                     <td class="m-datatable__cell">
                       <span style="overflow: visible; position: relative; width: 110px;">
                         <button
-                          @click="editModal(role)"
+                          @click="editModal(feature)"
                           class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
                           title="View "
                         >
                           <i class="la la-edit"></i>
                         </button>
                         <button
-                          @click="remove(role)"
+                          @click="remove(feature)"
                           class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
                           title="View "
                         >
@@ -182,7 +182,7 @@
 
               <pagination
                 :pagination="pagination"
-                :filtered="filteredroles"
+                :filtered="filteredfeatures"
                 @prev="--pagination.currentPage"
                 @next="++pagination.currentPage"
               ></pagination>
@@ -200,17 +200,17 @@
 import DataTable from "./DataTable";
 import Pagination from "./Pagination";
 import Modal from "./Modal.vue";
-import { MultiSelect } from "vue-search-select";
+import { ModelSelect } from "vue-search-select";
 
 export default {
-  components: { DataTable, Pagination, Modal, MultiSelect },
+  components: { DataTable, Pagination, Modal, ModelSelect },
 
   data() {
     let sortOrders = {};
 
     let columns = [
-      { label: "نام نقش", name: "role" },
-      { label: "دسترسی ها", name: "permissions" },
+      { label: "نام دسته بندی", name: "feature" },
+      { label: "کلید", name: "key" },
       { label: "تاریخ ایجاد", name: "created", type: "number" }
     ];
 
@@ -221,20 +221,17 @@ export default {
     return {
       modalType: "create",
 
-      roles: [],
-
-      permissions: [],
-      selectedPermissions: [],
+      features: [],
 
       columns,
 
-      sortKey: "role",
+      sortKey: "feature",
 
       search: "",
 
       sortOrders: sortOrders,
 
-      item: { name: "", permissions: [] },
+      item: { name: "", key_id: 0 },
 
       // how many items per page
       perPage: 10,
@@ -251,46 +248,28 @@ export default {
   },
 
   created() {
-    this.getroles();
-    this.getpermissions();
+    this.getfeatures();
   },
 
   methods: {
     editModal(item) {
-      this.selectedPermissions = item.permissions.map(x => {
-        return { text: x.name, value: x.id };
-      });
-      this.item = {
-        id: item.id,
-        name: item.name,
-        permissions: this.selectedPermissions.map(x => x.text)
-      };
-      $("#role_modal").modal("show");
+      this.item = { ...item };
+      $("#feature_modal").modal("show");
       this.modalType = "edit";
     },
 
     createModal(item) {
-      this.selectedPermissions = [];
-      this.item = { name: "", permissions: [] };
-      $("#role_modal").modal("show");
+      this.item = { name: "" };
+      $("#feature_modal").modal("show");
       this.modalType = "create";
     },
 
-    getroles() {
+    getfeatures() {
       axios
-        .get("/api/admin/roles")
+        .get("/api/admin/features")
         .then(response => {
-          this.roles = response.data;
-          this.pagination.total = this.roles.length;
-        })
-        .catch(error => console.log(error));
-    },
-
-    getpermissions() {
-      axios
-        .get("/api/admin/permissions")
-        .then(response => {
-          this.permissions = response.data;
+          this.features = response.data;
+          this.pagination.total = this.features.length;
         })
         .catch(error => console.log(error));
     },
@@ -323,16 +302,17 @@ export default {
 
     store() {
       axios
-        .post("/api/admin/roles", this.item)
+        .post("/api/admin/features", this.item)
         .then(response => {
-          this.roles.push(response.data);
-          this.pagination.total = this.roles.length;
+          this.features.push(response.data);
+          this.pagination.total = this.features.length;
           swal({
             type: "success",
-            text: "نقش با موفقیت اضافه شد",
+            text: "ویژگی با موفقیت اضافه شد",
             timer: 2500,
             showConfirmButton: false
           });
+          console.log(response.data);
         })
         .catch(error => {
           if (error.response.status == 422) {
@@ -366,55 +346,69 @@ export default {
         });
     },
 
-    update(role) {
-      const index = this.roles.findIndex(item => item.id == role.id);
+    update(feature) {
+      const index = this.features.findIndex(item => item.id == feature.id);
       console.log(index);
       axios
-        .put("/api/admin/roles/" + role.id, this.item)
+        .put("/api/admin/features/" + feature.id, this.item)
         .then(response => {
-          this.$set(this.roles, index, response.data);
+          this.$set(this.features, index, response.data);
           swal({
             type: "success",
-            text: "نقش به موفقیت به روز شد",
+            text: "ویژگی با موفقیت به روز شد",
             timer: 2500,
             showConfirmButton: false
           });
-          console.log(this.roles);
+          console.log(this.features);
         })
         .catch(error => {
-          if (error.response.status == 422) {
-            error.response.data.errors = Object.values(
-              error.response.data.errors
-            )
-              .map(item => {
-                return item
-                  .map(i => {
-                    return i;
-                  })
-                  .join("<hr/>");
-              })
-              .join("<br/>");
+          switch (error.response.status) {
+            case 422: {
+              error.response.data.errors = Object.values(
+                error.response.data.errors
+              )
+                .map(item => {
+                  return item
+                    .map(i => {
+                      return i;
+                    })
+                    .join("<hr/>");
+                })
+                .join("<br/>");
 
-            console.log(error.response.data);
+              console.log(error.response.data);
 
-            swal({
-              html: `
+              swal({
+                html: `
               <h2>داده ها نامعتبر میباشند</h2>
               <p> ${error.response.data.errors} </p>
               `,
-              type: "error",
+                type: "error",
 
-              confirmButtonText:
-                "<span><i class='la'></i><span>متوجه شدم</span></span>",
-              confirmButtonClass:
-                "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
-            });
+                confirmButtonText:
+                  "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                confirmButtonClass:
+                  "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+              });
+              break;
+            }
+            case 500: {
+              swal({
+                text: "خطایی رخ داده!",
+                type: "error",
+
+                confirmButtonText:
+                  "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                confirmButtonClass:
+                  "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+              });
+            }
           }
         });
     },
 
-    remove(role) {
-      const index = this.roles.indexOf(role);
+    remove(feature) {
+      const index = this.features.indexOf(feature);
       swal({
         text: "آیا اطمینان دارید که میخواهید این مورد را حذف کنید؟",
         type: "warning",
@@ -428,14 +422,31 @@ export default {
         console.log(answer);
         if (answer.value === true) {
           axios
-            .delete("/api/admin/roles/" + role.id)
+            .delete("/api/admin/features/" + feature.id)
             .then(response => {
-              this.roles.splice(index, 1);
+              this.features.splice(index, 1);
             })
             .catch(error => {
-              if (error.response.status == 500) {
+              if (error.response.status == 422) {
+                error.response.data.errors = Object.values(
+                  error.response.data.errors
+                )
+                  .map(item => {
+                    return item
+                      .map(i => {
+                        return i;
+                      })
+                      .join("<hr/>");
+                  })
+                  .join("<br/>");
+
+                console.log(error.response.data);
+
                 swal({
-                  text: "خطایی رخ داده!",
+                  html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
                   type: "error",
 
                   confirmButtonText:
@@ -447,31 +458,26 @@ export default {
             });
         }
       });
-    },
-
-    permissionOnSelect(items, lastSelectItem) {
-      this.selectedPermissions = items;
-      this.item.permissions = items.map(item => item.text);
     }
   },
 
   computed: {
     options() {
       let options = [];
-
-      this.permissions.forEach(item => {
-        let name = item.name || null;
-        let id = item.id || null;
-        options.push({ text: name, value: id });
-      });
+      if (this.features.length > 0)
+        this.features.forEach(item => {
+          let name = item.name || null;
+          let id = item.id || null;
+          options.push({ text: name, value: id });
+        });
       return options;
     },
 
-    filteredroles() {
-      let roles = this.roles;
+    filteredfeatures() {
+      let features = this.features;
 
       if (this.search) {
-        roles = roles.filter(row => {
+        features = features.filter(row => {
           return Object.keys(row).some(key => {
             return (
               String(row[key])
@@ -485,7 +491,7 @@ export default {
       let sortKey = this.sortKey;
       let order = this.sortOrders[sortKey] || 1;
       if (sortKey) {
-        roles = roles.slice().sort((a, b) => {
+        features = features.slice().sort((a, b) => {
           let index = this.getIndex(this.columns, "name", sortKey);
           a = String(a[sortKey]).toLowerCase();
           b = String(b[sortKey]).toLowerCase();
@@ -508,12 +514,12 @@ export default {
         });
       }
 
-      return roles;
+      return features;
     },
 
     paginated() {
       return this.paginate(
-        this.filteredroles,
+        this.filteredfeatures,
         this.perPage,
         this.pagination.currentPage
       );

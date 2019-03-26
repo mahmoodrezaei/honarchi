@@ -22,9 +22,6 @@ class categoryTest extends TestCase
     {
         $categories[] = factory(Category::class)->create()->toArray();
         $categories[] = factory(Category::class)->create()->toArray();
-        $categoriesNames =  array_map(function ($arr) {
-            return $arr['name'];
-        }, $categories);
 
         $response = $this->json('GET', route('categories.index'));
 
@@ -52,7 +49,7 @@ class categoryTest extends TestCase
                 'message' => 'The given data was invalid.',
                 'errors' => [
                     'name' => [
-                        'The name field is required.'
+                        trans('validation.required', ['attribute' => trans('validation.attributes.name')])
                     ]
                 ]
             ]);
@@ -67,7 +64,7 @@ class categoryTest extends TestCase
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'name' => ['The name may not be greater than 30 characters.']
+                    'name' => [trans('validation.max.string',['attribute' => trans('validation.attributes.name'), 'max' => '30'])]
                 ]
             ]);
 
@@ -81,7 +78,7 @@ class categoryTest extends TestCase
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'name' => ['The name has already been taken.']
+                    'name' => [trans('validation.unique',['attribute' => trans('validation.attributes.name')])]
                 ]
             ]);
 
@@ -95,7 +92,7 @@ class categoryTest extends TestCase
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'parent_id' => ['The parent id must be at least 1.']
+                    'parent_id' => [trans('validation.min.numeric', ['attribute' => 'parent id', 'min' => 1])]
                 ]
             ]);
 
@@ -109,7 +106,7 @@ class categoryTest extends TestCase
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'parent_id' => ['The parent id must be an integer.']
+                    'parent_id' => [trans('validation.integer', ['attribute' => 'parent id'])]
                 ]
             ]);
     }
@@ -155,7 +152,7 @@ class categoryTest extends TestCase
                 'message' => 'The given data was invalid.',
                 'errors' => [
                     'name' => [
-                        'The name field is required.'
+                        trans('validation.required', ['attribute' => trans('validation.attributes.name')])
                     ]
                 ]
             ]);
@@ -170,7 +167,7 @@ class categoryTest extends TestCase
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'name' => ['The name may not be greater than 30 characters.']
+                    'name' => [trans('validation.max.string', ['attribute' => trans('validation.attributes.name'), 'max' => '30'])]
                 ]
             ]);
 
@@ -184,7 +181,7 @@ class categoryTest extends TestCase
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'name' => ['The name has already been taken.']
+                    'name' => [trans('validation.unique', ['attribute' => trans('validation.attributes.name')])]
                 ]
             ]);
 
@@ -198,7 +195,7 @@ class categoryTest extends TestCase
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'parent_id' => ['The parent id must be at least 1.']
+                    'parent_id' => [trans('validation.min.numeric', ['attribute' => 'parent id', 'min' => 1])]
                 ]
             ]);
 
@@ -212,7 +209,7 @@ class categoryTest extends TestCase
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
                 'errors' => [
-                    'parent_id' => ['The parent id must be an integer.']
+                    'parent_id' => [trans('validation.integer', ['attribute' => 'parent id'])]
                 ]
             ]);
 

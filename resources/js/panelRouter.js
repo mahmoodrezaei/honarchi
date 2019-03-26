@@ -4,6 +4,8 @@ import Permissions from "./components/panel/Permissions";
 import Categories from "./components/panel/Categories.vue";
 import Roles from "./components/panel/Roles.vue";
 import Galleries from "./components/panel/Galleries";
+import Products from "./components/panel/Products";
+import Features from "./components/panel/Features";
 
 Vue.use(VueRouter);
 
@@ -24,6 +26,11 @@ let routes = [
     },
 
     {
+        path: "/admin/features",
+        component: Features
+    },
+
+    {
         path: "/admin/roles",
         component: Roles
     },
@@ -31,6 +38,11 @@ let routes = [
     {
         path: "/admin/galleries",
         component: Galleries
+    },
+
+    {
+        path: "/admin/products",
+        component: Products
     }
 ];
 

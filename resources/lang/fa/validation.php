@@ -115,6 +115,9 @@ return [
     'url'                  => ':attribute معتبر نمی‌باشد.',
     'uuid'                 => 'The :attribute must be a valid UUID.',
 
+    'feature_key_id_should_not_assign_to_a_feature_value' => 'فیلد کلید نباید به یک مقدار نسبت داده شود',
+    'A_number_of_entities_are_related' => 'تعدادی از :entities به این :entity وابسته هستند.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -173,9 +176,34 @@ return [
         'size'                  => 'اندازه',
         'terms'                 => 'شرایط',
         'province'              => 'استان',
+
+        'intro'                 => 'توضیحات کوتاه',
+        'purchase_price'        => 'قیمت خرید',
+        'price'                 => 'قیمت فروش',
+        'special_price'         => 'قیمت فروش ویژه',
+        'major_price'           => 'قیمت فروش عمده',
+        'no'                    => 'تعداد',
+        'major_no'              => 'حداق تعداد فروش عمده',
+        'features'              => 'ویژگی ها',
+        'pics'                  => 'عکس ها',
+        'max_purchase_per_rate' => 'حداقل تعداد فروش برای هر ستاره',
         'gallery_name'          => 'گالری',
         'location'              => 'محل تولید',
         'type'                  => 'نوع دست ساخته'
     ],
-];
 
+    'entities' => [
+        'category' => [
+            'plural' => 'دسته بندی ها',
+            'singular' => 'دسته بندی'
+        ],
+        'feature' => [
+            'plural' => 'ویژگی ها',
+            'singular' => 'ویژگی'
+        ],
+        'value' => [
+            'plural' => 'مقادیر',
+            'singular' => 'مقدار'
+        ],
+    ]
+];
