@@ -76,9 +76,14 @@ class GalleryController extends Controller
             'type' => 'required'
         ]);
 
-        $gallery->update($request->all());
+        $gallery->update($request->only([
+            'gallery_name',
+            'location',
+            'type'
+        ]));
 
         $data = [
+            'message' => 'گالری با موفقیت بروزرسانی شد',
             'gallery' => $gallery,
             'status_code' => 200
         ];

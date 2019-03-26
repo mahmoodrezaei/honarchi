@@ -147,7 +147,7 @@
                                     <td class="m-datatable__cell">
                                                 <span style="overflow: visible; position: relative; width: 110px;">
                                                     <button
-                                                            @click=""
+                                                            @click="showDetailModal(gallery)"
                                                             class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill"
                                                             title="نمایش جزییات"><i class="la la-edit"></i>
                                                     </button>
@@ -185,6 +185,44 @@
 
                         <!--end: Datatable -->
                     </div>
+
+                    <!-- modal for creating new gallery -->
+                    <Modal id="gallery_detail_modal">
+                        <template #header>
+                            <h5 class="modal-title" id="exampleModalLabel2">ایجاد گالری جدید</h5>
+                        </template>
+                        <template #body>
+                            <div class="form-group m-form__group">
+                                <input name="gallery_name" class="form-control m-input" type="text"
+                                       placeholder="نام گالری جدید"
+                                       v-model="newItem.gallery_name">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input class="form-control m-input" type="text"
+                                       name="location"
+                                       placeholder="محل تولید"
+                                       v-model="newItem.location">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <multi-select
+                                        placeholder="نوع دست ساخته"
+                                        :selected-options="selectedTypes"
+                                        @select="onSelectedTypes"
+                                        :options="typeOptions"
+                                ></multi-select>
+                            </div>
+                        </template>
+                        <template #footer>
+                            <button
+                                    @click="update(newItem)"
+                                    data-dismiss="modal"
+                                    type="submit"
+                                    class="btn btn-primary">
+                                بروزرسانی
+                            </button>
+                        </template>
+                    </Modal>
+
                 </div>
             </div>
         </div>
@@ -267,8 +305,10 @@
         },
 
         methods: {
+
             showCreateModal() {
                 this.newItem = {
+                    id: '',
                     owner_id: '',
                     gallery_name: '',
                     location: '',
@@ -276,7 +316,26 @@
                     state: '',
                     created_at: ''
                 };
+
+                this.selectedTypes = [];
+
                 $('#create_gallery_modal').modal('show')
+            },
+
+            showDetailModal(gallery) {
+                $('#gallery_detail_modal').modal('show');
+
+                this.selectedTypes = gallery.type.map(item => {
+                    return {text: item, value: item}
+                });
+
+                this.newItem = {
+                    id: gallery.id,
+                    owner_id: '',
+                    gallery_name: gallery.gallery_name,
+                    location: gallery.location,
+                    type: this.selectedTypes.map(item => item.text)
+                };
             },
 
             onSelectedTypes(items, lastSelectItem) {
@@ -290,14 +349,17 @@
                     .then(response => {
                         if (response.data.status_code === 201) {
                             swal({type: 'success', text: response.data.message, timer: 2500});
-                            this.newItem.gallery_name = response.data.gallery.gallery_name;
-                            this.newItem.location = response.data.gallery.location;
-                            this.newItem.state = response.data.gallery.state;
-                            this.newItem.created_at = response.data.gallery.created_at;
+
+                            this.newItem = {
+                                gallery_name: response.data.gallery.gallery_name,
+                                location: response.data.gallery.location,
+                                state: response.data.gallery.state,
+                                created_at: response.data.gallery.created_at
+                            };
+
                             this.galleries.push(this.newItem);
                             this.pagination.total = this.galleries.length;
                         }
-                        console.log(response.data.gallery)
                     })
                     .catch(error => {
                         if (error.response.status === 422) {
@@ -313,6 +375,43 @@
                             });
                         }
                     })
+            },
+
+            update(gallery) {
+
+                const index = this.galleries.findIndex(item => item.id === gallery.id);
+
+                console.log(gallery);
+                console.log('index: ' + index)
+
+                axios.patch(`/api/admin/galleries/${gallery.id}`, this.newItem)
+                    .then(response => {
+                        if (response.data.status_code === 200) {
+                            swal({type: 'success', text: response.data.message, timer: 2500});
+                            this.newItem = {
+                                gallery_name: response.data.gallery.gallery_name,
+                                location: response.data.gallery.location,
+                                state: response.data.gallery.state,
+                                created_at: response.data.gallery.created_at,
+                            };
+
+                            this.$set(this.galleries, index, this.newItem)
+                        }
+                    })
+                    .catch(error => {
+                        if (error.response.status === 422) {
+                            const errors = error.response.data.errors;
+
+                            console.log(Object.keys(errors));
+
+                            // errors.forEach((key, value) => console.log(value));
+                            swal({
+                                html: '<p v-for="item in Object.keys(errors)">{{ errors[item] }}</p>',
+                                type: 'error',
+                                timer: 3000,
+                            });
+                        }
+                    });
             },
 
             getGalleries() {
