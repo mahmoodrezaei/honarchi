@@ -1934,6 +1934,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
@@ -2294,7 +2306,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getcategories: function getcategories() {
       var _this = this;
 
-      axios.get("/api/categories").then(function (response) {
+      axios.get("/api/admin/categories").then(function (response) {
         _this.categories = response.data;
         _this.pagination.total = _this.categories.length;
       }).catch(function (error) {
@@ -2323,23 +2335,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return i[key] == value;
       });
     },
-    save: function save() {
+    store: function store() {
       var _this2 = this;
 
-      axios.post("/api/categories", this.item).then(function (response) {
+      axios.post("/api/admin/categories", this.item).then(function (response) {
         _this2.categories.push(response.data);
 
         _this2.pagination.total = _this2.categories.length;
+        swal({
+          type: "success",
+          text: "دسته بندی با موفقیت اضافه شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
         console.log(response.data);
       }).catch(function (error) {
         if (error.response.status == 422) {
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
+          console.log(error.response.data);
           swal({
-            text: error.response.data.message,
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
             type: "error",
             confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
             confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
           });
-          console.log(error.response.data);
         }
       });
     },
@@ -2350,14 +2373,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return item.id == category.id;
       });
       console.log(index);
-      axios.put("/api/categories/" + category.id, this.item).then(function (response) {
+      axios.put("/api/admin/categories/" + category.id, this.item).then(function (response) {
         _this3.$set(_this3.categories, index, response.data);
 
+        swal({
+          type: "success",
+          text: "دسته بندی با موفقیت به روز شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
         console.log(_this3.categories);
       }).catch(function (error) {
         if (error.response.status == 422) {
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
+          console.log(error.response.data);
           swal({
-            text: error.response.data.message,
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
             type: "error",
             confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
             confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
@@ -2381,26 +2416,40 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(answer);
 
         if (answer.value === true) {
-          axios.delete("/api/categories/" + category.id).then(function (response) {
+          axios.delete("/api/admin/categories/" + category.id).then(function (response) {
             _this4.categories.splice(index, 1);
           }).catch(function (error) {
-            if (error.response.status == 500) {
-              swal({
-                text: "ابتدا زیر مجموعه های این دسته بندی را تغییر دهید.",
-                type: "error",
-                confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
-                confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
-              });
+            switch (error.response.status) {
+              case 422:
+                {
+                  error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+                    return item.map(function (i) {
+                      return i;
+                    }).join("<hr/>");
+                  }).join("<br/>");
+                  console.log(error.response.data);
+                  swal({
+                    html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
+                    type: "error",
+                    confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                    confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+                  });
+                  break;
+                }
+
+              case 500:
+                {
+                  swal({
+                    text: "خطایی رخ داده!",
+                    type: "error",
+                    confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                    confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+                  });
+                }
             }
           });
         }
-      }); // const index = this.categories.indexOf(category);
-      // console.log(category);
-      // if (confirm("آیا اطمینان داری، این دسته بندی حذف شود؟")) {
-      //   axios.delete("/api/categories/" + category.id).then(response => {
-      //     this.categories.splice(index, 1);
-      //   });
-      // }
+      });
     }
   },
   computed: {
@@ -2504,6 +2553,493 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["columns", "sortKey", "sortOrders"]
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/panel/Features.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/panel/Features.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DataTable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DataTable */ "./resources/js/components/panel/DataTable.vue");
+/* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pagination */ "./resources/js/components/panel/Pagination.vue");
+/* harmony import */ var _Modal_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Modal.vue */ "./resources/js/components/panel/Modal.vue");
+/* harmony import */ var vue_search_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-search-select */ "./node_modules/vue-search-select/publish/vue-search-select.js");
+/* harmony import */ var vue_search_select__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_search_select__WEBPACK_IMPORTED_MODULE_3__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    DataTable: _DataTable__WEBPACK_IMPORTED_MODULE_0__["default"],
+    Pagination: _Pagination__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Modal: _Modal_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    ModelSelect: vue_search_select__WEBPACK_IMPORTED_MODULE_3__["ModelSelect"]
+  },
+  data: function data() {
+    var sortOrders = {};
+    var columns = [{
+      label: "نام دسته بندی",
+      name: "feature"
+    }, {
+      label: "کلید",
+      name: "key"
+    }, {
+      label: "تاریخ ایجاد",
+      name: "created",
+      type: "number"
+    }];
+    columns.forEach(function (column) {
+      sortOrders[column.name] = -1;
+    });
+    return {
+      modalType: "create",
+      features: [],
+      columns: columns,
+      sortKey: "feature",
+      search: "",
+      sortOrders: sortOrders,
+      item: {
+        name: "",
+        key_id: 0
+      },
+      // how many items per page
+      perPage: 10,
+      pagination: {
+        currentPage: 1,
+        total: "",
+        nextPage: "",
+        prevPage: "",
+        from: "",
+        to: ""
+      }
+    };
+  },
+  created: function created() {
+    this.getfeatures();
+  },
+  methods: {
+    editModal: function editModal(item) {
+      this.item = _objectSpread({}, item);
+      $("#feature_modal").modal("show");
+      this.modalType = "edit";
+    },
+    createModal: function createModal(item) {
+      this.item = {
+        name: ""
+      };
+      $("#feature_modal").modal("show");
+      this.modalType = "create";
+    },
+    getfeatures: function getfeatures() {
+      var _this = this;
+
+      axios.get("/api/admin/features").then(function (response) {
+        _this.features = response.data;
+        _this.pagination.total = _this.features.length;
+      }).catch(function (error) {
+        return console.log(error);
+      });
+    },
+    paginate: function paginate(data, perPage, pageNumber) {
+      this.pagination.from = data.length ? (pageNumber - 1) * perPage + 1 : " ";
+      this.pagination.to = pageNumber * perPage > data.length ? data.length : pageNumber * perPage;
+      this.pagination.prevPage = pageNumber > 1 ? pageNumber : "";
+      this.pagination.nextPage = data.length > this.pagination.to ? pageNumber + 1 : "";
+      return data.slice((pageNumber - 1) * perPage, pageNumber * perPage);
+    },
+    resetPagination: function resetPagination() {
+      this.pagination.currentPage = 1;
+      this.pagination.prevPage = "";
+      this.pagination.nextPage = "";
+    },
+    sortBy: function sortBy(key) {
+      this.resetPagination();
+      this.sortKey = key;
+      this.sortOrders[key] = this.sortOrders[key] * -1;
+    },
+    getIndex: function getIndex(array, key, value) {
+      return array.findIndex(function (i) {
+        return i[key] == value;
+      });
+    },
+    store: function store() {
+      var _this2 = this;
+
+      axios.post("/api/admin/features", this.item).then(function (response) {
+        _this2.features.push(response.data);
+
+        _this2.pagination.total = _this2.features.length;
+        swal({
+          type: "success",
+          text: "ویژگی با موفقیت اضافه شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
+        console.log(response.data);
+      }).catch(function (error) {
+        if (error.response.status == 422) {
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
+          console.log(error.response.data);
+          swal({
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
+            type: "error",
+            confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
+            confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+          });
+        }
+      });
+    },
+    update: function update(feature) {
+      var _this3 = this;
+
+      var index = this.features.findIndex(function (item) {
+        return item.id == feature.id;
+      });
+      console.log(index);
+      axios.put("/api/admin/features/" + feature.id, this.item).then(function (response) {
+        _this3.$set(_this3.features, index, response.data);
+
+        swal({
+          type: "success",
+          text: "ویژگی با موفقیت به روز شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
+        console.log(_this3.features);
+      }).catch(function (error) {
+        switch (error.response.status) {
+          case 422:
+            {
+              error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+                return item.map(function (i) {
+                  return i;
+                }).join("<hr/>");
+              }).join("<br/>");
+              console.log(error.response.data);
+              swal({
+                html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
+                type: "error",
+                confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+              });
+              break;
+            }
+
+          case 500:
+            {
+              swal({
+                text: "خطایی رخ داده!",
+                type: "error",
+                confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+              });
+            }
+        }
+      });
+    },
+    remove: function remove(feature) {
+      var _this4 = this;
+
+      var index = this.features.indexOf(feature);
+      swal({
+        text: "آیا اطمینان دارید که میخواهید این مورد را حذف کنید؟",
+        type: "warning",
+        confirmButtonText: "<span><i class='la'></i><span>بله</span></span>",
+        confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon",
+        showCancelButton: !0,
+        cancelButtonText: "<span><i class='la'></i><span>خیر</span></span>",
+        cancelButtonClass: "btn btn-secondary m-btn m-btn--pill m-btn--icon"
+      }).then(function (answer) {
+        console.log(answer);
+
+        if (answer.value === true) {
+          axios.delete("/api/admin/features/" + feature.id).then(function (response) {
+            _this4.features.splice(index, 1);
+          }).catch(function (error) {
+            if (error.response.status == 422) {
+              error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+                return item.map(function (i) {
+                  return i;
+                }).join("<hr/>");
+              }).join("<br/>");
+              console.log(error.response.data);
+              swal({
+                html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
+                type: "error",
+                confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+              });
+            }
+          });
+        }
+      });
+    }
+  },
+  computed: {
+    options: function options() {
+      var options = [];
+      if (this.features.length > 0) this.features.forEach(function (item) {
+        var name = item.name || null;
+        var id = item.id || null;
+        options.push({
+          text: name,
+          value: id
+        });
+      });
+      return options;
+    },
+    filteredfeatures: function filteredfeatures() {
+      var _this5 = this;
+
+      var features = this.features;
+
+      if (this.search) {
+        features = features.filter(function (row) {
+          return Object.keys(row).some(function (key) {
+            return String(row[key]).toLowerCase().indexOf(_this5.search.toLowerCase()) > -1;
+          });
+        });
+      }
+
+      var sortKey = this.sortKey;
+      var order = this.sortOrders[sortKey] || 1;
+
+      if (sortKey) {
+        features = features.slice().sort(function (a, b) {
+          var index = _this5.getIndex(_this5.columns, "name", sortKey);
+
+          a = String(a[sortKey]).toLowerCase();
+          b = String(b[sortKey]).toLowerCase();
+
+          if (_this5.columns[index].type && _this5.columns[index].type === "date") {
+            return (a === b ? 0 : new Date(a).getTime() > new Date(b).getTime() ? 1 : -1) * order;
+          } else if (_this5.columns[index].type && _this5.columns[index].type === "number") {
+            return (+a === +b ? 0 : +a > +b ? 1 : -1) * order;
+          } else {
+            return (a === b ? 0 : a > b ? 1 : -1) * order;
+          }
+        });
+      }
+
+      return features;
+    },
+    paginated: function paginated() {
+      return this.paginate(this.filteredfeatures, this.perPage, this.pagination.currentPage);
+    }
+  }
 });
 
 /***/ }),
@@ -3230,7 +3766,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getpermissions: function getpermissions() {
       var _this = this;
 
-      axios.get("/api/permissions").then(function (response) {
+      axios.get("/api/admin/permissions").then(function (response) {
         _this.permissions = response.data;
         _this.pagination.total = _this.permissions.length;
       }).catch(function (error) {
@@ -3259,23 +3795,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return i[key] == value;
       });
     },
-    save: function save() {
+    store: function store() {
       var _this2 = this;
 
-      axios.post("/api/permissions", this.item).then(function (response) {
+      axios.post("/api/admin/permissions", this.item).then(function (response) {
         _this2.permissions.push(response.data);
 
         _this2.pagination.total = _this2.permissions.length;
+        swal({
+          type: "success",
+          text: "اجازه دسترسی با موفقیت اضافه شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
         console.log(response.data);
       }).catch(function (error) {
         if (error.response.status == 422) {
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
+          console.log(error.response.data);
           swal({
-            text: error.response.data.message,
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
             type: "error",
             confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
             confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
           });
-          console.log(error.response.data);
         }
       });
     },
@@ -3285,14 +3832,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var index = this.permissions.findIndex(function (item) {
         return item.id == permission.id;
       });
-      axios.put("/api/permissions/" + permission.id, this.item).then(function (response) {
+      axios.put("/api/admin/permissions/" + permission.id, this.item).then(function (response) {
         _this3.$set(_this3.permissions, index, _this3.item);
 
+        swal({
+          type: "success",
+          text: "اجازه دسترسی به موفقیت بروز شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
         console.log(response.data);
       }).catch(function (error) {
         if (error.response.status == 422) {
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
+          console.log(error.response.data);
           swal({
-            text: error.response.data.message,
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
             type: "error",
             confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
             confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
@@ -3316,7 +3875,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(answer);
 
         if (answer.value === true) {
-          axios.delete("/api/permissions/" + permission.id).then(function (response) {
+          axios.delete("/api/admin/permissions/" + permission.id).then(function (response) {
             _this4.permissions.splice(index, 1);
           }).catch(function (error) {
             if (error.response.status == 500) {
@@ -3329,13 +3888,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           });
         }
-      }); // const index = this.permissions.indexOf(permission);
-      // console.log(permission);
-      // if (confirm("آیا اطمینان داری، این سطح دسترسی حذف شود؟")) {
-      //   axios.delete("/api/permissions/" + permission.id).then(response => {
-      //     this.permissions.splice(index, 1);
-      //   });
-      // }
+      });
     }
   },
   computed: {
@@ -3889,7 +4442,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       sortOrders[column.name] = -1;
     });
     return {
-      mohsen: [],
       rowType: "",
       imgLoacation: window.origin + "/storage/products/",
       modalType: "create",
@@ -3988,7 +4540,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getproducts: function getproducts() {
       var _this = this;
 
-      axios.get("/api/products").then(function (response) {
+      axios.get("/api/admin/products").then(function (response) {
         _this.products = response.data;
         _this.pagination.total = _this.products.length;
       }).catch(function (error) {
@@ -3998,7 +4550,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getcategories: function getcategories() {
       var _this2 = this;
 
-      axios.get("/api/categories").then(function (response) {
+      axios.get("/api/admin/categories").then(function (response) {
         _this2.categories = response.data;
       }).catch(function (error) {
         return console.log(error);
@@ -4016,8 +4568,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getfeatures: function getfeatures() {
       var _this4 = this;
 
-      axios.get("/api/features").then(function (response) {
-        _this4.features = response.data;
+      axios.get("/api/admin/features").then(function (response) {
+        response.data.forEach(function (item) {
+          if (item.key_id) {
+            this.features["features_values"].push(item);
+          } else {
+            this.features["features_names"].push(item);
+          }
+        }.bind(_this4));
       }).catch(function (error) {
         return console.log(error);
       });
@@ -4044,7 +4602,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return i[key] == value;
       });
     },
-    save: function save() {
+    store: function store() {
       var _this5 = this;
 
       this.item.pics = window.pics;
@@ -4064,15 +4622,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       console.log(this.item);
-      axios.post("/api/products", this.item).then(function (response) {
+      axios.post("/api/admin/products", this.item).then(function (response) {
         _this5.products.push(response.data);
 
         _this5.pagination.total = _this5.products.length;
+        swal({
+          type: "success",
+          text: "محصول با موفقیت اضافه شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
         console.log(response.data);
       }).catch(function (error) {
         if (error.response.status == 422) {
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
           swal({
-            text: error.response.data.message,
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
             type: "error",
             confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
             confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
@@ -4104,15 +4673,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var index = this.products.findIndex(function (item) {
         return item.id == product.id;
       });
-      axios.put("/api/products/" + product.id, this.item).then(function (response) {
+      axios.put("/api/admin/products/" + product.id, this.item).then(function (response) {
         _this6.$set(_this6.products, index, response.data);
 
+        swal({
+          type: "success",
+          text: "محصول با موفقیت به روز شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
         console.log(_this6.products);
       }).catch(function (error) {
         if (error.response.status == 422) {
-          console.log(error.response.data);
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
           swal({
-            text: error.response.data.message,
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
             type: "error",
             confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
             confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
@@ -4136,12 +4715,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(answer);
 
         if (answer.value === true) {
-          axios.delete("/api/products/" + product.id).then(function (response) {
+          axios.delete("/api/admin/products/" + product.id).then(function (response) {
             _this7.products.splice(index, 1);
+
+            swal({
+              type: "success",
+              text: "محصول با موفقیت حذف شد",
+              timer: 2500
+            });
           }).catch(function (error) {
             if (error.response.status == 500) {
               swal({
-                text: "ابتدا زیر مجموعه های این محصول را تغییر دهید.",
+                text: "خطایی رخ داده!",
                 type: "error",
                 confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
                 confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
@@ -4149,13 +4734,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           });
         }
-      }); // const index = this.products.indexOf(product);
-      // console.log(product);
-      // if (confirm("آیا اطمینان داری، این محصول حذف شود؟")) {
-      //   axios.delete("/api/products/" + product.id).then(response => {
-      //     this.products.splice(index, 1);
-      //   });
-      // }
+      });
     }
   },
   computed: {
@@ -4549,7 +5128,7 @@ __webpack_require__.r(__webpack_exports__);
     getroles: function getroles() {
       var _this = this;
 
-      axios.get("/api/roles").then(function (response) {
+      axios.get("/api/admin/roles").then(function (response) {
         _this.roles = response.data;
         _this.pagination.total = _this.roles.length;
       }).catch(function (error) {
@@ -4559,7 +5138,7 @@ __webpack_require__.r(__webpack_exports__);
     getpermissions: function getpermissions() {
       var _this2 = this;
 
-      axios.get("/api/permissions").then(function (response) {
+      axios.get("/api/admin/permissions").then(function (response) {
         _this2.permissions = response.data;
       }).catch(function (error) {
         return console.log(error);
@@ -4587,22 +5166,33 @@ __webpack_require__.r(__webpack_exports__);
         return i[key] == value;
       });
     },
-    save: function save() {
+    store: function store() {
       var _this3 = this;
 
-      axios.post("/api/roles", this.item).then(function (response) {
+      axios.post("/api/admin/roles", this.item).then(function (response) {
         _this3.roles.push(response.data);
 
         _this3.pagination.total = _this3.roles.length;
+        swal({
+          type: "success",
+          text: "نقش با موفقیت اضافه شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
       }).catch(function (error) {
         if (error.response.status == 422) {
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
+          console.log(error.response.data);
           swal({
-            text: error.response.data.message,
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
             type: "error",
             confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
             confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
           });
-          console.log(error.response.data);
         }
       });
     },
@@ -4613,14 +5203,26 @@ __webpack_require__.r(__webpack_exports__);
         return item.id == role.id;
       });
       console.log(index);
-      axios.put("/api/roles/" + role.id, this.item).then(function (response) {
+      axios.put("/api/admin/roles/" + role.id, this.item).then(function (response) {
         _this4.$set(_this4.roles, index, response.data);
 
+        swal({
+          type: "success",
+          text: "نقش به موفقیت به روز شد",
+          timer: 2500,
+          showConfirmButton: false
+        });
         console.log(_this4.roles);
       }).catch(function (error) {
         if (error.response.status == 422) {
+          error.response.data.errors = Object.values(error.response.data.errors).map(function (item) {
+            return item.map(function (i) {
+              return i;
+            }).join("<hr/>");
+          }).join("<br/>");
+          console.log(error.response.data);
           swal({
-            text: error.response.data.message,
+            html: "\n              <h2>\u062F\u0627\u062F\u0647 \u0647\u0627 \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0645\u06CC\u0628\u0627\u0634\u0646\u062F</h2>\n              <p> ".concat(error.response.data.errors, " </p>\n              "),
             type: "error",
             confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
             confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
@@ -4644,12 +5246,12 @@ __webpack_require__.r(__webpack_exports__);
         console.log(answer);
 
         if (answer.value === true) {
-          axios.delete("/api/roles/" + role.id).then(function (response) {
+          axios.delete("/api/admin/roles/" + role.id).then(function (response) {
             _this5.roles.splice(index, 1);
           }).catch(function (error) {
             if (error.response.status == 500) {
               swal({
-                text: "ابتدا زیر مجموعه های این نقش را تغییر دهید.",
+                text: "خطایی رخ داده!",
                 type: "error",
                 confirmButtonText: "<span><i class='la'></i><span>متوجه شدم</span></span>",
                 confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
@@ -40613,6 +41215,36 @@ var render = function() {
                         on: {
                           click: function($event) {
                             $event.preventDefault()
+                            return _vm.$router.push("/admin/features")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "m-menu__link-icon flaticon-line-graph"
+                        }),
+                        _vm._v(" "),
+                        _vm._m(4)
+                      ]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  {
+                    staticClass: "m-menu__item m-menu__item--submenu",
+                    attrs: { "aria-haspopup": "true" }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "m-menu__link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
                             return _vm.$router.push("/admin/categories")
                           }
                         }
@@ -40622,13 +41254,13 @@ var render = function() {
                           staticClass: "m-menu__link-icon flaticon-notes"
                         }),
                         _vm._v(" "),
-                        _vm._m(4)
+                        _vm._m(5)
                       ]
                     )
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(5),
+                _vm._m(6),
                 _vm._v(" "),
                 _c(
                   "li",
@@ -40654,13 +41286,13 @@ var render = function() {
                           staticClass: "m-menu__link-icon flaticon-line-graph"
                         }),
                         _vm._v(" "),
-                        _vm._m(6)
+                        _vm._m(7)
                       ]
                     )
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(7),
+                _vm._m(8),
                 _vm._v(" "),
                 _c(
                   "li",
@@ -40686,7 +41318,7 @@ var render = function() {
                           staticClass: "m-menu__link-icon flaticon-users"
                         }),
                         _vm._v(" "),
-                        _vm._m(8)
+                        _vm._m(9)
                       ]
                     )
                   ]
@@ -40717,7 +41349,7 @@ var render = function() {
                             "m-menu__link-icon flaticon-user-settings"
                         }),
                         _vm._v(" "),
-                        _vm._m(9)
+                        _vm._m(10)
                       ]
                     )
                   ]
@@ -40748,7 +41380,7 @@ var render = function() {
                             "m-menu__link-icon flaticon-user-settings"
                         }),
                         _vm._v(" "),
-                        _vm._m(10)
+                        _vm._m(11)
                       ]
                     )
                   ]
@@ -40824,6 +41456,18 @@ var staticRenderFns = [
       _c("span", { staticClass: "m-menu__link-wrap" }, [
         _c("span", { staticClass: "m-menu__link-text" }, [
           _vm._v("لیست محصولات")
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "m-menu__link-title" }, [
+      _c("span", { staticClass: "m-menu__link-wrap" }, [
+        _c("span", { staticClass: "m-menu__link-text" }, [
+          _vm._v("ویژگی های لینک شده")
         ])
       ])
     ])
@@ -41123,7 +41767,7 @@ var render = function() {
                                 "data-dismiss": "modal",
                                 type: "submit"
                               },
-                              on: { click: _vm.save }
+                              on: { click: _vm.store }
                             },
                             [_vm._v("ثبت کن")]
                           ),
@@ -41614,6 +42258,553 @@ var staticRenderFns = [
           _c("span", [_c("i", { staticClass: "fa fa-toolbox" })])
         ])
       ]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/panel/Features.vue?vue&type=template&id=0fd40f13&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/panel/Features.vue?vue&type=template&id=0fd40f13& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "m-grid__item m-grid__item--fluid m-wrapper" },
+    [
+      _c("div", { staticClass: "m-content" }, [
+        _c("div", { staticClass: "m-portlet m-portlet--mobile" }, [
+          _c("div", { staticClass: "col col-lg" }, [
+            _c(
+              "div",
+              { staticClass: "m-portlet__head" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "m-portlet__head-tools" }, [
+                  _c("ul", { staticClass: "m-portlet__nav" }, [
+                    _c("li", { staticClass: "m-portlet__nav-item" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill",
+                          attrs: { "data-toggle": "modal" },
+                          on: { click: _vm.createModal }
+                        },
+                        [_c("i", { staticClass: "fa fa-plus" })]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("Modal", {
+                  attrs: { id: "feature_modal" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "header",
+                      fn: function() {
+                        return [
+                          _c(
+                            "h5",
+                            {
+                              staticClass: "modal-title",
+                              attrs: { id: "exampleModalLabel" }
+                            },
+                            [_vm._v("ایجاد دسته بندی جدید")]
+                          )
+                        ]
+                      },
+                      proxy: true
+                    },
+                    {
+                      key: "body",
+                      fn: function() {
+                        return [
+                          _c(
+                            "div",
+                            { staticClass: "form-group m-form-group" },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.item.name,
+                                    expression: "item.name"
+                                  }
+                                ],
+                                staticClass: "form-control m-input",
+                                attrs: {
+                                  id: "name",
+                                  type: "text",
+                                  placeholder: "نام دسته بندی جدید"
+                                },
+                                domProps: { value: _vm.item.name },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.item,
+                                      "name",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "form-group m-form-group" },
+                            [
+                              _c("model-select", {
+                                attrs: {
+                                  placeholder: "دسته بندی مادر",
+                                  options: _vm.options
+                                },
+                                model: {
+                                  value: _vm.item.key_id,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.item, "key_id", $$v)
+                                  },
+                                  expression: "item.key_id"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ]
+                      },
+                      proxy: true
+                    },
+                    {
+                      key: "footer",
+                      fn: function() {
+                        return [
+                          _c(
+                            "button",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.modalType == "create",
+                                  expression: "modalType == 'create'"
+                                }
+                              ],
+                              staticClass: "btn btn-primary",
+                              attrs: {
+                                "data-dismiss": "modal",
+                                type: "submit"
+                              },
+                              on: { click: _vm.store }
+                            },
+                            [_vm._v("ثبت کن")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.modalType == "edit",
+                                  expression: "modalType == 'edit'"
+                                }
+                              ],
+                              staticClass: "btn btn-primary",
+                              attrs: {
+                                "data-dismiss": "modal",
+                                type: "submit"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.update(_vm.item)
+                                }
+                              }
+                            },
+                            [_vm._v("بروزرسانی")]
+                          )
+                        ]
+                      },
+                      proxy: true
+                    }
+                  ])
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "m-portlet__body" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30"
+                },
+                [
+                  _c("div", { staticClass: "row align-items-center" }, [
+                    _c("div", { staticClass: "col-xl-8 order-2 order-xl-1" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "form-group m-form__group row align-items-center"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "col-md-4 m--align-right" },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "m-input-icon m-input-icon--left"
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.search,
+                                        expression: "search"
+                                      }
+                                    ],
+                                    staticClass:
+                                      "form-control m-input m-input--solid",
+                                    attrs: {
+                                      type: "text",
+                                      placeholder: "Search...",
+                                      id: "generalSearch"
+                                    },
+                                    domProps: { value: _vm.search },
+                                    on: {
+                                      input: [
+                                        function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.search = $event.target.value
+                                        },
+                                        _vm.resetPagination
+                                      ]
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _vm._m(1)
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "col-xl-4 order-1 order-xl-2 m--align-right"
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "form-group m-form__group row" },
+                          [
+                            _c(
+                              "label",
+                              {
+                                staticClass: "col-9 col-form-label-sm",
+                                attrs: { for: "perPage" }
+                              },
+                              [_vm._v("تعداد رکوردها")]
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-3" }, [
+                              _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.perPage,
+                                      expression: "perPage"
+                                    }
+                                  ],
+                                  staticClass:
+                                    "custom-select custom-select-sm form-control form-control-sm m-input m-datatable__pager-size",
+                                  attrs: { id: "perPage" },
+                                  on: {
+                                    change: [
+                                      function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.perPage = $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      },
+                                      function($event) {
+                                        return _vm.resetPagination()
+                                      }
+                                    ]
+                                  }
+                                },
+                                [
+                                  _c("option", { attrs: { value: "10" } }, [
+                                    _vm._v("10")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "25" } }, [
+                                    _vm._v("25")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "50" } }, [
+                                    _vm._v("50")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "100" } }, [
+                                    _vm._v("100")
+                                  ])
+                                ]
+                              )
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", {
+                          staticClass:
+                            "m-separator m-separator--dashed d-xl-none"
+                        })
+                      ]
+                    )
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "m_datatable m-datatable m-datatable--default m-datatable--loaded",
+                  attrs: { id: "local_data" }
+                },
+                [
+                  _c(
+                    "data-table",
+                    {
+                      attrs: {
+                        columns: _vm.columns,
+                        sortKey: _vm.sortKey,
+                        sortOrders: _vm.sortOrders
+                      },
+                      on: { sort: _vm.sortBy }
+                    },
+                    [
+                      _c(
+                        "tbody",
+                        { staticClass: "m-datatable__body" },
+                        _vm._l(_vm.paginated, function(feature) {
+                          return _c(
+                            "tr",
+                            {
+                              key: feature.id,
+                              staticClass: "m-datatable__row m-datatable__row",
+                              staticStyle: { left: "0px" }
+                            },
+                            [
+                              _c("td", { staticClass: "m-datatable__cell" }, [
+                                _c(
+                                  "span",
+                                  { staticStyle: { width: "110px" } },
+                                  [_vm._v(_vm._s(feature.name))]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "m-datatable__cell" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "m-list-badge",
+                                    staticStyle: { width: "130px" }
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "m-list-badge__items" },
+                                      [
+                                        _vm.features.filter(function(item) {
+                                          return item.id == feature.key_id
+                                        })[0]
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticStyle: { margin: "10px" }
+                                              },
+                                              [
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "m-list-badge__item m-list-badge__item--brand"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        _vm.features.filter(
+                                                          function(item) {
+                                                            return (
+                                                              item.id ==
+                                                              feature.key_id
+                                                            )
+                                                          }
+                                                        )[0].name
+                                                      )
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    )
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "m-datatable__cell" }, [
+                                _c(
+                                  "span",
+                                  { staticStyle: { width: "110px" } },
+                                  [_vm._v(_vm._s(feature.created_at))]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "m-datatable__cell" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticStyle: {
+                                      overflow: "visible",
+                                      position: "relative",
+                                      width: "110px"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill",
+                                        attrs: { title: "View " },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.editModal(feature)
+                                          }
+                                        }
+                                      },
+                                      [_c("i", { staticClass: "la la-edit" })]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill",
+                                        attrs: { title: "View " },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.remove(feature)
+                                          }
+                                        }
+                                      },
+                                      [_c("i", { staticClass: "la la-remove" })]
+                                    )
+                                  ]
+                                )
+                              ])
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("pagination", {
+                    attrs: {
+                      pagination: _vm.pagination,
+                      filtered: _vm.filteredfeatures
+                    },
+                    on: {
+                      prev: function($event) {
+                        --_vm.pagination.currentPage
+                      },
+                      next: function($event) {
+                        ++_vm.pagination.currentPage
+                      }
+                    }
+                  })
+                ],
+                1
+              )
+            ])
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "m-portlet__head-caption" }, [
+      _c("div", { staticClass: "m-portlet__head-title" }, [
+        _c("h3", { staticClass: "m-portlet__head-text" }, [
+          _vm._v("مدیریت دسته بندی ها")
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "span",
+      { staticClass: "m-input-icon__icon m-input-icon__icon--left" },
+      [_c("span", [_c("i", { staticClass: "la la-search" })])]
     )
   }
 ]
@@ -42461,7 +43652,7 @@ var render = function() {
                                 "data-dismiss": "modal",
                                 type: "submit"
                               },
-                              on: { click: _vm.save }
+                              on: { click: _vm.store }
                             },
                             [_vm._v("ثبت کن")]
                           ),
@@ -43758,7 +44949,7 @@ var render = function() {
                                 "data-dismiss": "modal",
                                 type: "submit"
                               },
-                              on: { click: _vm.save }
+                              on: { click: _vm.store }
                             },
                             [_vm._v("ثبت کن")]
                           ),
@@ -44281,7 +45472,7 @@ var render = function() {
                                 "data-dismiss": "modal",
                                 type: "submit"
                               },
-                              on: { click: _vm.save }
+                              on: { click: _vm.store }
                             },
                             [_vm._v("ثبت کن")]
                           ),
@@ -63418,6 +64609,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/panel/Features.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/panel/Features.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Features_vue_vue_type_template_id_0fd40f13___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Features.vue?vue&type=template&id=0fd40f13& */ "./resources/js/components/panel/Features.vue?vue&type=template&id=0fd40f13&");
+/* harmony import */ var _Features_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Features.vue?vue&type=script&lang=js& */ "./resources/js/components/panel/Features.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Features_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Features_vue_vue_type_template_id_0fd40f13___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Features_vue_vue_type_template_id_0fd40f13___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/panel/Features.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/panel/Features.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/panel/Features.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Features_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Features.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/panel/Features.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Features_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/panel/Features.vue?vue&type=template&id=0fd40f13&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/panel/Features.vue?vue&type=template&id=0fd40f13& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Features_vue_vue_type_template_id_0fd40f13___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Features.vue?vue&type=template&id=0fd40f13& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/panel/Features.vue?vue&type=template&id=0fd40f13&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Features_vue_vue_type_template_id_0fd40f13___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Features_vue_vue_type_template_id_0fd40f13___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/panel/Galleries.vue":
 /*!*****************************************************!*\
   !*** ./resources/js/components/panel/Galleries.vue ***!
@@ -63961,6 +65221,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_panel_Roles_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/panel/Roles.vue */ "./resources/js/components/panel/Roles.vue");
 /* harmony import */ var _components_panel_Galleries__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/panel/Galleries */ "./resources/js/components/panel/Galleries.vue");
 /* harmony import */ var _components_panel_Products__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/panel/Products */ "./resources/js/components/panel/Products.vue");
+/* harmony import */ var _components_panel_Features__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/panel/Features */ "./resources/js/components/panel/Features.vue");
+
 
 
 
@@ -63978,6 +65240,9 @@ var routes = [{
 }, {
   path: "/admin/categories",
   component: _components_panel_Categories_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+}, {
+  path: "/admin/features",
+  component: _components_panel_Features__WEBPACK_IMPORTED_MODULE_7__["default"]
 }, {
   path: "/admin/roles",
   component: _components_panel_Roles_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
@@ -64003,7 +65268,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/html/my_projects/3_Doing/Honarchi/resources/js/panel.js */"./resources/js/panel.js");
+module.exports = __webpack_require__(/*! /home/ehsan/projects/honarchi/resources/js/panel.js */"./resources/js/panel.js");
 
 
 /***/ })
