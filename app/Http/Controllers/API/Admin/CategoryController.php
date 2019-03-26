@@ -35,6 +35,7 @@ class CategoryController extends Controller
             'name'      => 'required|max:30|unique:categories',
             'parent_id' => 'nullable|integer|min:1|exists:categories,id'
         ]);
+        $request['slug'] = str_slug($request['name']);
 
         $category = Category::create($request->all());
 
@@ -55,6 +56,7 @@ class CategoryController extends Controller
             'name'      => "required|max:30|unique:categories,name,{$category->id}",
             'parent_id' => 'nullable|integer|min:1|exists:categories,id'
         ]);
+        $request['slug'] = str_slug($request['name']);
 
         $category->update($request->all());
 

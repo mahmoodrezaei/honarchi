@@ -16,8 +16,8 @@ class CreateFeaturesTable extends Migration
         Schema::create('features', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('key_id')->nullable();
-            $table->string('name');
-            $table->string('slug')->nullable();
+            $table->string('name')->unique();
+            $table->string('slug');
             $table->timestamps();
 
             $table->foreign('key_id')->references('id')->on('features')->onDelete('cascade');
