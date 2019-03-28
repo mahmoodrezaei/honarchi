@@ -832,7 +832,7 @@ export default {
       // load galleries
       if (this.galleries.length > 0)
         this.galleries.forEach(item => {
-          let name = item.name || null;
+          let name = item.gallery_name || null;
           let id = item.id || null;
           options.galleries.push({ text: name, value: id });
         });
