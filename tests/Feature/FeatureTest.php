@@ -273,7 +273,7 @@ class FeatureTest extends TestCase
         $response = $this->delete(route('features.destroy', ['feature' => $feature->id]));
 
         $response->assertStatus(204)
-            ->assertSee(null);
+            ->assertSee(null); 
 
         $this->assertDatabaseMissing($this->table, $feature->toArray());
     }
