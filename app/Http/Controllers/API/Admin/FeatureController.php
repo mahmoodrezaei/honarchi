@@ -34,6 +34,7 @@ class FeatureController extends Controller
                 }
             ],
         ]);
+        $request['slug'] = str_slug($request['name']);
 
         $feature = Feature::create($request->all());
 
@@ -57,6 +58,7 @@ class FeatureController extends Controller
                 }
             ],
         ]);
+        $request['slug'] = str_slug($request['name']);
 
         $feature->update($request->all());
 

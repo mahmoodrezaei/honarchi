@@ -45712,7 +45712,7 @@ var render = function() {
                                     _vm._v(
                                       _vm._s(
                                         product.gallery
-                                          ? product.gallery.name
+                                          ? product.gallery.gallery_name
                                           : "بدون گالری"
                                       )
                                     )
@@ -65772,7 +65772,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/ehsan/projects/honarchi/resources/js/panel.js */"./resources/js/panel.js");
+module.exports = __webpack_require__(/*! /var/www/html/my_projects/3_Doing/Honarchi/resources/js/panel.js */"./resources/js/panel.js");
 
 
 /***/ })

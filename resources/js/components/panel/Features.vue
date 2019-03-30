@@ -6,7 +6,7 @@
           <div class="m-portlet__head">
             <div class="m-portlet__head-caption">
               <div class="m-portlet__head-title">
-                <h3 class="m-portlet__head-text">مدیریت دسته بندی ها</h3>
+                <h3 class="m-portlet__head-text">مدیریت ویژگی ها</h3>
               </div>
             </div>
 
@@ -26,7 +26,7 @@
 
             <Modal id="feature_modal">
               <template #header>
-                <h5 class="modal-title" id="exampleModalLabel">ایجاد دسته بندی جدید</h5>
+                <h5 class="modal-title" id="exampleModalLabel">ایجاد ویژگی جدید</h5>
               </template>
               <template #body>
                 <div class="form-group m-form-group">
@@ -34,16 +34,12 @@
                     id="name"
                     class="form-control m-input"
                     type="text"
-                    placeholder="نام دسته بندی جدید"
+                    placeholder="نام ویژگی جدید"
                     v-model="item.name"
                   >
                 </div>
                 <div class="form-group m-form-group">
-                  <model-select
-                    placeholder="دسته بندی مادر"
-                    :options="options"
-                    v-model="item.key_id"
-                  ></model-select>
+                  <model-select placeholder="کلید" :options="options" v-model="item.key_id"></model-select>
                 </div>
               </template>
               <template #footer>
@@ -209,7 +205,7 @@ export default {
     let sortOrders = {};
 
     let columns = [
-      { label: "نام دسته بندی", name: "feature" },
+      { label: "نام ویژگی", name: "feature" },
       { label: "کلید", name: "key" },
       { label: "تاریخ ایجاد", name: "created", type: "number" }
     ];

@@ -122,10 +122,11 @@ class categoryTest extends TestCase
 
         $response->assertStatus(201);
         $response->assertJsonStructure([
-            'id', 'name', 'parent_id'
+            'id', 'name', 'slug', 'parent_id',
         ]);
         $response->assertJson([
             'name' => $category->name,
+            'slug' => str_slug($category->name),
             'parent_id' => $category->parent_id
         ]);
 
@@ -243,10 +244,11 @@ class categoryTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'id', 'name', 'parent_id'
+            'id', 'name', 'slug', 'parent_id'
         ]);
         $response->assertJson([
             'name' => $category->name,
+            'slug' => str_slug($category->name),
             'parent_id' => $category->parent_id
         ]);
     }
