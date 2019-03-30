@@ -386,7 +386,7 @@
                     <td class="m-datatable__cell">
                       <span
                         style="width: 110px;"
-                      >{{ product.gallery ? product.gallery.name : 'بدون گالری'}}</span>
+                      >{{ product.gallery ? product.gallery.gallery_name : 'بدون گالری'}}</span>
                     </td>
 
                     <!-- <td class="m-datatable__cell">
