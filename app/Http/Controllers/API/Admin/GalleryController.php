@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Admin;
 use App\Gallery;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GalleryController extends Controller
 {
@@ -31,7 +32,7 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'gallery_name' => 'required',
+            'gallery_name' => 'required|unique:galleries',
             'location' => 'required',
             'type' => 'required'
         ]);
@@ -49,7 +50,7 @@ class GalleryController extends Controller
         ]);
 
         $data = [
-            'message' => 'Gallery created',
+            'message' => 'گالری با موفقیت ایجاد شد',
             'status_code' => 201,
             'gallery' => $gallery
         ];
@@ -75,9 +76,14 @@ class GalleryController extends Controller
             'type' => 'required'
         ]);
 
-        $gallery->update($request->all());
+        $gallery->update($request->only([
+            'gallery_name',
+            'location',
+            'type'
+        ]));
 
         $data = [
+            'message' => 'گالری با موفقیت بروزرسانی شد',
             'gallery' => $gallery,
             'status_code' => 200
         ];
@@ -90,7 +96,7 @@ class GalleryController extends Controller
         $gallery->update(['state' => 1]);
 
         $data = [
-            'message' => 'Gallery approved',
+            'message' => 'گالری با موفقیت تایید شد',
             'status_code' => 200
         ];
 
@@ -102,7 +108,7 @@ class GalleryController extends Controller
         $gallery->update(['state' => -1]);
 
         $data = [
-            'message' => 'Gallery is blocked',
+            'message' => 'گالری با موفقیت مسدود شد',
             'status_code' => 200
         ];
 
@@ -114,7 +120,7 @@ class GalleryController extends Controller
         $gallery->update(['state' => 1]);
 
         $data = [
-            'message' => 'Gallery is unblocked',
+            'message' => 'گالری با موفقیت باز شد',
             'status_code' => 200
         ];
 

@@ -28,7 +28,7 @@ class GalleryTest extends TestCase
         $this->json('patch', 'api/admin/galleries/' . $gallery->id . '/approve')
             ->assertStatus(200)
             ->assertJsonStructure(['message', 'status_code'])
-            ->assertJson(['message' => 'Gallery approved']);
+            ->assertJson(['message' => 'گالری با موفقیت تایید شد']);
 
         $this->assertDatabaseHas('galleries', ['state' => 1]);
     }
@@ -41,7 +41,7 @@ class GalleryTest extends TestCase
         $this->json('patch', 'api/admin/galleries/' . $gallery->id . '/block')
             ->assertStatus(200)
             ->assertJsonStructure(['message', 'status_code'])
-            ->assertJson(['message' => 'Gallery is blocked']);
+            ->assertJson(['message' => 'گالری با موفقیت مسدود شد']);
     }
 
     /** @test */
@@ -52,7 +52,7 @@ class GalleryTest extends TestCase
         $this->json('patch', 'api/admin/galleries/' . $gallery->id . '/unblock')
             ->assertStatus(200)
             ->assertJsonStructure(['message', 'status_code'])
-            ->assertJson(['message' => 'Gallery is unblocked']);
+            ->assertJson(['message' => 'گالری با موفقیت باز شد']);
     }
 
     /** @test */
@@ -81,7 +81,6 @@ class GalleryTest extends TestCase
         $this->withExceptionHandling();
         $gallery = create('App\Gallery');
 
-        $gallery->owner_id = 10;
         $gallery->gallery_name = 'updated name';
         $gallery->location = 'updated location';
 
@@ -91,7 +90,6 @@ class GalleryTest extends TestCase
             ->assertJson(['gallery' => $gallery->refresh()->toArray()]);
 
         $this->assertDatabaseHas('galleries', [
-            'owner_id' => 10,
             'gallery_name' => 'updated name',
             'location' => 'updated location'
         ]);
