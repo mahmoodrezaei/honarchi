@@ -2769,10 +2769,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -2787,7 +2783,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     var sortOrders = {};
     var columns = [{
-      label: "نام دسته بندی",
+      label: "نام ویژگی",
       name: "feature"
     }, {
       label: "کلید",
@@ -42539,7 +42535,7 @@ var render = function() {
                               staticClass: "modal-title",
                               attrs: { id: "exampleModalLabel" }
                             },
-                            [_vm._v("ایجاد دسته بندی جدید")]
+                            [_vm._v("ایجاد ویژگی جدید")]
                           )
                         ]
                       },
@@ -42566,7 +42562,7 @@ var render = function() {
                                 attrs: {
                                   id: "name",
                                   type: "text",
-                                  placeholder: "نام دسته بندی جدید"
+                                  placeholder: "نام ویژگی جدید"
                                 },
                                 domProps: { value: _vm.item.name },
                                 on: {
@@ -42591,7 +42587,7 @@ var render = function() {
                             [
                               _c("model-select", {
                                 attrs: {
-                                  placeholder: "دسته بندی مادر",
+                                  placeholder: "کلید",
                                   options: _vm.options
                                 },
                                 model: {
@@ -43006,7 +43002,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "m-portlet__head-caption" }, [
       _c("div", { staticClass: "m-portlet__head-title" }, [
         _c("h3", { staticClass: "m-portlet__head-text" }, [
-          _vm._v("مدیریت دسته بندی ها")
+          _vm._v("مدیریت ویژگی ها")
         ])
       ])
     ])
@@ -65772,7 +65768,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/html/my_projects/3_Doing/Honarchi/resources/js/panel.js */"./resources/js/panel.js");
+module.exports = __webpack_require__(/*! /home/ehsan/projects/honarchi/resources/js/panel.js */"./resources/js/panel.js");
 
 
 /***/ })

@@ -19,11 +19,11 @@ class CreateGalleriesTable extends Migration
             $table->string('gallery_name')->nullable()->unique();
             $table->string('location');
             $table->string('type');
-            $table->text('samples')->nullable();
             $table->text('description')->nullable();
             $table->text('bio')->nullable();
             $table->tinyInteger('state')->default(0); // 0 => unapproved, 1 => approved, -1 => block
             $table->float('rate')->nullable();
+            $table->json('samples')->nullable();
             $table->string('cover_path')->nullable();
             $table->string('avatar_path')->nullable();
             $table->timestamps();
