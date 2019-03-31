@@ -6,6 +6,7 @@ use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 
 class CategoryController extends Controller
@@ -32,8 +33,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      => 'required|max:30|unique:categories',
-            'parent_id' => 'nullable|integer|min:1|exists:categories,id'
+            'parent_id' => 'nullable|integer|min:1|exists:categories,id',
+            'name'      => [
+                'required',
+                'max:30',
+                Rule::unique('categories')->where(function ($query) use($request) {
+                return $query->where('name', $request['name'])
+                    ->where('parent_id', $request['parent_id']);
+            }),],
         ]);
         $request['slug'] = str_slug($request['name']);
 
@@ -53,8 +60,15 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $this->validate($request, [
-            'name'      => "required|max:30|unique:categories,name,{$category->id}",
-            'parent_id' => 'nullable|integer|min:1|exists:categories,id'
+            'parent_id' => 'nullable|integer|min:1|exists:categories,id',
+            'name'      => [
+                'required',
+                'max:30',
+                Rule::unique('categories')->where(function ($query) use($request, $category) {
+
+                    return $query->where('name', $request['name'])
+                        ->where('parent_id', $request['parent_id']);
+                }),]
         ]);
         $request['slug'] = str_slug($request['name']);
 
