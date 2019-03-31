@@ -18,3 +18,8 @@ Auth::routes();
 // TODO: add auth middleware
 Route::get('/admin/{any?}', 'AdminController@index')
     ->where('any', '.*');
+
+
+Route::get('test', function() {
+    return view('public.layouts.master');
+});
