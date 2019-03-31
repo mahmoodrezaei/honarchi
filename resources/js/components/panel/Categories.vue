@@ -39,6 +39,15 @@
                   >
                 </div>
                 <div class="form-group m-form-group">
+                  <input
+                    id="name"
+                    class="form-control m-input"
+                    type="text"
+                    placeholder="نحوه ی نمایش در url"
+                    v-model="item.slug"
+                  >
+                </div>
+                <div class="form-group m-form-group">
                   <model-select
                     placeholder="دسته بندی مادر"
                     :options="options"
@@ -231,7 +240,7 @@ export default {
 
       sortOrders: sortOrders,
 
-      item: { name: "", parent_id: 0 },
+      item: { name: "", slug: "", parent_id: 0 },
 
       // how many items per page
       perPage: 10,
@@ -259,7 +268,7 @@ export default {
     },
 
     createModal(item) {
-      this.item = { name: "" };
+      this.item = { name: "" ,slug: ""};
       $("#category_modal").modal("show");
       this.modalType = "create";
     },

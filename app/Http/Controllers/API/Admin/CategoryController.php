@@ -42,7 +42,8 @@ class CategoryController extends Controller
                     ->where('parent_id', $request['parent_id']);
             }),],
         ]);
-        $request['slug'] = str_slug($request['name']);
+        if (!isset($request['slug']) || $request['slug'] == '')
+            $request['slug'] = str_slug($request['name']);
 
         $category = Category::create($request->all());
 
@@ -65,12 +66,16 @@ class CategoryController extends Controller
                 'required',
                 'max:30',
                 Rule::unique('categories')->where(function ($query) use($request, $category) {
+                    if($request['name'] == $category->name && $request['parent_id'] == $category->parent_id){
+                        return $query->where('id', -1);
+                    }
 
                     return $query->where('name', $request['name'])
                         ->where('parent_id', $request['parent_id']);
                 }),]
         ]);
-        $request['slug'] = str_slug($request['name']);
+        if (!isset($request['slug']) || $request['slug'] == '')
+            $request['slug'] = str_slug($request['name']);
 
         $category->update($request->all());
 
