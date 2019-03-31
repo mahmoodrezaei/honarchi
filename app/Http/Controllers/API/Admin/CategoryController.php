@@ -74,7 +74,7 @@ class CategoryController extends Controller
                         ->where('parent_id', $request['parent_id']);
                 }),]
         ]);
-        if (isset($request['slug']) && $request['slug'] != $category->slug)
+        if (!isset($request['slug']) || $request['slug'] == '')
             $request['slug'] = str_slug($request['name']);
 
         $category->update($request->all());
