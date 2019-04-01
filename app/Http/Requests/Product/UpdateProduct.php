@@ -23,10 +23,14 @@ class UpdateProduct extends FormRequest
      */
     public function rules()
     {
+        $id = $this->product->id;
+
         return [
             'category_id' => 'nullable|integer|min:1|exists:categories,id',
             'gallery_id' => 'nullable|integer|min:1|exists:galleries,id',
             'name' => 'required|max:50',
+            'slug' => 'required|unique:products,slug,'.$id,
+            'code' => 'required|unique:products,slug,'.$id,
             'intro' => 'required|max:255',
             'location' => 'required|string',
             'description' => 'required|string',

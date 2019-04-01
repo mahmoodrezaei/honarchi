@@ -27,6 +27,8 @@ class StoreProduct extends FormRequest
             'category_id' => 'nullable|integer|min:1|exists:categories,id',
             'gallery_id' => 'nullable|integer|min:1|exists:galleries,id',
             'name' => 'required|max:50',
+            'slug' => 'required|unique:products',
+            'code' => 'required|unique:products',
             'location' => 'required|string',
             'intro' => 'required|max:255',
             'description' => 'required|string',
