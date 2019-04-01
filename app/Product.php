@@ -16,7 +16,6 @@ class Product extends Model
 
     protected $guarded = [
         'id',
-        'code',
         'pics',
         'rate',
         'created_at',
@@ -77,7 +76,6 @@ class Product extends Model
 
         $model = Product::make($attributes);
         $model->pics = $pics;
-        $model->code = (string) strtoupper(uniqid());
         $model->save();
 
         return $model;

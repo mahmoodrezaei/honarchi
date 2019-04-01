@@ -42,7 +42,8 @@ class ProductController extends Controller
         foreach ($request['features'] as $key => $feature){
             if ($feature['type'] == 'linked' ){
 
-                $product->linked_features()->attach($feature['value']);
+                if(isset($feature['value']))
+                    $product->linked_features()->attach($feature['value']);
             }
         }
 
@@ -69,8 +70,8 @@ class ProductController extends Controller
         foreach ($request['features'] as $key => $feature){
             if ($feature['type'] == 'linked' ){
 
-
-                $product->linked_features()->attach($feature['value']);
+                if(isset($feature['value']))
+                    $product->linked_features()->attach($feature['value']);
             }
         }
         $product->load(['category','gallery']);

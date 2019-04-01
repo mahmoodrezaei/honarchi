@@ -41,15 +41,39 @@
                       >
                     </div>
                     <div class="col-6">
-                      <input
-                        id="name"
-                        class="form-control m-input"
-                        type="text"
-                        placeholder="محل تولید"
-                        v-model="item.location"
-                      >
+                        <input
+                            id="location"
+                            class="form-control m-input"
+                            type="text"
+                            placeholder="محل تولید"
+                            v-model="item.location"
+                        >
+
                     </div>
                   </div>
+                    <div class="form-group m-form__group row">
+
+                        <div class="col-6">
+                            <input
+                                style="text-align: left;"
+                                id="code"
+                                class="form-control m-input"
+                                type="text"
+                                placeholder="کد محصول"
+                                v-model="item.code"
+                            >
+                        </div>
+                        <div class="col-6">
+                            <input
+                                style="text-align: left;"
+                                id="slug"
+                                class="form-control m-input"
+                                type="text"
+                                placeholder="نحوه ی نمایش در URL"
+                                v-model="item.slug"
+                            >
+                    </div>
+                    </div>
                   <div class="form-group m-form__group row">
                     <div class="col-6">
                       <model-select
@@ -94,7 +118,7 @@
                   <div class="form-group m-form__group row">
                     <div class="col-6">
                       <input
-                        id="intro"
+                        id="no"
                         class="form-control m-input"
                         type="number"
                         placeholder="تعداد موجود در انبار"
@@ -104,7 +128,7 @@
 
                     <div class="col-6">
                       <input
-                        id="intro"
+                        id="major_no"
                         class="form-control m-input"
                         type="number"
                         placeholder="حداقل تعداد فروش عمده"
@@ -115,7 +139,7 @@
                   <div class="form-group m-form__group row">
                     <div class="col-12">
                       <input
-                        id="intro"
+                        id="max_purchase_per_rate"
                         class="form-control m-input"
                         type="number"
                         placeholder="تعداد فروش برای هر ستاره"
@@ -126,7 +150,7 @@
                   <div class="form-group m-form__group row">
                     <div class="col-6">
                       <input
-                        id="intro"
+                        id="purchase_price"
                         class="form-control m-input"
                         type="number"
                         placeholder="قیمت خرید"
@@ -136,7 +160,7 @@
 
                     <div class="col-6">
                       <input
-                        id="intro"
+                        id="price"
                         class="form-control m-input"
                         type="number"
                         placeholder="قیمت فروش"
@@ -147,7 +171,7 @@
                   <div class="form-group m-form__group row">
                     <div class="col-6">
                       <input
-                        id="intro"
+                        id="special_price"
                         class="form-control m-input"
                         type="number"
                         placeholder="قیمت فروش خاص"
@@ -157,7 +181,7 @@
 
                     <div class="col-6">
                       <input
-                        id="intro"
+                        id="major_price"
                         class="form-control m-input"
                         type="number"
                         placeholder="قیمت فروش عمده"
