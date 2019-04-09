@@ -7,6 +7,10 @@ import Galleries from "../views/panel/galleries/Galleries";
 import Products from "../views/panel/products/Products";
 import Features from "../views/panel/attributes/Features";
 
+import Options from '../views/panel/options/Options';
+import OptionsCreate from '../views/panel/options/Create';
+import OptionsEdit from '../views/panel/options/Edit';
+
 Vue.use(VueRouter);
 
 let routes = [
@@ -43,7 +47,11 @@ let routes = [
     {
         path: "/admin/products",
         component: Products
-    }
+    },
+
+    { path: "/admin/options", component: Options },
+    { path: "/admin/options/create", component: OptionsCreate },
+    { path: "/admin/options/:id/edit", component: OptionsEdit }
 ];
 
 let router = new VueRouter({

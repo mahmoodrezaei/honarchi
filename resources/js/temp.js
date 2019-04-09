@@ -1,124 +1,77 @@
-var FormControls = {
+var FormRepeater = {
     init: function () {
-        $("#new_permission_form").validate({
-            rules: {
-                name: {required: !0, minlength: 5},
-            }, invalidHandler: function (e, r) {
-                $("#m_form_1_msg").removeClass("m--hide").show(), mUtil.scrollTop()
-            }, submitHandler: function (e) {
+        $("#m_repeater_1").repeater({
+            initEmpty: !1, defaultValues: {"text-input": "foo"}, show: function () {
+                $(this).slideDown()
+            }, hide: function (e) {
+                $(this).slideUp(e)
+            }
+        }), $("#m_repeater_2").repeater({
+            initEmpty: !1, defaultValues: {"text-input": "foo"}, show: function () {
+                $(this).slideDown()
+            }, hide: function (e) {
+                confirm("Are you sure you want to delete this element?") && $(this).slideUp(e)
+            }
+        }), $("#m_repeater_3").repeater({
+            initEmpty: !1, defaultValues: {"text-input": "foo"}, show: function () {
+                $(this).slideDown()
+            }, hide: function (e) {
+                confirm("Are you sure you want to delete this element?") && $(this).slideUp(e)
+            }
+        }), $("#m_repeater_4").repeater({
+            initEmpty: !1, defaultValues: {"text-input": "foo"}, show: function () {
+                $(this).slideDown()
+            }, hide: function (e) {
+                $(this).slideUp(e)
+            }
+        }), $("#m_repeater_5").repeater({
+            initEmpty: !1, defaultValues: {"text-input": "foo"}, show: function () {
+                $(this).slideDown()
+            }, hide: function (e) {
+                $(this).slideUp(e)
+            }
+        }), $("#m_repeater_6").repeater({
+            initEmpty: !1, defaultValues: {"text-input": "foo"}, show: function () {
+                $(this).slideDown()
+            }, hide: function (e) {
+                $(this).slideUp(e)
             }
         })
     }
 };
 jQuery(document).ready(function () {
-    FormControls.init()
+    FormRepeater.init()
 });
 
-var SweetAlert2Demo = {
-    init: function () {
-        $("#m_sweetalert_demo_1").click(function (e) {
-            swal("Good job!")
-        }), $("#m_sweetalert_demo_2").click(function (e) {
-            swal("Here's the title!", "...and here's the text!")
-        }), $("#m_sweetalert_demo_3_1").click(function (e) {
-            swal("Good job!", "You clicked the button!", "warning")
-        }), $("#m_sweetalert_demo_3_2").click(function (e) {
-            swal("Good job!", "You clicked the button!", "error")
-        }), $("#m_sweetalert_demo_3_3").click(function (e) {
-            swal("Good job!", "You clicked the button!", "success")
-        }), $("#m_sweetalert_demo_3_4").click(function (e) {
-            swal("Good job!", "You clicked the button!", "info")
-        }), $("#m_sweetalert_demo_3_5").click(function (e) {
-            swal("Good job!", "You clicked the button!", "question")
-        }), $("#m_sweetalert_demo_4").click(function (e) {
-            swal({
-                title: "Good job!",
-                text: "You clicked the button!",
-                icon: "success",
-                confirmButtonText: "Confirm me!",
-                confirmButtonClass: "btn btn-focus m-btn m-btn--pill m-btn--air"
-            })
-        }), $("#m_sweetalert_demo_5").click(function (e) {
-            swal({
-                title: "Good job!",
-                text: "You clicked the button!",
-                icon: "success",
-                confirmButtonText: "<span><i class='la la-headphones'></i><span>I am game!</span></span>",
-                confirmButtonClass: "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon",
-                showCancelButton: !0,
-                cancelButtonText: "<span><i class='la la-thumbs-down'></i><span>No, thanks</span></span>",
-                cancelButtonClass: "btn btn-secondary m-btn m-btn--pill m-btn--icon"
-            })
-        }), $("#m_sweetalert_demo_6").click(function (e) {
-            swal({
-                position: "top-right",
-                type: "success",
-                title: "Your work has been saved",
-                showConfirmButton: !1,
-                timer: 1500
-            })
-        }), $("#m_sweetalert_demo_7").click(function (e) {
-            swal({
-                title: "jQuery HTML example",
-                html: $("<div>").addClass("some-class").text("jQuery is everywhere."),
-                animation: !1,
-                customClass: "animated tada"
-            })
-        }), $("#m_sweetalert_demo_8").click(function (e) {
-            swal({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Yes, delete it!"
-            }).then(function (e) {
-                e.value && swal("Deleted!", "Your file has been deleted.", "success")
-            })
-        }), $("#m_sweetalert_demo_9").click(function (e) {
-            swal({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel!",
-                reverseButtons: !0
-            }).then(function (e) {
-                e.value ? swal("Deleted!", "Your file has been deleted.", "success") : "cancel" === e.dismiss && swal("Cancelled", "Your imaginary file is safe :)", "error")
-            })
-        }), $("#m_sweetalert_demo_10").click(function (e) {
-            swal({
-                title: "Sweet!",
-                text: "Modal with a custom image.",
-                imageUrl: "https://unsplash.it/400/200",
-                imageWidth: 400,
-                imageHeight: 200,
-                imageAlt: "Custom image",
-                animation: !1
-            })
-        }), $("#m_sweetalert_demo_11").click(function (e) {
-            swal({
-                title: "Auto close alert!", text: "I will close in 5 seconds.", timer: 5e3, onOpen: function () {
-                    swal.showLoading()
-                }
-            }).then(function (e) {
-                "timer" === e.dismiss && console.log("I was closed by the timer")
-            })
-        })
+/*new Vue({
+    el: '#app',
+    data: {
+        fields: [{ first: '',last: '' }],
+    },
+    created: function() {
+    },
+    methods: {
+        AddField: function () {
+            this.fields.push({ first: '',last: '' });
+        }
     }
-};
-jQuery(document).ready(function () {
-    SweetAlert2Demo.init()
 });
 
+.border {
+    border: 1px solid black;
+    padding: 3px;
+    margin-bottom: 5px;
+}
 
-
-/*if (response.data.status_code === 201) {
-                            swal({ type: 'success', text: response.data.message, timer: 2500});
-                            this.newItem.gallery_name = response.data.gallery.gallery_name;
-                            this.newItem.location = response.data.gallery.location;
-                            this.newIte.state = response.data.gallery.state;
-                            this.newItem.created_at = response.data.gallery.created_at;
-                            this.galleries.push(this.newItem);
-                            this.pagination.total = this.galleries.length;
-                        }*/
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.14/vue.js"></script>
+    <div id="app">
+    <h1>Vue JS Multiple Fields Repeater</h1>
+<div class="border" v-for="field in fields">
+    <input v-model="field.first" placeholder="Enter First Name">
+    <input v-model="field.last" placeholder="Enter Last Name">
+    </div>
+    <button @click="AddField">
+    New Field
+</button>
+<pre>{{ $data | json }}</pre>
+</div>*/

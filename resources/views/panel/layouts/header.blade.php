@@ -4,11 +4,11 @@
         <div class="m-stack m-stack--ver m-stack--desktop">
 
             <!-- BEGIN: Brand -->
-            <div class="m-stack__item m-brand  m-brand--skin-dark ">
+            <div class="m-stack__item m-brand  m-brand--skin-light">
                 <div class="m-stack m-stack--ver m-stack--general">
                     <div class="m-stack__item m-stack__item--middle m-brand__logo">
                         <a href="index.blade.php" class="m-brand__logo-wrapper">
-                            <img alt="" src="/assets/images/front/logo.svg">
+                            <img alt="" src="{{ asset('assets/images/front/logo.svg') }}" height="40">
                         </a>
                     </div>
                     <div class="m-stack__item m-stack__item--middle m-brand__tools">

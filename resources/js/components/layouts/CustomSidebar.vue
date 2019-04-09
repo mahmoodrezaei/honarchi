@@ -32,7 +32,7 @@
 
           <!-- request section -->
           <li class="m-menu__section">
-            <h4 class="m-menu__section-text">محصولات</h4>
+            <h4 class="m-menu__section-text">کاتالوگ</h4>
             <i class="m-menu__section-icon flaticon-more-v2"></i>
           </li>
           <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
@@ -68,12 +68,23 @@
             </a>
           </li>
 
+          <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
+            <a href="#" @click.prevent="$router.push('/admin/options')" class="m-menu__link">
+              <i class="m-menu__link-icon flaticon-interface-7"></i>
+              <span class="m-menu__link-title">
+                <span class="m-menu__link-wrap">
+                  <span class="m-menu__link-text">گزینه‌های متغیر</span>
+                </span>
+              </span>
+            </a>
+          </li>
+
           <li class="m-menu__section">
             <h4 class="m-menu__section-text">گالری‌ها</h4>
             <i class="m-menu__section-icon flaticon-more-v2"></i>
           </li>
 
-          <li class="m-menu__item m-menu__item--active" aria-haspopup="true">
+          <li class="m-menu__item m-menu__item" aria-haspopup="true">
             <a href="#" @click.prevent="$router.push('/admin/galleries')" class="m-menu__link">
               <i class="m-menu__link-icon flaticon-line-graph"></i>
               <span class="m-menu__link-title">
