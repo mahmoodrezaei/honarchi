@@ -230,9 +230,9 @@
 </template>
 
 <script>
-    import DataTable from "./DataTable";
-    import Pagination from "./Pagination";
-    import Modal from './Modal'
+    import DataTable from '../../../components/DataTable';
+    import Pagination from '../../../components/Pagination';
+    import Modal from '../../../components/Modal'
     import {MultiSelect} from 'vue-search-select'
 
     export default {

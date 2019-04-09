@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import CustomSidebar from "./layouts/CustomSidebar";
-import Flash from "./layouts/Flash";
+import CustomSidebar from "./CustomSidebar";
+import Flash from "./Flash";
 
 export default {
   components: { CustomSidebar, Flash }

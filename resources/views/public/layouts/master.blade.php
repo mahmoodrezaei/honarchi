@@ -95,7 +95,7 @@
                             <i class="fal fa-shopping-cart"></i>
                         </a>
                         <!-- cart-NOT-empty -->
-                        <!-- <ul class="cart-tooltip text-center">
+                        {{--<ul class="cart-tooltip text-center">
                             <li class="product-sty1">
                                 <a href="#">
                                     <img  class="img-sty1" src="images/accessory/minicart01.jpg" alt="هفت سین">
@@ -148,7 +148,7 @@
                             <hr>
                             <li class="product-sty1">
                                 <a href="#">
-                                    <img  class="img-sty1" src="images/accessory/minicart01.jpg" alt="هفت سین">
+                                    <img  class="img-sty1" src="{{ asset('assets/images/front/accessory/minicart01.jpg') }}" alt="هفت سین">
                                     <h3 class="header-sty1">سرویس هفت سین طرح شیرین و فرهاد</h3>
                                 </a>
                                 <div class="price-product-sty1">
@@ -174,7 +174,7 @@
                                 <button type="button" class="btn btn-round btn-info">تسویه حساب</button>
                                 <button type="button" class="btn btn-round btn-success">سبدخرید</button>
                             </div>
-                        </ul> -->
+                        </ul>--}}
                         <!-- cart-empty -->
                         <ul class="tooltip-empty cart-tooltip text-center">
                             <div class="img-empty">

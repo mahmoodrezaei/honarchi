@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('gallery_id')->nullable();
             $table->string('code')->unique();
             $table->string('name')->nullable();
+            $table->string('slug');
             $table->string('intro')->nullable();
             $table->text('description')->nullable();
             $table->string('purchase_price')->nullable();

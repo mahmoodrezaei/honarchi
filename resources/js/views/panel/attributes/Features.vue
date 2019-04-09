@@ -6,7 +6,7 @@
           <div class="m-portlet__head">
             <div class="m-portlet__head-caption">
               <div class="m-portlet__head-title">
-                <h3 class="m-portlet__head-text">مدیریت سطح دسترسی‌ها</h3>
+                <h3 class="m-portlet__head-text">مدیریت ویژگی ها</h3>
               </div>
             </div>
 
@@ -24,18 +24,23 @@
               </ul>
             </div>
 
-            <Modal id="permission_modal">
+            <Modal id="feature_modal">
               <template #header>
-                <h5 class="modal-title" id="exampleModalLabel">ایجاد سطح دسترسی جدید</h5>
+                <h5 class="modal-title" id="exampleModalLabel">ایجاد ویژگی جدید</h5>
               </template>
               <template #body>
-                <input
-                  id="name"
-                  class="form-control m-input"
-                  type="text"
-                  placeholder="نام سطح دسترسی جدید"
-                  v-model="item.name"
-                >
+                <div class="form-group m-form-group">
+                  <input
+                    id="name"
+                    class="form-control m-input"
+                    type="text"
+                    placeholder="نام ویژگی جدید"
+                    v-model="item.name"
+                  >
+                </div>
+                <div class="form-group m-form-group">
+                  <model-select placeholder="کلید" :options="options" v-model="item.key_id"></model-select>
+                </div>
               </template>
               <template #footer>
                 <button
@@ -122,28 +127,44 @@
               >
                 <tbody style class="m-datatable__body">
                   <tr
-                    v-for="permission in paginated"
-                    :key="permission.id"
+                    v-for="feature in paginated"
+                    :key="feature.id"
                     class="m-datatable__row m-datatable__row"
                     style="left: 0px;"
                   >
                     <td class="m-datatable__cell">
-                      <span style="width: 110px;">{{permission.name}}</span>
+                      <span style="width: 110px;">{{feature.name}}</span>
                     </td>
+
                     <td class="m-datatable__cell">
-                      <span style="width: 110px;">{{permission.created_at}}</span>
+                      <div style="width: 130px;" class="m-list-badge">
+                        <div class="m-list-badge__items">
+                          <div
+                            v-if="features.filter(item => item.id == feature.key_id)[0]"
+                            style="margin: 10px;"
+                          >
+                            <span
+                              class="m-list-badge__item m-list-badge__item--brand"
+                            >{{ features.filter(item => item.id == feature.key_id)[0].name }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="m-datatable__cell">
+                      <span style="width: 110px;">{{feature.created_at}}</span>
                     </td>
                     <td class="m-datatable__cell">
                       <span style="overflow: visible; position: relative; width: 110px;">
                         <button
-                          @click="editModal(permission)"
+                          @click="editModal(feature)"
                           class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
                           title="View "
                         >
                           <i class="la la-edit"></i>
                         </button>
                         <button
-                          @click="remove(permission)"
+                          @click="remove(feature)"
                           class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
                           title="View "
                         >
@@ -157,7 +178,7 @@
 
               <pagination
                 :pagination="pagination"
-                :filtered="filteredpermissions"
+                :filtered="filteredfeatures"
                 @prev="--pagination.currentPage"
                 @next="++pagination.currentPage"
               ></pagination>
@@ -172,18 +193,20 @@
 </template>
 
 <script>
-import DataTable from "./DataTable";
-import Pagination from "./Pagination";
-import Modal from "./Modal.vue";
+import DataTable from "../../../components/DataTable";
+import Pagination from "../../../components/Pagination";
+import Modal from "../../../components/Modal.vue";
+import { ModelSelect } from "vue-search-select";
 
 export default {
-  components: { DataTable, Pagination, Modal },
+  components: { DataTable, Pagination, Modal, ModelSelect },
 
   data() {
     let sortOrders = {};
 
     let columns = [
-      { label: "نام سطح دسترسی", name: "permission" },
+      { label: "نام ویژگی", name: "feature" },
+      { label: "کلید", name: "key" },
       { label: "تاریخ ایجاد", name: "created", type: "number" }
     ];
 
@@ -194,17 +217,17 @@ export default {
     return {
       modalType: "create",
 
-      permissions: [],
+      features: [],
 
       columns,
 
-      sortKey: "permission",
+      sortKey: "feature",
 
       search: "",
 
       sortOrders: sortOrders,
 
-      item: { name: "", parent_id: 0 },
+      item: { name: "", key_id: 0 },
 
       // how many items per page
       perPage: 10,
@@ -221,28 +244,28 @@ export default {
   },
 
   created() {
-    this.getpermissions();
+    this.getfeatures();
   },
 
   methods: {
     editModal(item) {
       this.item = { ...item };
-      $("#permission_modal").modal("show");
+      $("#feature_modal").modal("show");
       this.modalType = "edit";
     },
 
     createModal(item) {
       this.item = { name: "" };
-      $("#permission_modal").modal("show");
+      $("#feature_modal").modal("show");
       this.modalType = "create";
     },
 
-    getpermissions() {
+    getfeatures() {
       axios
-        .get("/api/admin/permissions")
+        .get("/api/admin/features")
         .then(response => {
-          this.permissions = response.data;
-          this.pagination.total = this.permissions.length;
+          this.features = response.data;
+          this.pagination.total = this.features.length;
         })
         .catch(error => console.log(error));
     },
@@ -275,13 +298,13 @@ export default {
 
     store() {
       axios
-        .post("/api/admin/permissions", this.item)
+        .post("/api/admin/features", this.item)
         .then(response => {
-          this.permissions.push(response.data);
-          this.pagination.total = this.permissions.length;
+          this.features.push(response.data);
+          this.pagination.total = this.features.length;
           swal({
             type: "success",
-            text: "اجازه دسترسی با موفقیت اضافه شد",
+            text: "ویژگی با موفقیت اضافه شد",
             timer: 2500,
             showConfirmButton: false
           });
@@ -319,57 +342,69 @@ export default {
         });
     },
 
-    update(permission) {
-      const index = this.permissions.findIndex(
-        item => item.id == permission.id
-      );
-
+    update(feature) {
+      const index = this.features.findIndex(item => item.id == feature.id);
+      console.log(index);
       axios
-        .put("/api/admin/permissions/" + permission.id, this.item)
+        .put("/api/admin/features/" + feature.id, this.item)
         .then(response => {
-          this.$set(this.permissions, index, this.item);
+          this.$set(this.features, index, response.data);
           swal({
             type: "success",
-            text: "اجازه دسترسی به موفقیت بروز شد",
+            text: "ویژگی با موفقیت به روز شد",
             timer: 2500,
             showConfirmButton: false
           });
-          console.log(response.data);
+          console.log(this.features);
         })
         .catch(error => {
-          if (error.response.status == 422) {
-            error.response.data.errors = Object.values(
-              error.response.data.errors
-            )
-              .map(item => {
-                return item
-                  .map(i => {
-                    return i;
-                  })
-                  .join("<hr/>");
-              })
-              .join("<br/>");
+          switch (error.response.status) {
+            case 422: {
+              error.response.data.errors = Object.values(
+                error.response.data.errors
+              )
+                .map(item => {
+                  return item
+                    .map(i => {
+                      return i;
+                    })
+                    .join("<hr/>");
+                })
+                .join("<br/>");
 
-            console.log(error.response.data);
+              console.log(error.response.data);
 
-            swal({
-              html: `
+              swal({
+                html: `
               <h2>داده ها نامعتبر میباشند</h2>
               <p> ${error.response.data.errors} </p>
               `,
-              type: "error",
+                type: "error",
 
-              confirmButtonText:
-                "<span><i class='la'></i><span>متوجه شدم</span></span>",
-              confirmButtonClass:
-                "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
-            });
+                confirmButtonText:
+                  "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                confirmButtonClass:
+                  "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+              });
+              break;
+            }
+            case 500: {
+              swal({
+                text: "خطایی رخ داده!",
+                type: "error",
+
+                confirmButtonText:
+                  "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                confirmButtonClass:
+                  "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+              });
+            }
           }
         });
     },
 
-    remove(permission) {
-      const index = this.permissions.indexOf(permission);
+    remove(feature) {
+      const index = this.features.indexOf(feature);
       swal({
         text: "آیا اطمینان دارید که میخواهید این مورد را حذف کنید؟",
         type: "warning",
@@ -383,14 +418,31 @@ export default {
         console.log(answer);
         if (answer.value === true) {
           axios
-            .delete("/api/admin/permissions/" + permission.id)
+            .delete("/api/admin/features/" + feature.id)
             .then(response => {
-              this.permissions.splice(index, 1);
+              this.features.splice(index, 1);
             })
             .catch(error => {
-              if (error.response.status == 500) {
+              if (error.response.status == 422) {
+                error.response.data.errors = Object.values(
+                  error.response.data.errors
+                )
+                  .map(item => {
+                    return item
+                      .map(i => {
+                        return i;
+                      })
+                      .join("<hr/>");
+                  })
+                  .join("<br/>");
+
+                console.log(error.response.data);
+
                 swal({
-                  text: "خطایی رخ داده!",
+                  html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
                   type: "error",
 
                   confirmButtonText:
@@ -408,8 +460,8 @@ export default {
   computed: {
     options() {
       let options = [];
-      if (this.permissions.length > 0)
-        this.permissions.forEach(item => {
+      if (this.features.length > 0)
+        this.features.forEach(item => {
           let name = item.name || null;
           let id = item.id || null;
           options.push({ text: name, value: id });
@@ -417,11 +469,11 @@ export default {
       return options;
     },
 
-    filteredpermissions() {
-      let permissions = this.permissions;
+    filteredfeatures() {
+      let features = this.features;
 
       if (this.search) {
-        permissions = permissions.filter(row => {
+        features = features.filter(row => {
           return Object.keys(row).some(key => {
             return (
               String(row[key])
@@ -435,7 +487,7 @@ export default {
       let sortKey = this.sortKey;
       let order = this.sortOrders[sortKey] || 1;
       if (sortKey) {
-        permissions = permissions.slice().sort((a, b) => {
+        features = features.slice().sort((a, b) => {
           let index = this.getIndex(this.columns, "name", sortKey);
           a = String(a[sortKey]).toLowerCase();
           b = String(b[sortKey]).toLowerCase();
@@ -458,12 +510,12 @@ export default {
         });
       }
 
-      return permissions;
+      return features;
     },
 
     paginated() {
       return this.paginate(
-        this.filteredpermissions,
+        this.filteredfeatures,
         this.perPage,
         this.pagination.currentPage
       );

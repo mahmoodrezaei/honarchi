@@ -23,8 +23,9 @@
         "sass-loader": "^7.1.0",
         "vue": "^2.6.7",
         "vue-router": "^3.0.2",
-        "vue-search-select": "^2.8.3",
-        "vue-template-compiler": "^2.6.7"
+        "vue-search-select": "M0H314-hasani/vue-search-select#master",
+        "vue-template-compiler": "^2.6.7",
+        "tinymce": "^4.9.4"
     },
     "dependencies": {}
 }

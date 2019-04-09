@@ -1,11 +1,11 @@
 import VueRouter from "vue-router";
-import Users from "./components/panel/Users";
-import Permissions from "./components/panel/Permissions";
-import Categories from "./components/panel/Categories.vue";
-import Roles from "./components/panel/Roles.vue";
-import Galleries from "./components/panel/Galleries";
-import Products from "./components/panel/Products";
-import Features from "./components/panel/Features";
+import Users from "../views/panel/users/Users";
+import Permissions from "../views/panel/permissions/Permissions";
+import Categories from "../views/panel/categories/Categories.vue";
+import Roles from "../views/panel/roles/Roles.vue";
+import Galleries from "../views/panel/galleries/Galleries";
+import Products from "../views/panel/products/Products";
+import Features from "../views/panel/attributes/Features";
 
 Vue.use(VueRouter);
 

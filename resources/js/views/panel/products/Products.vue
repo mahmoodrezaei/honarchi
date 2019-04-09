@@ -106,11 +106,12 @@
                     <div class="col-12">
                       <textarea
                         class="form-control m-input m-input--air"
-                        id="description"
+                        id="description-editor"
                         rows="3"
                         style="margin-top: 0px; margin-bottom: 0px; height: 133px;"
                         placeholder="توضیحات"
                         v-model="item.description"
+                        v-text="item.description"
                       ></textarea>
                     </div>
                   </div>
@@ -469,9 +470,10 @@
 </template>
 
 <script>
-import DataTable from "./DataTable";
-import Pagination from "./Pagination";
-import Modal from "./Modal.vue";
+
+import DataTable from "../../../components/DataTable";
+import Pagination from "../../../components/Pagination";
+import Modal from "../../../components/Modal.vue";
 import { ModelSelect } from "vue-search-select";
 
 export default {
@@ -536,6 +538,7 @@ export default {
     this.getcategories();
     this.getgalleries();
     this.getfeatures();
+    this.editorInit();
   },
 
   methods: {
@@ -543,6 +546,7 @@ export default {
       this.item.features.push({ type: type });
       var elem = document.createElement("tr");
     },
+
     removeElement: function(index) {
       this.item.features.splice(index, 1);
     },
@@ -577,6 +581,7 @@ export default {
     fileToUrl(file) {
       return URL.createObjectURL(file);
     },
+
     handleFileUpload() {
       this.getBase64(this.$refs.file.files[0], function(e) {
         window.pics.push(e.target.result);
@@ -834,7 +839,45 @@ export default {
             });
         }
       });
-    }
+    },
+
+    editorInit() {
+      // description-editor
+      const editor_config = {
+        path_absolute : "/",
+        selector: "textarea#description-editor",
+        plugins: [
+          "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+          "searchreplace wordcount visualblocks visualchars code fullscreen",
+          "insertdatetime media nonbreaking save table contextmenu directionality",
+          "emoticons template paste textcolor colorpicker textpattern"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
+        relative_urls: false,
+        file_browser_callback : function(field_name, url, type, win) {
+          var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+          var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
+
+          var cmsURL = editor_config.path_absolute + 'admin/filemanager?field_name=' + field_name;
+          if (type == 'image') {
+            cmsURL = cmsURL + "&type=Images";
+          } else {
+            cmsURL = cmsURL + "&type=Files";
+          }
+
+          window.tinyMCE.activeEditor.windowManager.open({
+            file : cmsURL,
+            title : 'Filemanager',
+            width : x * 0.8,
+            height : y * 0.8,
+            resizable : "yes",
+            close_previous : "no"
+          });
+        }
+      };
+
+      tinymce.init(editor_config);
+    },
   },
 
   computed: {

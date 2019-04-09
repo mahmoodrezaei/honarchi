@@ -12,12 +12,12 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
 License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
 -->
-<html lang="en">
+<html lang="fa">
 
 	<!-- begin::Head -->
 	<head>
 		<meta charset="utf-8" />
-		<title>Metronic | Login Page - 1</title>
+		<title>صفحه ورود به قسمت ادمین</title>
 		<meta name="description" content="Latest updates and statistic charts">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
 
@@ -54,40 +54,42 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="m-login__wrapper">
 								<div class="m-login__logo">
 									<a href="#">
-										<img src="../../../assets/app/media/img/logos/logo-2.png">
+										<img src="{{ asset('assets/images/front/logo-form.svg') }}" alt="logo" height="80">
 									</a>
 								</div>
 								<div class="m-login__signin">
-									<div class="m-login__head">
-										<h3 class="m-login__title">Sign In To Admin</h3>
-									</div>
+									{{--<div class="m-login__head">
+										<h3 class="m-login__title">ورود به قسمت ادمین</h3>
+									</div>--}}
 									<form class="m-login__form m-form" action="/login" method="POST">
 
 										@csrf
 
 										<div class="form-group m-form__group">
-											<input class="form-control m-input" type="text" placeholder="Email" name="email" autocomplete="off">
+											<input class="form-control m-input" type="text" placeholder="ایمیل" name="email" autocomplete="off">
 										</div>
 										<div class="form-group m-form__group">
-											<input class="form-control m-input m-login__form-input--last" type="password" placeholder="Password" name="password">
+											<input class="form-control m-input m-login__form-input--last" type="password" placeholder="کلمه عبور" name="password">
 										</div>
 										<div class="row m-login__form-sub">
 											<div class="col m--align-left">
 												<label class="m-checkbox m-checkbox--focus">
-													<input type="checkbox" name="remember"> Remember me
+													<input type="checkbox" name="remember"> منو به خاطر بسپار
 													<span></span>
 												</label>
 											</div>
-											<div class="col m--align-right">
+											{{--<div class="col m--align-right">
 												<a href="javascript:;" id="m_login_forget_password" class="m-link">Forget Password ?</a>
-											</div>
+											</div>--}}
 										</div>
 										<div class="m-login__form-action">
-											<button type="submit" id="m_login_signin_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">Sign In</button>
+											<button type="submit" id="m_login_signin_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">ورود</button>
 										</div>
 									</form>
 								</div>
-								<div class="m-login__signup">
+
+								{{-- TODO: SIGN UP FORM --}}
+								{{--<div class="m-login__signup">
 									<div class="m-login__head">
 										<h3 class="m-login__title">Sign Up</h3>
 										<div class="m-login__desc">Enter your details to create your account:</div>
@@ -119,8 +121,10 @@ License: You must have a valid license purchased only from themeforest(the above
 											<button id="m_login_signup_cancel" class="btn btn-outline-focus  m-btn m-btn--pill m-btn--custom">Cancel</button>
 										</div>
 									</form>
-								</div>
-								<div class="m-login__forget-password">
+								</div>--}}
+
+								{{-- TODO: FORGOTTEN PASSWORD SECTION --}}
+								{{--<div class="m-login__forget-password">
 									<div class="m-login__head">
 										<h3 class="m-login__title">Forgotten Password ?</h3>
 										<div class="m-login__desc">Enter your email to reset your password:</div>
@@ -134,20 +138,23 @@ License: You must have a valid license purchased only from themeforest(the above
 											<button id="m_login_forget_password_cancel" class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom">Cancel</button>
 										</div>
 									</form>
-								</div>
+								</div>--}}
 							</div>
 						</div>
-						<div class="m-stack__item m-stack__item--center">
+
+						{{-- TODO: SIGN UP SECTION --}}
+						{{--<div class="m-stack__item m-stack__item--center">
 							<div class="m-login__account">
 								<span class="m-login__account-msg">
 									Don't have an account yet ?
 								</span>&nbsp;&nbsp;
 								<a href="javascript:;" id="m_login_signup" class="m-link m-link--focus m-login__account-link">Sign Up</a>
 							</div>
-						</div>
+						</div>--}}
 					</div>
 				</div>
-				<div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content m-grid-item--center" style="background-image: url(../../../assets/app/media/img//bg/bg-4.jpg)">
+				<div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content m-grid-item--center"
+					 style="background-image: url({{ asset('assets/images/bg/bg-2.jpg') }})">
 					<div class="m-grid__item">
 						<h3 class="m-login__welcome">Join Our Community</h3>
 						<p class="m-login__msg">
@@ -164,6 +171,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script src="{{ asset('js/vendors.bundle.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('js/scripts.bundle.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('js/dashboard.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('js/login.js') }}"></script>
 
 		<!--end::Page Scripts -->
 	</body>
