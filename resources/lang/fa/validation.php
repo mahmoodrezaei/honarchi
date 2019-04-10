@@ -189,7 +189,8 @@ return [
         'max_purchase_per_rate' => 'حداقل تعداد فروش برای هر ستاره',
         'gallery_name'          => 'گالری',
         'location'              => 'محل تولید',
-        'type'                  => 'نوع دست ساخته'
+        'type'                  => 'نوع دست ساخته',
+        'optionType'            => 'نوع گزینه'
     ],
 
     'entities' => [

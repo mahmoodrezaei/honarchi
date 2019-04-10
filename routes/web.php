@@ -23,3 +23,6 @@ Route::get('/admin/{any?}', 'AdminController@index')
 Route::get('test', function() {
     return view('public.layouts.master');
 });
+
+Route::get('/api/admin/options', 'API\Admin\ProductOptionController@index');
+Route::post('/api/admin/options', 'API\Admin\ProductOptionController@store');

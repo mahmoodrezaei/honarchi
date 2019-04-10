@@ -2,11 +2,11 @@
     <div class="m-stack__item m-topbar__nav-wrapper">
         <ul class="m-topbar__nav m-nav m-nav--inline">
 
-            {{--<search></search>--}}
+{{--            <search></search>--}}
 
-            @include('panel.layouts.topbar.notification')
+{{--            @include('panel.layouts.topbar.notification')--}}
 
-            @include('panel.layouts.topbar.quick-actions')
+{{--            @include('panel.layouts.topbar.quick-actions')--}}
 
             {{--<language></language>--}}
 

@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
     return $request->user();
 });*/
 
-Route::apiResource('admin/permissions', 'API\Admin\PermissionController');
+Route::apiResource('admin/permissions', 'API\Admin\PermissionController')->middleware('auth');
 
 Route::apiResource('admin/roles', 'API\Admin\RoleController');
 

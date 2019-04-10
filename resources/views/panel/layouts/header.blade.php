@@ -51,7 +51,7 @@
 
             <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
 
-                @include('panel.layouts.horizontal-menu')
+{{--                @include('panel.layouts.horizontal-menu')--}}
 
                 {{--<horizontal-menu></horizontal-menu>
                 <top-bar></top-bar>--}}
