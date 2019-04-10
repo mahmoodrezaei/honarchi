@@ -28,16 +28,24 @@
                             <form class="m-form">
                                 <div class="m-portlet__body">
                                     <div class="m-form__section m-form__section--first">
-                                        <div class="form-group m-form__group row">
-                                            <label class="col-lg-2 col-form-label">Minimum Setup</label>
+                                        <div class="m-form__group form-group row">
+                                            <label class="col-lg-2 col-form-label">نوع گزینه</label>
                                             <div class="col-lg-4">
-                                                <div class="dropdown bootstrap-select form-control m-bootstrap-select m_">
-                                                    <select class="form-control m-bootstrap-select m_selectpicker" tabindex="-98">
-                                                        <option>Mustard</option>
-                                                        <option>Ketchup</option>
-                                                        <option>Relish</option>
-                                                    </select>
-                                                    <button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard" aria-expanded="false"><div class="filter-option"><div class="filter-option-inner">Mustard</div></div>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button><div class="dropdown-menu" role="combobox" style="max-height: 367.75px; overflow: hidden; min-height: 0px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);" x-placement="bottom-start"><div class="inner show" role="listbox" aria-expanded="false" tabindex="-1" style="max-height: 355.75px; overflow-y: auto; min-height: 0px;"><ul class="dropdown-menu inner show"><li class="selected active"><a role="option" class="dropdown-item selected active" aria-disabled="false" tabindex="0" aria-selected="true"><span class=" bs-ok-default check-mark"></span><span class="text">Mustard</span></a></li><li><a role="option" class="dropdown-item" aria-disabled="false" tabindex="0" aria-selected="false"><span class=" bs-ok-default check-mark"></span><span class="text">Ketchup</span></a></li><li><a role="option" class="dropdown-item" aria-disabled="false" tabindex="0" aria-selected="false"><span class=" bs-ok-default check-mark"></span><span class="text">Relish</span></a></li></ul></div></div></div>
+                                                <div class="m-radio-inline">
+                                                    <label class="m-radio">
+                                                        <input type="radio" name="example_8" value="1"> متن
+                                                        <span></span>
+                                                    </label>
+                                                    <label class="m-radio">
+                                                        <input type="radio" name="example_8" value="2">رنگ
+                                                        <span></span>
+                                                    </label>
+                                                    <label class="m-radio">
+                                                        <input type="radio" name="example_8" value="3">وابسته
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                                <span class="m-form__help">نوع گزینه مورد نظر را انتخاب کنید</span>
                                             </div>
                                         </div>
                                         <div class="form-group m-form__group row">
@@ -81,26 +89,15 @@
 </template>
 
 <script>
-    import $ from "jquery";
-
     export default {
         name: "OptionsCreate",
 
         created() {
-            this.bootStrapSelect();
+
         },
 
         methods: {
-            bootStrapSelect() {
-                var BootstrapSelect = {
-                    init: function () {
-                        $(".m_selectpicker").selectpicker()
-                    }
-                };
-                jQuery(document).ready(function () {
-                    BootstrapSelect.init()
-                });
-            }
+
         }
     }
 </script>
