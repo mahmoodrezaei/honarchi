@@ -12,6 +12,8 @@
 */
 
 
+
+
 Auth::routes();
 
 // Admin Routes
@@ -23,3 +25,7 @@ Route::get('/admin/{any?}', 'AdminController@index')
 Route::get('test', function() {
     return view('public.layouts.master');
 });
+
+Route::apiResource('api/admin/attributes', 'API\Admin\ProductAttributeController')->parameters([
+    'attributes' => 'model'
+]);
