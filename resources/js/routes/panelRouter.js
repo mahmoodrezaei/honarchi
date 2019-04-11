@@ -4,7 +4,10 @@ import Permissions from "../views/panel/permissions/Permissions";
 import Categories from "../views/panel/categories/Categories.vue";
 import Roles from "../views/panel/roles/Roles.vue";
 import Galleries from "../views/panel/galleries/Galleries";
+
 import Products from "../views/panel/products/Products";
+import ProductsCreate from "../views/panel/products/Create"
+
 import Features from "../views/panel/attributes/Features";
 
 import Options from '../views/panel/options/Options';
@@ -44,10 +47,8 @@ let routes = [
         component: Galleries
     },
 
-    {
-        path: "/admin/products",
-        component: Products
-    },
+    { path: "/admin/products", component: Products },
+    { path: "/admin/products/create", component: ProductsCreate},
 
     { path: "/admin/options", component: Options },
     { path: "/admin/options/create", component: OptionsCreate },
