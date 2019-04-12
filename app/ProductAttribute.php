@@ -18,8 +18,8 @@ class ProductAttribute extends Model
 
     public static function getLastPosition()
     {
-        if(static::all()->isNotEmpty())
-          return  static::all()->pluck('position')->sortByDesc('position')->first() + 1;
+        if (static::all()->isNotEmpty())
+          return static::all()->sortByDesc('position')->first()->position + 1;
 
         return 1;
     }

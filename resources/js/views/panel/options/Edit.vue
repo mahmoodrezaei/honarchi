@@ -6,7 +6,7 @@
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
-                                <h3 class="m-portlet__head-text">ایجاد گزینه جدید</h3>
+                                <h3 class="m-portlet__head-text">ویرایش</h3>
                             </div>
                         </div>
 
@@ -55,7 +55,8 @@
                                         <label for="name" class="col-lg-2 col-form-label">نام</label>
                                         <div class="col-lg-4">
                                             <input type="text" id="name" v-model="editItem.name" class="form-control m-input" placeholder="">
-                                            <span class="m-form__help">نام گزینه مورد نظر را وارد کنید:</span>
+                                            <span v-if="!errors.name" class="m-form__help">نام گزینه مورد نظر را وارد کنید:</span>
+                                            <form-error v-if="errors.name" :errors="errors">{{ errors.name[0] }}</form-error>
                                         </div>
                                     </div>
 
@@ -183,8 +184,12 @@
 </template>
 
 <script>
+    import FormError from "../../../components/FormError";
+
     export default {
         name: "OptionsEdit",
+
+        components: {FormError},
 
         data() {
             return {
@@ -236,14 +241,17 @@
                         this.sending = false;
                         flash(response.data.message)
                     })
-                    .catch(error => {
-                        console.log(error.response.data);
-                        this.sending = false
-                    });
+                    .catch( function(errors) {
+                        console.log(errors.response.data);
+                        this.loading = false;
+                        this.sending = false;
+                        this.errors = errors.response.data.errors;
+                    }.bind(this));
             },
 
             initEditItem(response) {
                 this.editItem.values = [];
+                this.errors = '';
                 this.editItem.optionType = response.data.option.type;
                 this.editItem.name = response.data.option.name;
                 for (let index = 0; index < response.data.values.length; index++) {

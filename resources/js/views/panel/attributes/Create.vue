@@ -289,7 +289,6 @@ export default {
         .post(attributesRoutes.store.url, this.attributeItem)
         .then(response => {
           this.resetData();
-          flash("", "danger");
         })
         .catch(
           function(errors) {

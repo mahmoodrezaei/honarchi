@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductOption extends Model
 {
-    protected $table = "product_option";
+    protected $table = 'product_option';
 
     protected $fillable = ['type', 'name', 'position'];
 
@@ -15,6 +15,14 @@ class ProductOption extends Model
     {
         $verta = new Verta($created_at);
         return $verta->formatJalaliDate();
+    }
+
+    public static function getLastPosition()
+    {
+        if (static::all()->isNotEmpty())
+            return static::all()->sortByDesc('position')->first()->position + 1;
+
+        return 1;
     }
 
     public function values()

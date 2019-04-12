@@ -45,14 +45,16 @@
                                                         <span></span>
                                                     </label>
                                                 </div>
-                                                <span class="m-form__help">نوع گزینه مورد نظر را انتخاب کنید</span>
+                                                <span v-if="!errors.optionType" class="m-form__help">نوع گزینه مورد نظر را انتخاب کنید</span>
+                                                <form-error v-if="errors.optionType" :errors="errors">{{ errors.optionType[0] }}</form-error>
                                             </div>
                                         </div>
                                         <div class="form-group m-form__group row">
                                             <label for="name" class="col-lg-2 col-form-label">نام</label>
                                             <div class="col-lg-4">
                                                 <input type="text" id="name" v-model="newItem.name" class="form-control m-input" placeholder="">
-                                                <span class="m-form__help">نام گزینه مورد نظر را وارد کنید:</span>
+                                                <span v-if="!errors.name" class="m-form__help">نام گزینه مورد نظر را وارد کنید:</span>
+                                                <form-error v-if="errors.name" :errors="errors">{{ errors.name[0] }}</form-error>
                                             </div>
                                         </div>
 
@@ -180,10 +182,13 @@
 </template>
 
 <script>
-    import optionRoutes from '../../../lib/apiRoutes'
+    import {optionRoutes} from '../../../lib/apiRoutes'
+    import FormError from '../../../components/FormError'
 
     export default {
         name: "OptionsCreate",
+
+        components: { FormError },
 
         data() {
             return {
@@ -223,8 +228,10 @@
                         this.newItem.values = [{name: '', value: ''}];
                         flash(response.data.message)
                     })
-                    .catch(error => console.log(error.response));
-                    // .catch(function(error) {this.errors = error.response.data.errors.name}.bind(this));
+                    .catch( function(errors) {
+                        console.log(errors.response.data);
+                        this.errors = errors.response.data.errors;
+                    }.bind(this));
             }
         }
     }

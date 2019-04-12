@@ -31,6 +31,7 @@ class ProductOptionController extends Controller
         $option = ProductOption::create([
             'type' => $request->optionType,
             'name' => $request->name,
+            'position' => ProductOption::getLastPosition()
         ]);
 
 
