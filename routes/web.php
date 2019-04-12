@@ -12,6 +12,8 @@
 */
 
 
+
+
 Auth::routes();
 
 // Admin Routes
@@ -28,3 +30,7 @@ Route::get('/api/admin/options', 'API\Admin\ProductOptionController@index');
 Route::post('/api/admin/options', 'API\Admin\ProductOptionController@store');
 Route::get('/api/admin/options/{option}/show', 'API\Admin\ProductOptionController@show');
 Route::put('/api/admin/options/{option}/update', 'API\Admin\ProductOptionController@update');
+
+Route::apiResource('api/admin/attributes', 'API\Admin\ProductAttributeController')->parameters([
+    'attributes' => 'model'
+]);

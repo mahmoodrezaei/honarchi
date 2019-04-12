@@ -10,9 +10,13 @@ import ProductsCreate from "../views/panel/products/Create"
 
 import Features from "../views/panel/attributes/Features";
 
-import Options from '../views/panel/options/Options';
-import OptionsCreate from '../views/panel/options/Create';
-import OptionsEdit from '../views/panel/options/Edit';
+import Options from "../views/panel/options/Options";
+import OptionsCreate from "../views/panel/options/Create";
+import OptionsEdit from "../views/panel/options/Edit";
+
+import Attributes from "../views/panel/attributes/Attributes";
+import AttributesCreate from "../views/panel/attributes/Create";
+import AttributesEdit from "../views/panel/attributes/Edit";
 
 Vue.use(VueRouter);
 
@@ -52,7 +56,11 @@ let routes = [
 
     { path: "/admin/options", component: Options },
     { path: "/admin/options/create", component: OptionsCreate },
-    { path: "/admin/options/:id/edit", component: OptionsEdit }
+    { path: "/admin/options/:id/edit", component: OptionsEdit },
+
+    { path: "/admin/attributes", component: Attributes },
+    { path: "/admin/attributes/create", component: AttributesCreate },
+    { path: "/admin/attributes/:id/edit", component: AttributesEdit }
 ];
 
 let router = new VueRouter({
