@@ -21,7 +21,7 @@ Route::get('/admin/{any?}', 'AdminController@index')
 
 
 Route::get('test', function() {
-    return view('public.layouts.master');
+    return view('public.index');
 });
 
 Route::get('/api/admin/options', 'API\Admin\ProductOptionController@index');
