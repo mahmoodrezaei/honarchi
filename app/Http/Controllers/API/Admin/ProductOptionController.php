@@ -11,7 +11,14 @@ class ProductOptionController extends Controller
 
     public function index()
     {
-        return 'options.index';
+        $options = ProductOption::orderBy('created_at', 'desc')->get();
+
+        $data = [
+            'options' => $options,
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
     }
 
     public function store(Request $request)
@@ -26,18 +33,64 @@ class ProductOptionController extends Controller
             'name' => $request->name,
         ]);
 
-        /*if ($request->values != null) {
-            if ($request->optionType === 'text') {
 
-            }
-        }*/
+        foreach ($values = $request->values as $item) {
+            $option->values()->create([
+                'value' => json_encode($item)
+            ]);
+        }
 
         $data = [
             $option,
-            'values' => $request->values[0]['name'],
-            'message' => 'option created successfully'
+            'values' => $option->values,
+            'message' => 'گزینه جدید با موفقیت ساخته شد'
         ];
 
         return response()->json($data, 201);
+    }
+
+    public function show(ProductOption $option)
+    {
+        $data = [
+            'option' => $option,
+            'values' => $option->values,
+            'message' => __('successfully_data_received')
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function update(Request $request, ProductOption $option)
+    {
+
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        $option->update([
+            'name' => $request->name,
+        ]);
+
+        foreach ($values = $request->values as $item) {
+            if ($item['id'] !== null) {
+                $option->values()
+                    ->where('id', $item['id'])
+                    ->update([
+                        'value' => json_encode($item['value']),
+                    ]);
+            } else {
+                $option->values()->create([
+                    'value' => json_encode($item['value']),
+                ]);
+            }
+        }
+
+        $data = [
+            'option' => $option,
+            'values' => $option->values,
+            'message' => __('successfully_data_received')
+        ];
+
+        return response()->json($data, 200);
     }
 }

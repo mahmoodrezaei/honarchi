@@ -33,15 +33,15 @@
                                             <div class="col-lg-4">
                                                 <div class="m-radio-inline">
                                                     <label class="m-radio">
-                                                        <input type="radio" name="type" v-model="newItem.optionType" value="text"> متن
+                                                        <input type="radio" name="type" v-model="newItem.optionType" @change="onOptionTypeChanges" value="text"> متن
                                                         <span></span>
                                                     </label>
                                                     <label class="m-radio">
-                                                        <input type="radio" name="type" v-model="newItem.optionType" value="color">رنگ
+                                                        <input type="radio" name="type" v-model="newItem.optionType" @change="onOptionTypeChanges" value="color">رنگ
                                                         <span></span>
                                                     </label>
                                                     <label class="m-radio">
-                                                        <input type="radio" name="type" v-model="newItem.optionType" value="related">وابسته
+                                                        <input type="radio" name="type" v-model="newItem.optionType" @change="onOptionTypeChanges" value="related">وابسته
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -62,20 +62,20 @@
                                             <div class="form-group  m-form__group row">
                                                 <label class="col-lg-2 col-form-label">مقادیر</label>
                                                 <div data-repeater-list="" class="col-lg-10">
-                                                    <div v-for="(textValue, index) in textValues" :key="index" data-repeater-item="" class="form-group m-form__group row align-items-center">
+                                                    <div v-for="(item, index) in newItem.values" :key="index" data-repeater-item="" class="form-group m-form__group row align-items-center">
                                                         <div class="col-md-3">
                                                             <div class="m-form__group m-form__group--inline">
                                                                 <div class="m-form__label">
                                                                     <label for="textValues"></label>
                                                                 </div>
                                                                 <div class="m-form__control">
-                                                                    <input type="text" v-model="textValue.name" id="textValues" class="form-control m-input" placeholder="مقدار را وارد کنید">
+                                                                    <input type="text" v-model="item.value" id="textValues" class="form-control m-input" placeholder="مقدار را وارد کنید">
                                                                 </div>
                                                             </div>
                                                             <div class="d-md-none m--margin-bottom-10"></div>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <div data-repeater-delete="" @click="removeTextValue(index)"
+                                                            <div data-repeater-delete="" @click="removeField(index)"
                                                                  class="btn-sm btn btn-danger m-btn m-btn--icon m-btn--pill">
 																<span>
 																	<i class="la la-trash-o"></i>
@@ -89,7 +89,7 @@
                                             <div class="m-form__group form-group row">
                                                 <label class="col-lg-2 col-form-label"></label>
                                                 <div class="col-lg-4">
-                                                    <div data-repeater-create="" @click="addTextValue"
+                                                    <div data-repeater-create="" @click="addField"
                                                          class="btn btn btn-sm btn-brand m-btn m-btn--icon m-btn--pill m-btn--wide">
 														<span>
 															<i class="la la-plus"></i>
@@ -104,14 +104,14 @@
                                             <div class="form-group  m-form__group row">
                                                 <label class="col-lg-2 col-form-label">مقادیر:</label>
                                                 <div data-repeater-list="" class="col-lg-10">
-                                                    <div data-repeater-item="" v-for="(colorValue, index) in colorValues" :key="index" class="form-group m-form__group row align-items-center">
+                                                    <div data-repeater-item="" v-for="(item, index) in newItem.values" :key="index" class="form-group m-form__group row align-items-center">
                                                         <div class="col-md-3">
                                                             <div class="m-form__group m-form__group--inline">
                                                                 <div class="m-form__label">
                                                                     <label for="colorName"></label>
                                                                 </div>
                                                                 <div class="m-form__control">
-                                                                    <input type="text" id="colorName" v-model="colorValue.name" class="form-control m-input" placeholder="نام رنگ">
+                                                                    <input type="text" id="colorName" v-model="item.name" class="form-control m-input" placeholder="نام رنگ">
                                                                 </div>
                                                             </div>
                                                             <div class="d-md-none m--margin-bottom-10"></div>
@@ -122,13 +122,13 @@
                                                                     <label for="colorValue" class="m-label m-label--single"></label>
                                                                 </div>
                                                                 <div class="m-form__control">
-                                                                    <input type="color" value="" v-model="colorValue.color" id="colorValue" class="form-control m-input" placeholder="رنگ مورد نظر">
+                                                                    <input type="color" value="" v-model="item.value" id="colorValue" class="form-control m-input" placeholder="رنگ مورد نظر">
                                                                 </div>
                                                             </div>
                                                             <div class="d-md-none m--margin-bottom-10"></div>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <div data-repeater-delete="" @click="removeColorValue(index)"
+                                                            <div data-repeater-delete="" @click="removeField(index)"
                                                                  class="btn-sm btn btn-danger m-btn m-btn--icon m-btn--pill">
 																<span>
 																	<i class="la la-trash-o"></i>
@@ -142,7 +142,7 @@
                                             <div class="m-form__group form-group row">
                                                 <label class="col-lg-2 col-form-label"></label>
                                                 <div class="col-lg-4">
-                                                    <div data-repeater-create="" @click="addColorValue"
+                                                    <div data-repeater-create="" @click="addField"
                                                          class="btn btn btn-sm btn-brand m-btn m-btn--icon m-btn--pill m-btn--wide">
 														<span>
 															<i class="la la-plus"></i>
@@ -188,58 +188,41 @@
         data() {
             return {
                 newItem: {
-                    optionType: '',
+                    optionType: 'text',
                     name: '',
-                    values: { name: '', color: ''}
+                    values: [
+                        { name: '', value: ''}
+                    ]
                 },
 
                 errors: '',
-
-                colorValues: [
-                    { name: '', color: '' }
-                ],
-
-                textValues: [ {name: ''} ],
             }
         },
 
-        created() {
-
-        },
-
         methods: {
-            addTextValue() {
-                this.textValues.push({ name: ''});
+            addField() {
+                this.newItem.values.push({name: '', value: ''});
             },
 
-            removeTextValue(index) {
-                if (this.textValues.length !== 1) {
-                    this.textValues.splice(index, 1);
+            removeField(index) {
+                if (this.newItem.values.length !== 1) {
+                    this.newItem.values.splice(index, 1);
                 }
             },
 
-            addColorValue() {
-                this.colorValues.push({ name: '', color: ''})
-            },
-
-            removeColorValue(index) {
-                if (this.colorValues.length !== 1) {
-                    this.colorValues.splice(index, 1)
-                }
+            onOptionTypeChanges() {
+                this.newItem.values = [ {name: '', value: ''} ]
             },
 
             submit() {
-                if (this.newItem.optionType === 'text') {
-                    this.newItem.values = this.textValues
-                } else if (this.newItem.optionType === 'color') {
-                    this.newItem.values = this.colorValues
-                } else {
-                    this.newItem.values = ''
-                }
-
-                // console.log(this.newItem);
                 axios.post('/api/admin/options', this.newItem)
-                    .then(response => console.log(response.data))
+                    .then(response => {
+                        // console.log(response.data);
+                        this.newItem.optionType = 'text';
+                        this.newItem.name = '';
+                        this.newItem.values = [{name: '', value: ''}];
+                        flash(response.data.message)
+                    })
                     .catch(error => console.log(error.response));
                     // .catch(function(error) {this.errors = error.response.data.errors.name}.bind(this));
             }
