@@ -162,7 +162,7 @@
                                 <div class="m-form__actions m-form__actions">
                                     <div class="row">
                                         <div class="col-lg-4">
-                                            <button type="button" @click="submit" class="btn btn-success">ثبت</button>
+                                            <button type="button" @click="submit" class="btn btn-success" :class="submitBtnLoaderClasses">ثبت</button>
 <!--                                            <button type="reset" class="btn btn-secondary">Cancel</button>-->
                                         </div>
                                         <div class="col-lg-2">
@@ -200,6 +200,8 @@
                     ]
                 },
 
+                sending: false,
+
                 errors: '',
             }
         },
@@ -220,18 +222,40 @@
             },
 
             submit() {
+                this.sending = true;
+
                 axios.post('/api/admin/options', this.newItem)
                     .then(response => {
-                        // console.log(response.data);
+                        this.errors = '';
                         this.newItem.optionType = 'text';
                         this.newItem.name = '';
                         this.newItem.values = [{name: '', value: ''}];
+                        this.sending = false;
                         flash(response.data.message)
                     })
                     .catch( function(errors) {
-                        console.log(errors.response.data);
-                        this.errors = errors.response.data.errors;
+                        if (errors.message === 'Network Error') {
+                            this.sending = false;
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            switch (errors.response.status) {
+                                case 422:
+                                    this.errors = errors.response.data.errors;
+                                    this.sending = false;
+                                    break;
+                                case 500:
+                                    break;
+                                default:
+                                    console.log(errors.response.data);
+                            }
+                        }
                     }.bind(this));
+            }
+        },
+
+        computed: {
+            submitBtnLoaderClasses() {
+                return this.sending ? 'm-loader m-loader--light m-loader--left' : '';
             }
         }
     }

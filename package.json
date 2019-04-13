@@ -21,11 +21,12 @@
         "resolve-url-loader": "^2.3.2",
         "sass": "^1.17.2",
         "sass-loader": "^7.1.0",
+        "tinymce": "^4.9.4",
         "vue": "^2.6.7",
+        "vue-persian-datetime-picker": "^2.0.0",
         "vue-router": "^3.0.2",
         "vue-search-select": "M0H314-hasani/vue-search-select#master",
-        "vue-template-compiler": "^2.6.7",
-        "tinymce": "^4.9.4"
+        "vue-template-compiler": "^2.6.7"
     },
     "dependencies": {}
 }

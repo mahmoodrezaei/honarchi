@@ -227,10 +227,18 @@
                         this.initEditItem(response);
                         this.loading = false
                     })
-                    .catch(error => {
-                        console.log(error.response.data);
-                        this.loading = false
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            this.loading = false;
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            this.loading = false;
+                            console.log(error.response.data);
+                        }
                     });
+                    /*.catch(error => {
+
+                    });*/
             },
 
             updateOption() {
@@ -242,10 +250,22 @@
                         flash(response.data.message)
                     })
                     .catch( function(errors) {
-                        console.log(errors.response.data);
-                        this.loading = false;
-                        this.sending = false;
-                        this.errors = errors.response.data.errors;
+                        if (errors.message === 'Network Error') {
+                            this.sending = false;
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            switch (errors.response.status) {
+                                case 422:
+                                    this.errors = errors.response.data.errors;
+                                    this.loading = false;
+                                    this.sending = false;
+                                    break;
+                                case 500:
+                                    break;
+                                default:
+                                    console.log(errors.response.data);
+                            }
+                        }
                     }.bind(this));
             },
 

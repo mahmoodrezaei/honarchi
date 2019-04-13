@@ -192,7 +192,13 @@
                         this.options = response.data.options;
                         this.pagination.total = this.options.length;
                     })
-                    .catch(error => console.log(error.response));
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            console.log(errors.response.data);
+                        }
+                    });
             },
 
             paginate(data, perPage, pageNumber) {
