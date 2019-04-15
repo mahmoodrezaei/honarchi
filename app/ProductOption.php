@@ -25,6 +25,11 @@ class ProductOption extends Model
         return 1;
     }
 
+    public function products()
+    {
+        return $this->belongsToMany('App\Products', 'product_options', 'product_id');
+    }
+
     public function values()
     {
         return $this->hasMany('App\ProductOptionValue', 'option_id');

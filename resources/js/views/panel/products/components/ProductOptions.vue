@@ -19,15 +19,13 @@
             </div>
             <div class="col-lg-6" v-show="!isSimple">
                 <label for="published_date">تاریخ انتشار:</label>
-                <div class="input-group date">
-                    <input type="text" id="published_date" style="direction: ltr" class="form-control m-input">
-                    <div class="input-group-append">
-                        <span class="input-group-text">
-                            <i class="la la-calendar m--font-success"></i>
-                        </span>
-                    </div>
-                </div>
-                <span class="m-form__help">تاریخ انتشار محصول را مشخص کنید</span>
+                <multi-select
+                        id="published_date"
+                        :selected-options="selectedOptions"
+                        @select="optionsOnSelect"
+                        :options="optionsSelectBoxValues"
+                ></multi-select>
+                <span class="m-form__help">گزینه‌های محصول متغیر را مشخص کنید</span>
             </div>
         </div>
 
@@ -37,7 +35,7 @@
         <div class="m-form__actions">
             <div class="row">
                 <div class="col-lg-6">
-                    <button type="reset" class="btn btn-success">ثبت</button>
+                    <button type="reset" class="btn btn-success" :class="submitBtnLoaderClasses">ثبت</button>
                 </div>
             </div>
         </div>
@@ -57,7 +55,49 @@
             return {
                 isSimple: true,
 
+                options: [],
+
                 selectedOptions: [],
+            }
+        },
+
+        created() {
+            this.retrieveOptions();
+        },
+
+        methods: {
+            retrieveOptions() {
+                axios.get('/api/admin/options')
+                    .then(response => {
+                        this.options = response.data.options;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            console.log(errors.response.data);
+                        }
+                    });
+            },
+
+            optionsOnSelect(items, lastSelectItem) {
+                this.selectedOptions = items;
+            }
+        },
+
+        computed: {
+            optionsSelectBoxValues() {
+                let temp = [];
+
+                this.options.forEach(item => {
+                    temp.push({text: item.name, value: item.id, id: item.id})
+                });
+
+                return temp;
+            },
+
+            submitBtnLoaderClasses() {
+
             }
         }
     }

@@ -80,20 +80,27 @@
         <div class="m-form__seperator m-form__seperator--dashed"></div>
 
         <div class="m-form__group form-group row">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="m-form__group form-group row">
                     <label class="col-form-label">این محصول فعال باشد:</label>
-                    <div class="col-6">
-                        <span class="m-switch m-switch--outline m-switch--icon m-switch--success">
-                            <label>
-                                <input type="checkbox" v-model="productDetail.enabled" checked="checked" name="">
-                                <span></span>
-                            </label>
-                        </span>
+                    <div class="col-4">
+                    <span class="m-switch m-switch--outline m-switch--icon m-switch--success">
+                        <label>
+                            <input type="checkbox" v-model="productDetail.enabled" checked="checked" name="">
+                            <span></span>
+                        </label>
+                    </span>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
+                <label for="max-purchased-per-rate">حداقل تعداد فروش برای هر ستاره:</label>
+                <div class="m-input-icon m-input-icon--right">
+                    <input type="text" v-model="productDetail.max_purchase_per_rate" id="max-purchased-per-rate" class="form-control m-input" placeholder="">
+                </div>
+                <span class="m-form__help"></span>
+            </div>
+            <div class="col-lg-4">
                 <label for="published_date">تاریخ انتشار:</label>
                 <div class="input-group date">
                     <input type="text" id="published_date" style="direction: ltr" v-model="productDetail.published_date" class="form-control m-input">
@@ -178,6 +185,7 @@
                     description: '',
                     published_date: '',
                     enabled: '',
+                    max_purchase_per_rate: ''
                 }
             }
         }

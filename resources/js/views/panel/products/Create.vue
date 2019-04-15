@@ -6,7 +6,7 @@
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
-                                <h3 class="m-portlet__head-text">ایجاد مخصول جدید</h3>
+                                <h3 class="m-portlet__head-text">ایجاد محصول جدید</h3>
                             </div>
                         </div>
 

@@ -51,7 +51,7 @@
               <i class="m-menu__link-icon flaticon-line-graph"></i>
               <span class="m-menu__link-title">
                 <span class="m-menu__link-wrap">
-                  <span class="m-menu__link-text">ویژگی های</span>
+                  <span class="m-menu__link-text">ویژگی‌ها</span>
                 </span>
               </span>
             </a>

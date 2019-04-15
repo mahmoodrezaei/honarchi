@@ -28,6 +28,11 @@ class Gallery extends Model
         return $verta->formatJalaliDate();
     }
 
+    public function products()
+    {
+        return $this->hasMany('App\Product');
+    }
+
     public function owner()
     {
         $this->belongsTo(User::class, 'owner_id');

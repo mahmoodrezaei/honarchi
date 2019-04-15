@@ -27,6 +27,7 @@ class CreateProductsTable extends Migration
             $table->dateTime('published_date')->nullable();
             $table->timestamps();
             $table->boolean('enabled')->default(false);
+            $table->boolean('isSimple')->default(true);
             $table->boolean('trashed')->default(false);
 
             $table->foreign('gallery_id')->references('id')->on('galleries');
