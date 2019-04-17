@@ -28,10 +28,10 @@ class ProductAttribute extends Model
     {
         $model = static::make($attributes);
         switch ($attributes['type']){
-            case 'text':
+            case 'متن':
                 $model->storage_type = 'text';
                 break;
-            case 'select':
+            case 'انتخاب':
                 $model->storage_type = 'json';
                 break;
         }
@@ -44,14 +44,14 @@ class ProductAttribute extends Model
 
     public function update(array $attributes = [], array $options = [])
     {
-        switch ($attributes['type']){
-            case 'text':
-                $this->storage_type = 'text';
-                break;
-            case 'select':
-                $this->storage_type = 'json';
-                break;
-        }
+//        switch ($attributes['type']){
+//            case 'text':
+//                $this->storage_type = 'text';
+//                break;
+//            case 'select':
+//                $this->storage_type = 'json';
+//                break;
+//        }
 
         Parent::update($attributes, $options);
 

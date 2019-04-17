@@ -3,9 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use function Symfony\Component\Debug\Tests\testHeader;
 
-class Category extends Model
+class ProductCategory extends Model
 {
     protected $guarded = ['id'];
 
@@ -16,12 +15,12 @@ class Category extends Model
 
     public function parent()
     {
-        return $this->belongsTo('App\Category', 'parent_id');
+        return $this->belongsTo('App\ProductCategory', 'parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany('App\Category', 'parent_id');
+        return $this->hasMany('App\ProductCategory', 'parent_id');
     }
 
     public function hasChildren(){
@@ -38,6 +37,16 @@ class Category extends Model
         }
 
         return false;
+    }
+
+
+    public function getLastPosition()
+    {
+
+        if (static::where('parent_id', $this->parent_id)->get()->isNotEmpty())
+            return  static::where('parent_id', $this->parent_id)->get()->sortByDesc('position')->first()->position + 1;
+
+        return  1;
     }
 
 }

@@ -31,6 +31,6 @@ Route::post('/api/admin/options', 'API\Admin\ProductOptionController@store');
 Route::get('/api/admin/options/{option}/show', 'API\Admin\ProductOptionController@show');
 Route::put('/api/admin/options/{option}/update', 'API\Admin\ProductOptionController@update');
 
-Route::apiResource('api/admin/attributes', 'API\Admin\ProductAttributeController')->parameters([
-    'attributes' => 'model'
-]);
+Route::apiResource('api/admin/attributes', 'API\Admin\ProductAttributeController')->parameters(['attributes' => 'model']);
+
+Route::apiResource('api/admin/categories', 'API\Admin\ProductCategoryController')->parameters(['categories' => 'model']);
