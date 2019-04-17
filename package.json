@@ -23,6 +23,7 @@
         "sass-loader": "^7.1.0",
         "tinymce": "^4.9.4",
         "vue": "^2.6.7",
+        "vue-multiselect": "ehsanmoodi/vue-multiselect#master",
         "vue-persian-datetime-picker": "^2.0.0",
         "vue-router": "^3.0.2",
         "vue-search-select": "M0H314-hasani/vue-search-select#master",

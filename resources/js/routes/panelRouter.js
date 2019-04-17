@@ -7,6 +7,7 @@ import Galleries from "../views/panel/galleries/Galleries";
 
 import Products from "../views/panel/products/Products";
 import ProductsCreate from "../views/panel/products/Create"
+import ProductsEdit from "../views/panel/products/Edit"
 
 import Features from "../views/panel/attributes/Features";
 
@@ -53,6 +54,7 @@ let routes = [
 
     { path: "/admin/products", component: Products },
     { path: "/admin/products/create", component: ProductsCreate},
+    { path: "/admin/products/:id/edit", component: ProductsEdit},
 
     { path: "/admin/options", component: Options },
     { path: "/admin/options/create", component: OptionsCreate },

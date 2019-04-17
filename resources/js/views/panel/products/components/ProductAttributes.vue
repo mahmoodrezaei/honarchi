@@ -13,7 +13,14 @@
                                             <label for="attribute-name"></label>
                                         </div>
                                         <div class="m-form__control">
-                                            <model-select placeholder="نام ویژگی" :options="attributeSelectBoxValues" v-model="item.selectedAttribute"></model-select>
+                                            <multiselect v-model="item.selectedAttribute"
+                                                         placeholder="انتخاب ویژگی"
+                                                         :selectLabel="'انتخاب'"
+                                                         :selectedLabel="'انتخاب شده'"
+                                                         :deselectLabel="'حذف'"
+                                                         label="name" track-by="name"
+                                                         :multiple="false"
+                                                         :options="attributeSelectBoxValues()"></multiselect>
                                         </div>
                                     </div>
                                     <div class="d-md-none m--margin-bottom-10"></div>
@@ -36,9 +43,14 @@
                                             <label for="single-choice" class="m-label m-label--single"></label>
                                         </div>
                                         <div class="m-form__control">
-                                            <model-select placeholder="مقدار ویژگی"
-                                                          :options="singleChoiceSelectBoxValues(index)"
-                                                          v-model="item.singleChoice"></model-select>
+                                            <multiselect v-model="item.singleChoice"
+                                                         placeholder="مقدار ویژگی"
+                                                         :selectLabel="'انتخاب'"
+                                                         :selectedLabel="'انتخاب شده'"
+                                                         :deselectLabel="'حذف'"
+                                                         label="value" track-by="value"
+                                                         :allow-empty="false"
+                                                         :options="singleChoiceSelectBoxValues(index)"></multiselect>
                                         </div>
                                     </div>
                                     <div class="d-md-none m--margin-bottom-10"></div>
@@ -50,11 +62,14 @@
                                             <label for="multiple-choice" class="m-label m-label--single"></label>
                                         </div>
                                         <div class="m-form__control">
-<!--                                            <input type="text" value="" id="multiple-choice" class="form-control m-input" placeholder="انتخاب چندتایی">-->
-                                            <multi-select placeholder="مقادیر ویژگی‌"
-                                                          :options="multipleChoiceSelectBoxValues(index)"
-                                                          :selected-options="tempMultipleChoices"
-                                                          @select="multipleChoicesOnSelect" @change="saveMultipleChoicesToSelectedAttribute(index)"></multi-select>
+                                            <multiselect v-model="item.multipleChoice"
+                                                         placeholder="مقادیر ویژگی"
+                                                         :selectLabel="'انتخاب'"
+                                                         :selectedLabel="'انتخاب شده'"
+                                                         :deselectLabel="'حذف'"
+                                                         label="value" track-by="value"
+                                                         :multiple="true"
+                                                         :options="multipleChoiceSelectBoxValues(index)"></multiselect>
                                         </div>
                                     </div>
                                     <div class="d-md-none m--margin-bottom-10"></div>
@@ -105,12 +120,14 @@
 </template>
 
 <script>
-    import { ModelSelect, MultiSelect } from 'vue-search-select'
+    import { ModelSelect } from 'vue-search-select'
+    import Multiselect from 'vue-multiselect'
+
 
     export default {
         name: "ProductAttributes",
 
-        components: { ModelSelect, MultiSelect },
+        components: { ModelSelect, Multiselect },
 
         data() {
             return {
@@ -120,7 +137,7 @@
                     selectedAttribute: {},
                     textValue: '',
                     singleChoice: {},
-                    multipleChoice: []
+                    multipleChoice: [],
                 }],
 
                 tempMultipleChoices: []
@@ -143,6 +160,9 @@
 
             multipleChoicesOnSelect(items, lastSelectItem) {
                 this.tempMultipleChoices = items;
+                /*if (this.items[index]) {
+                    this.items[index].multipleChoice = items;
+                }*/
             },
 
             saveMultipleChoicesToSelectedAttribute(index) {
@@ -172,8 +192,9 @@
                 if (choices.length > 0) {
                     choices.forEach(item => {
                         temp.push({
-                            text: item.value,
                             value: item.value,
+                            slug: item.slug,
+                            // code: item.code,
                         })
                     })
                 }
@@ -182,8 +203,7 @@
             },
 
             multipleChoiceSelectBoxValues(index) {
-                let multipleChoices =
-                    this.items[index].selectedAttribute.configuration ?
+                let multipleChoices = this.items[index].selectedAttribute.configuration ?
                         this.items[index].selectedAttribute.configuration.values : [];
 
                 let temp = [];
@@ -191,35 +211,23 @@
                 if (multipleChoices.length > 0) {
                     multipleChoices.forEach(item => {
                         temp.push({
-                            text: item.value,
                             value: item.value,
+                            slug: item.slug,
                         })
                     })
                 }
 
                 return temp;
             },
-        },
 
-        computed: {
             attributeSelectBoxValues() {
-                let attributes = [];
-
-                if (this.attributes.length > 0) {
-                    this.attributes.forEach(item => {
-                        attributes.push({
-                            text: item.name,
-                            value: item.id,
-                            type: item.type,
-                            storageType: item.storage_type,
-                            linkable: item.linkable,
-                            configuration: item.configuration
-                        })
-                    })
-                }
+                let attributes = this.attributes;
 
                 return attributes;
             },
+        },
+
+        computed: {
 
             submitBtnLoaderClasses() {
 
@@ -228,6 +236,7 @@
     }
 </script>
 
-<style scoped>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
+<style scoped>
 </style>
