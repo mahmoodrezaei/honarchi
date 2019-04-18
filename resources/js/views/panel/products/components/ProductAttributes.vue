@@ -25,7 +25,7 @@
                                     </div>
                                     <div class="d-md-none m--margin-bottom-10"></div>
                                 </div>
-                                <div class="col-md-4" v-if="item.selectedAttribute.type === 'text'">
+                                <div class="col-md-4" v-if="item.selectedAttribute.type === 'متن'">
                                     <div class="m-form__group m-form__group--inline">
                                         <div class="m-form__label">
                                             <label for="text-value" class="m-label m-label--single"></label>
@@ -37,7 +37,7 @@
                                     <div class="d-md-none m--margin-bottom-10"></div>
                                 </div>
 
-                                <div class="col-md-4" v-else-if="item.selectedAttribute.type === 'select' && item.selectedAttribute.configuration.type === 'choices'">
+                                <div class="col-md-4" v-else-if="item.selectedAttribute.type === 'انتخاب' && item.selectedAttribute.configuration.type === 'choices'">
                                     <div class="m-form__group m-form__group--inline">
                                         <div class="m-form__label">
                                             <label for="single-choice" class="m-label m-label--single"></label>
@@ -56,7 +56,7 @@
                                     <div class="d-md-none m--margin-bottom-10"></div>
                                 </div>
 
-                                <div class="col-md-4" v-else-if="item.selectedAttribute.type === 'select' && item.selectedAttribute.configuration.type === 'multiple'">
+                                <div class="col-md-4" v-else-if="item.selectedAttribute.type === 'انتخاب' && item.selectedAttribute.configuration.type === 'multiple'">
                                     <div class="m-form__group m-form__group--inline">
                                         <div class="m-form__label">
                                             <label for="multiple-choice" class="m-label m-label--single"></label>
@@ -120,14 +120,12 @@
 </template>
 
 <script>
-    import { ModelSelect } from 'vue-search-select'
     import Multiselect from 'vue-multiselect'
-
 
     export default {
         name: "ProductAttributes",
 
-        components: { ModelSelect, Multiselect },
+        components: { Multiselect },
 
         data() {
             return {
