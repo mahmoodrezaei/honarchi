@@ -15,4 +15,9 @@ class Product extends Model
     {
         return $this->belongsTo('App\Gallery');
     }
+
+    public function attributes()
+    {
+        return $this->belongsToMany('App\ProductAttribute', 'product_attribute_value', 'attribute_id', 'product_id')->withPivot(['text_value', 'json_value']);
+    }
 }

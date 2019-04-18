@@ -9,6 +9,8 @@ use App\Http\Requests\Product\UpdateProduct;
 use File;
 use App\Product;
 use DB;
+use Illuminate\Http\Request;
+
 
 class ProductController extends Controller
 {
@@ -23,5 +25,35 @@ class ProductController extends Controller
         $request->validated();
 
 
+    }
+
+    public function syncAttribute(Request $request ,Product $product)
+    {
+        $requestData = $request->all();
+
+        $product->attributes()->detach();
+
+        foreach ($requestData as $item){
+            switch ($item['selectedAttribute']['type']){
+                case 'متن':
+                    $product->attributes()->attach($item['id'], ['text_value' => $item['textValue']]);
+                    break;
+                case 'انتخاب':
+                    if ($item['selectedAttribute']['configuration']['type'] == 'choices')
+                        $product->attributes()->attach($item['id'], ['json_value' =>  json_decode([$item['singleChoice']['code']])]);
+                    elseif ($item['selectedAttribute']['configuration']['type'] == 'multiple')
+                        $product->attributes()->attach($item['id'], ['json_value' =>  json_decode(array_column($item['multipleChoice'], 'code'))]);
+                    break;
+            }
+
+        }
+
+        $responseData = [
+            'status_code' => 200,
+            'message' => __('successfully_data_sync'),
+            'data' => null
+        ];
+
+        return response()->json($responseData,200);
     }
 }
