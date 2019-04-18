@@ -29,13 +29,11 @@ class StoreProduct extends FormRequest
             'name' => 'required|max:50',
             'slug' => 'required|unique:products',
             'location' => 'required|string',
-            'intro' => 'required|max:255',
+            'short_description' => 'required|max:255',
             'description' => 'required|string',
-            'no' => 'required|integer',
-            'major_no' => 'required|integer',
-            'features' => 'nullable|array',
-            'pics' => 'nullable|array',
             'max_purchase_per_rate' => 'required|integer',
+            'published_date' => 'required',
+            'enabled' => 'required'
         ];
     }
 }
