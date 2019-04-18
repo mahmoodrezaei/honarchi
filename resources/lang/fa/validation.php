@@ -190,7 +190,8 @@ return [
         'gallery_name'          => 'گالری',
         'location'              => 'محل تولید',
         'type'                  => 'نوع دست ساخته',
-        'optionType'            => 'نوع گزینه'
+        'optionType'            => 'نوع گزینه',
+        'published_date'        => 'تاریخ انتشار'
     ],
 
     'entities' => [

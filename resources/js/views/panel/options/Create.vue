@@ -234,14 +234,14 @@
                         flash(response.data.message)
                     })
                     .catch( function(errors) {
+                        this.sending = false;
+
                         if (errors.message === 'Network Error') {
-                            this.sending = false;
                             flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
                         } else {
                             switch (errors.response.status) {
                                 case 422:
                                     this.errors = errors.response.data.errors;
-                                    this.sending = false;
                                     break;
                                 case 500:
                                     break;

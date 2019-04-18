@@ -34,3 +34,17 @@ Route::put('/api/admin/options/{option}/update', 'API\Admin\ProductOptionControl
 Route::apiResource('api/admin/attributes', 'API\Admin\ProductAttributeController')->parameters(['attributes' => 'model']);
 
 Route::apiResource('api/admin/categories', 'API\Admin\ProductCategoryController')->parameters(['categories' => 'model']);
+
+Route::get('/api/admin/galleries', 'API\Admin\GalleryController@index');
+Route::post('/api/admin/galleries', 'API\Admin\GalleryController@store');
+Route::get('/api/admin/galleries/{gallery}', 'API\Admin\GalleryController@show');
+Route::patch('/api/admin/galleries/{gallery}', 'API\Admin\GalleryController@update');
+Route::patch('/api/admin/galleries/{gallery}/approve', 'API\Admin\GalleryController@approveGallery');
+Route::patch('/api/admin/galleries/{gallery}/block', 'API\Admin\GalleryController@blockGallery');
+Route::patch('/api/admin/galleries/{gallery}/unblock', 'API\Admin\GalleryController@unblockGallery');
+Route::patch('/api/admin/galleries/{gallery}/unblock', 'API\Admin\GalleryController@unblockGallery');
+
+Route::prefix('/api/admin/products')->group(function () {
+    Route::get('/', 'API\Admin\ProductController@index');
+    Route::post('/', 'API\Admin\ProductController@store');
+});

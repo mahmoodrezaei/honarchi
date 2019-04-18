@@ -110,10 +110,10 @@
                                                                 title="نمایش جزییات"><i class="la la-edit"></i>
                                                         </button>
                                                     </router-link>
-                                                    <button
-                                                            class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                            title="حذف"><i class="la la-remove"></i>
-                                                    </button>
+<!--                                                    <button-->
+<!--                                                            class="m-portlet__nav-link btn m-btn m-btn&#45;&#45;hover-danger m-btn&#45;&#45;icon m-btn&#45;&#45;icon-only m-btn&#45;&#45;pill"-->
+<!--                                                            title="حذف"><i class="la la-remove"></i>-->
+<!--                                                    </button>-->
                                                 </span>
                                     </td>
                                 </tr>

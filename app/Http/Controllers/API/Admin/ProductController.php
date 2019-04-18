@@ -22,6 +22,11 @@ class ProductController extends Controller
     {
         $request->validated();
 
+        $response_data = [
+            'product' => $request->all(),
+            'response_code' => 200
+        ];
 
+        return response()->json($response_data, 200);
     }
 }
