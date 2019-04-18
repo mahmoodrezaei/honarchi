@@ -13,7 +13,7 @@
                                             <label for="attribute-name"></label>
                                         </div>
                                         <div class="m-form__control">
-                                            <multiselect v-model="item.selectedAttribute"
+                                            <multiselect @input="attributeValueChanged(index)" v-model="item.selectedAttribute"
                                                          placeholder="انتخاب ویژگی"
                                                          :selectLabel="'انتخاب'"
                                                          :selectedLabel="'انتخاب شده'"
@@ -179,6 +179,14 @@
             removeField(index) {
                 if (this.items.length !== 1) {
                     this.items.splice(index, 1);
+                }
+            },
+
+            attributeValueChanged(index) {
+                if (this.items[index]) {
+                    this.items[index].textValue = "";
+                    this.items[index].singleChoice = {};
+                    this.items[index].multipleChoice = [];
                 }
             },
 
