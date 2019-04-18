@@ -39,7 +39,7 @@
                             @change="attributeItemTypeChenge()"
                             type="radio"
                             name="example_8"
-                            value="text"
+                            value="متن"
                           >متن
                           <span></span>
                         </label>
@@ -49,7 +49,7 @@
                             @change="attributeItemTypeChenge()"
                             type="radio"
                             name="example_8"
-                            value="select"
+                            value="انتخاب"
                           >انتخاب
                           <span></span>
                         </label>
@@ -61,7 +61,11 @@
                     <label class="col-lg-2 col-form-label">لینک شدن</label>
                     <div class="col-lg-4">
                       <label class="m-checkbox">
-                        <input v-model="attributeItem.linkable" type="checkbox">
+                        <input
+                          v-model="attributeItem.linkable"
+                          @change="attributeItemLinkabelChenge()"
+                          type="checkbox"
+                        >
                         <span style="transform: rotate(90deg);">‌</span>
                       </label>
 
@@ -91,13 +95,14 @@
                         v-model="attributeItem.slug"
                         type="text"
                         class="form-control m-input"
+                        :disabled="!attributeItem.linkable"
                       >
                       <span v-if="!errors.slug" class="m-form__help">نامک ویژگی خود را وارد کنید</span>
                       <form-error v-if="errors.slug" :errors="errors">{{ errors.slug[0] }}</form-error>
                     </div>
                   </div>
 
-                  <div v-show="attributeItem.type == 'select'">
+                  <div v-show="attributeItem.type == 'انتخاب'">
                     <div
                       class="m-form__seperator m-form__seperator&#45;&#45;dashed m-form__seperator&#45;&#45;space m&#45;&#45;margin-bottom-40"
                     ></div>
@@ -166,6 +171,7 @@
                                 v-model="attributeItem.configuration.values[index]['slug']"
                                 type="text"
                                 class="form-control m-input"
+                                :disabled="!attributeItem.linkable"
                               >
                               <span class="m-form__help">نامک این مقدار را وارد کنید</span>
                             </div>
@@ -217,6 +223,7 @@
                       @click.prevent="storeAttributeRequest"
                       type="reset"
                       class="btn btn-success"
+                      :class="storeBtnLoaderClasses"
                     >ثبت کردن</button>
                     <button type="reset" class="btn btn-secondary">Cancel</button>
                   </div>
@@ -249,16 +256,24 @@ export default {
 
   data() {
     return {
+      sending: false,
+
       attributeItem: {},
       errors: []
     };
+  },
+
+  computed: {
+    storeBtnLoaderClasses() {
+      return this.sending ? "m-loader m-loader--light m-loader--left" : "";
+    }
   },
 
   methods: {
     resetData() {
       this.attributeItem = {
         name: "",
-        type: "text",
+        type: "متن",
         configuration: {},
         linkable: false
       };
@@ -274,26 +289,50 @@ export default {
 
     attributeItemTypeChenge() {
       switch (this.attributeItem.type) {
-        case "text":
-          this.attributeItem.type = "text";
+        case "متن":
+          this.attributeItem.type = "متن";
           this.attributeItem.configuration = {};
           break;
-        case "select":
-          this.attributeItem.type = "select";
+        case "انتخاب":
+          this.attributeItem.type = "انتخاب";
           this.attributeItem.configuration = { type: "choices", values: [{}] };
+      }
+    },
+    attributeItemLinkabelChenge() {
+      if (!this.attributeItem.linkable) {
+        delete this.attributeItem["slug"];
+        if (this.attributeItem.type == "انتخاب")
+          this.attributeItem.configuration.values.map(item => {
+            delete item["slug"];
+          });
       }
     },
 
     storeAttributeRequest() {
+      this.sending = true;
       axios
         .post(attributesRoutes.store.url, this.attributeItem)
-        .then(response => {
-          this.resetData();
-        })
+        .then(
+          function(response) {
+            this.sending = false;
+            flash(response.data.message);
+            this.resetData();
+          }.bind(this)
+        )
         .catch(
           function(errors) {
-            console.log(errors.response.data);
-            this.errors = errors.response.data.errors;
+            console.log(errors.response.data.errors);
+
+            if (errors.message == "Network Error") {
+              this.sending = false;
+              flash("خطایی در اتصال به شبکه رخ داده است.", "warning");
+            } else
+              switch (errors.response.status) {
+                case 422:
+                  this.sending = false;
+                  this.errors = errors.response.data.errors;
+                  break;
+              }
           }.bind(this)
         );
     }

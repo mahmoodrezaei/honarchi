@@ -6,7 +6,7 @@
           <div class="m-portlet__head">
             <div class="m-portlet__head-caption">
               <div class="m-portlet__head-title">
-                <h3 class="m-portlet__head-text">مدیریت ویژگی ها</h3>
+                <h3 class="m-portlet__head-text">گزینه‌های متغیر</h3>
               </div>
             </div>
 
@@ -23,42 +23,6 @@
                 </li>
               </ul>
             </div>
-
-            <Modal id="feature_modal">
-              <template #header>
-                <h5 class="modal-title" id="exampleModalLabel">ایجاد ویژگی جدید</h5>
-              </template>
-              <template #body>
-                <div class="form-group m-form-group">
-                  <input
-                    id="name"
-                    class="form-control m-input"
-                    type="text"
-                    placeholder="نام ویژگی جدید"
-                    v-model="item.name"
-                  >
-                </div>
-                <div class="form-group m-form-group">
-                  <model-select placeholder="کلید" :options="options" v-model="item.key_id"></model-select>
-                </div>
-              </template>
-              <template #footer>
-                <button
-                  v-show="modalType == 'create'"
-                  data-dismiss="modal"
-                  type="submit"
-                  class="btn btn-primary"
-                >ثبت کن</button>
-
-                <button
-                  v-show="modalType == 'edit'"
-                  @click="update(item)"
-                  data-dismiss="modal"
-                  type="submit"
-                  class="btn btn-primary"
-                >بروزرسانی</button>
-              </template>
-            </Modal>
           </div>
 
           <div class="m-portlet__body">
@@ -113,59 +77,49 @@
             </div>
             <!--end: Search Form -->
             <!--begin: Datatable -->
+
             <div
               class="m_datatable m-datatable m-datatable--default m-datatable--loaded"
               id="local_data"
               style
             >
+              <!--<div v-show="loading" class="m-loader m-loader&#45;&#45;lg m-loader&#45;&#45;info" style="z-index: 100; position: relative; top: 100px"></div>-->
+
               <data-table
                 :columns="columns"
                 :sortKey="sortKey"
                 :sortOrders="sortOrders"
                 @sort="sortBy"
               >
-                <tbody style class="m-datatable__body">
+                <tbody class="m-datatable__body">
                   <tr
-                    v-for="feature in paginated"
-                    :key="feature.id"
+                    v-for="attribute in paginated"
+                    :key="attribute.id"
                     class="m-datatable__row m-datatable__row"
                     style="left: 0px;"
                   >
                     <td class="m-datatable__cell">
-                      <span style="width: 110px;">{{feature.name}}</span>
+                      <span style="width: 110px;">{{ attribute.name }}</span>
                     </td>
-
                     <td class="m-datatable__cell">
-                      <div style="width: 130px;" class="m-list-badge">
-                        <div class="m-list-badge__items">
-                          <div
-                            v-if="features.filter(item => item.id == feature.key_id)[0]"
-                            style="margin: 10px;"
-                          >
-                            <span
-                              class="m-list-badge__item m-list-badge__item--brand"
-                            >{{ features.filter(item => item.id == feature.key_id)[0].name }}</span>
-                          </div>
-                        </div>
-                      </div>
+                      <span style="width: 110px;">{{ attribute.type }}</span>
                     </td>
-
                     <td class="m-datatable__cell">
-                      <span style="width: 110px;">{{feature.created_at}}</span>
+                      <span style="width: 110px;">{{attribute.created_at}}</span>
                     </td>
                     <td class="m-datatable__cell">
                       <span style="overflow: visible; position: relative; width: 110px;">
+                        <router-link :to="`/admin/attributes/${attribute.id}/edit`">
+                          <button
+                            class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill"
+                            title="نمایش جزییات"
+                          >
+                            <i class="la la-edit"></i>
+                          </button>
+                        </router-link>
                         <button
-                          @click="editModal(feature)"
-                          class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
-                          title="View "
-                        >
-                          <i class="la la-edit"></i>
-                        </button>
-                        <button
-                          @click="remove(feature)"
                           class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                          title="View "
+                          title="حذف"
                         >
                           <i class="la la-remove"></i>
                         </button>
@@ -177,13 +131,11 @@
 
               <pagination
                 :pagination="pagination"
-                :filtered="filteredfeatures"
+                :filtered="filteredattributes"
                 @prev="--pagination.currentPage"
                 @next="++pagination.currentPage"
               ></pagination>
             </div>
-
-            <!--end: Datatable -->
           </div>
         </div>
       </div>
@@ -194,18 +146,18 @@
 <script>
 import DataTable from "../../../components/DataTable";
 import Pagination from "../../../components/Pagination";
-import Modal from "../../../components/Modal.vue";
-import { ModelSelect } from "vue-search-select";
 
 export default {
-  components: { DataTable, Pagination, Modal, ModelSelect },
+  name: "Attributes",
+
+  components: { DataTable, Pagination },
 
   data() {
     let sortOrders = {};
 
     let columns = [
-      { label: "نام ویژگی", name: "feature" },
-      { label: "کلید", name: "key" },
+      { label: "ویژگی", name: "attribute" },
+      { label: "نوع ویژگی", name: "type" },
       { label: "تاریخ ایجاد", name: "created", type: "number" }
     ];
 
@@ -214,21 +166,16 @@ export default {
     });
 
     return {
-      modalType: "create",
-
-      features: [],
+      attributes: [],
 
       columns,
 
-      sortKey: "feature",
+      sortKey: "attribute",
 
       search: "",
 
       sortOrders: sortOrders,
 
-      item: { name: "", key_id: 0 },
-
-      // how many items per page
       perPage: 10,
 
       pagination: {
@@ -243,18 +190,18 @@ export default {
   },
 
   created() {
-    this.getfeatures();
+    this.retrieveAttributes();
   },
 
   methods: {
-    getfeatures() {
+    retrieveAttributes() {
       axios
         .get("/api/admin/attributes")
         .then(response => {
-          this.features = response.data.data;
-          this.pagination.total = this.features.length;
+          this.attributes = response.data.data;
+          this.pagination.total = this.attributes.length;
         })
-        .catch(error => console.log(error));
+        .catch(error => console.log(error.response));
     },
 
     paginate(data, perPage, pageNumber) {
@@ -285,22 +232,11 @@ export default {
   },
 
   computed: {
-    options() {
-      let options = [];
-      if (this.features.length > 0)
-        this.features.forEach(item => {
-          let name = item.name || null;
-          let id = item.id || null;
-          options.push({ text: name, value: id });
-        });
-      return options;
-    },
-
-    filteredfeatures() {
-      let features = this.features;
+    filteredattributes() {
+      let attributes = this.attributes;
 
       if (this.search) {
-        features = features.filter(row => {
+        attributes = attributes.filter(row => {
           return Object.keys(row).some(key => {
             return (
               String(row[key])
@@ -314,7 +250,7 @@ export default {
       let sortKey = this.sortKey;
       let order = this.sortOrders[sortKey] || 1;
       if (sortKey) {
-        features = features.slice().sort((a, b) => {
+        attributes = attributes.slice().sort((a, b) => {
           let index = this.getIndex(this.columns, "name", sortKey);
           a = String(a[sortKey]).toLowerCase();
           b = String(b[sortKey]).toLowerCase();
@@ -337,12 +273,12 @@ export default {
         });
       }
 
-      return features;
+      return attributes;
     },
 
     paginated() {
       return this.paginate(
-        this.filteredfeatures,
+        this.filteredattributes,
         this.perPage,
         this.pagination.currentPage
       );
@@ -350,3 +286,6 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+</style>

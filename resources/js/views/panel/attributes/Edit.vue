@@ -25,43 +25,51 @@
           </div>
 
           <div class="m-portlet__body">
+            <div v-show="loading" class="m-loader m-loader--lg m-loader--info mt-5"></div>
+
             <!--begin::Form-->
-            <form class="m-form">
+            <form v-show="!loading" class="m-form">
               <div class="m-portlet__body">
                 <div class="m-form__section m-form__section--first">
                   <div class="m-form__group form-group row">
                     <label class="col-lg-2 col-form-label">نوع ویژگی</label>
                     <div class="col-lg-4">
                       <div class="m-radio-inline">
-                        <label class="m-radio">
+                        <label class="m-radio m-radio--disabled">
                           <input
                             v-model="attributeItem.type"
                             @change="attributeItemTypeChenge()"
                             type="radio"
                             name="example_8"
-                            value="text"
+                            value="متن"
+                            disabled
                           >متن
                           <span></span>
                         </label>
-                        <label class="m-radio">
+                        <label class="m-radio m-radio--disabled">
                           <input
                             v-model="attributeItem.type"
                             @change="attributeItemTypeChenge()"
                             type="radio"
                             name="example_8"
-                            value="select"
+                            value="انتخاب"
+                            disabled
                           >انتخاب
                           <span></span>
                         </label>
                       </div>
-                      <span class="m-form__help">نوع ویژگی مورد نظر را انتخاب کنید</span>
+                      <span class="m-form__help">نوع ویژگی قابل تغییر نمی باشد</span>
                     </div>
                   </div>
                   <div class="m-form__group form-group row">
                     <label class="col-lg-2 col-form-label">لینک شدن</label>
                     <div class="col-lg-4">
                       <label class="m-checkbox">
-                        <input v-model="attributeItem.linkable" type="checkbox">
+                        <input
+                          v-model="attributeItem.linkable"
+                          @change="attributeItemLinkabelChenge()"
+                          type="checkbox"
+                        >
                         <span style="transform: rotate(90deg);">‌</span>
                       </label>
 
@@ -72,20 +80,33 @@
                   <div class="form-group m-form__group row">
                     <label class="col-lg-2 col-form-label">نام ویژگی</label>
                     <div class="col-lg-4">
-                      <input v-model="attributeItem.name" type="text" class="form-control m-input">
-                      <span class="m-form__help">نام ویژگی خود را وارد کنید</span>
+                      <input
+                        @click="errors['name'] = ''"
+                        v-model="attributeItem.name"
+                        type="text"
+                        class="form-control m-input"
+                      >
+                      <span v-if="!errors.name" class="m-form__help">نام ویژگی خود را وارد کنید</span>
+                      <form-error v-if="errors.name" :errors="errors">{{ errors.name[0] }}</form-error>
                     </div>
                   </div>
 
                   <div class="form-group m-form__group row">
                     <label class="col-lg-2 col-form-label">نامک ویژگی</label>
                     <div class="col-lg-4">
-                      <input v-model="attributeItem.slug" type="text" class="form-control m-input">
-                      <span class="m-form__help">نامک ویژگی خود را وارد کنید</span>
+                      <input
+                        @click="errors['slug'] = ''"
+                        v-model="attributeItem.slug"
+                        type="text"
+                        class="form-control m-input"
+                        :disabled="!attributeItem.linkable"
+                      >
+                      <span v-if="!errors.slug" class="m-form__help">نامک ویژگی خود را وارد کنید</span>
+                      <form-error v-if="errors.slug" :errors="errors">{{ errors.slug[0] }}</form-error>
                     </div>
                   </div>
 
-                  <div v-show="attributeItem.type == 'select'">
+                  <div v-show="attributeItem.type == 'انتخاب'">
                     <div
                       class="m-form__seperator m-form__seperator&#45;&#45;dashed m-form__seperator&#45;&#45;space m&#45;&#45;margin-bottom-40"
                     ></div>
@@ -154,6 +175,7 @@
                                 v-model="attributeItem.configuration.values[index]['slug']"
                                 type="text"
                                 class="form-control m-input"
+                                :disabled="!attributeItem.linkable"
                               >
                               <span class="m-form__help">نامک این مقدار را وارد کنید</span>
                             </div>
@@ -205,7 +227,8 @@
                       @click.prevent="updateAttributeRequest"
                       type="reset"
                       class="btn btn-success"
-                    >ثبت کردن</button>
+                      :class="updateBtnLoaderClasses"
+                    >بروز رسانی</button>
                     <button type="reset" class="btn btn-secondary">Cancel</button>
                   </div>
                   <div class="col-lg-2"></div>
@@ -223,9 +246,13 @@
 
 <script>
 import { attributesRoutes } from "../../../lib/apiRoutes";
+import FormError from "../../../components/FormError.vue";
 
 export default {
   name: "AttributesCreate",
+  components: {
+    FormError
+  },
 
   created() {
     this.loadData();
@@ -233,22 +260,44 @@ export default {
 
   data() {
     return {
+      loading: true,
+      sending: false,
+      errors: [],
+      deletedAttributeItemConfigurationValues: [],
+
       attributeItem: { type: "", configuration: { type: "" } }
     };
+  },
+
+  computed: {
+    updateBtnLoaderClasses() {
+      return this.sending ? "m-loader m-loader--light m-loader--left" : "";
+    }
   },
 
   methods: {
     loadData() {
       this.showAttributeRequest().then(data => {
+        this.loading = false;
+        if (!data.linkable) {
+          delete data["slug"];
+        }
         this.attributeItem = data;
       });
     },
 
     addAttributeValueRow(index) {
-      this.attributeItem.configuration.values.splice(index + 1, 0, {});
+      this.attributeItem.configuration.values.splice(index + 1, 0, {
+        code: ""
+      });
     },
 
     removeAttributeValueRow(index) {
+      if (this.attributeItem.configuration.values[index]["code"])
+        this.deletedAttributeItemConfigurationValues.push(
+          this.attributeItem.configuration.values[index]["code"]
+        );
+
       this.attributeItem.configuration.values.splice(index, 1);
     },
 
@@ -276,16 +325,49 @@ export default {
       }
     },
 
+    attributeItemLinkabelChenge() {
+      if (!this.attributeItem.linkable) {
+        delete this.attributeItem["slug"];
+        if (this.attributeItem.type == "انتخاب")
+          this.attributeItem.configuration.values.map(item => {
+            delete item["slug"];
+          });
+      }
+    },
+
     updateAttributeRequest() {
+      this.sending = true;
+      this.attributeItem.deletedAttributeItemConfigurationValues = this.deletedAttributeItemConfigurationValues;
       axios
         .put(
           attributesRoutes.update.url + this.$route.params.id,
           this.attributeItem
         )
-        .then(response => {
-          this.attributeItem = response.data.data;
-        })
-        .catch(errors => {});
+        .then(
+          function(response) {
+            console.log("1");
+            this.attributeItem = response.data.data;
+            this.sending = false;
+            flash(response.data.message);
+          }.bind(this)
+        )
+        .catch(
+          function(errors) {
+            console.log(errors.response.data.errors);
+
+            if (errors.message == "Network Error") {
+              this.sending = false;
+              flash("خطایی در اتصال به شبکه رخ داده است.", "warning");
+            } else
+              switch (errors.response.status) {
+                case 422:
+                  this.loading = false;
+                  this.sending = false;
+                  this.errors = errors.response.data.errors;
+                  break;
+              }
+          }.bind(this)
+        );
     },
 
     showAttributeRequest() {
@@ -294,7 +376,9 @@ export default {
         .then(response => {
           return response.data.data;
         })
-        .catch(errors => {});
+        .catch(errors => {
+          this.loading = false;
+        });
     }
   }
 };

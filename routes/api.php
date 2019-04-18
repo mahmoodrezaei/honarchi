@@ -21,7 +21,6 @@ Route::apiResource('admin/permissions', 'API\Admin\PermissionController')->middl
 
 Route::apiResource('admin/roles', 'API\Admin\RoleController');
 
-Route::apiResource('admin/categories', 'API\Admin\CategoryController')->except(['show']);
 
 Route::apiResource('admin/features', 'API\Admin\FeatureController')->except(['show']);
 

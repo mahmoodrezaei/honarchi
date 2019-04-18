@@ -13,16 +13,66 @@
             <div class="m-portlet__head-tools">
               <ul class="m-portlet__nav">
                 <li class="m-portlet__nav-item">
-                  <router-link :to="`/admin/categories/create`">
-                    <button
-                      class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill"
-                    >
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </router-link>
+                  <button
+                    @click="createModal"
+                    data-toggle="modal"
+                    class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
                 </li>
               </ul>
             </div>
+
+            <Modal id="category_modal">
+              <template #header>
+                <h5 class="modal-title" id="exampleModalLabel">ایجاد دسته بندی جدید</h5>
+              </template>
+              <template #body>
+                <div class="form-group m-form-group">
+                  <input
+                    id="name"
+                    class="form-control m-input"
+                    type="text"
+                    placeholder="نام دسته بندی جدید"
+                    v-model="item.name"
+                  >
+                </div>
+                <div class="form-group m-form-group">
+                  <input
+                    id="name"
+                    class="form-control m-input"
+                    type="text"
+                    placeholder="نحوه ی نمایش در url"
+                    v-model="item.slug"
+                  >
+                </div>
+                <div class="form-group m-form-group">
+                  <model-select
+                    placeholder="دسته بندی مادر"
+                    :options="options"
+                    v-model="item.parent_id"
+                  ></model-select>
+                </div>
+              </template>
+              <template #footer>
+                <button
+                  v-show="modalType == 'create'"
+                  @click="store"
+                  data-dismiss="modal"
+                  type="submit"
+                  class="btn btn-primary"
+                >ثبت کن</button>
+
+                <button
+                  v-show="modalType == 'edit'"
+                  @click="update(item)"
+                  data-dismiss="modal"
+                  type="submit"
+                  class="btn btn-primary"
+                >بروزرسانی</button>
+              </template>
+            </Modal>
           </div>
 
           <div class="m-portlet__body">
@@ -96,15 +146,7 @@
                     style="left: 0px;"
                   >
                     <td class="m-datatable__cell">
-                      <span style="width: 110px;">
-                        <strong style="color: #716aca; font-size: 20px;">|</strong>
-                        <strong
-                          style="color: #716aca; font-size: 20px;"
-                          v-for="(index) in category.level"
-                          :key="index"
-                        >-</strong>
-                        {{category.name}}
-                      </span>
+                      <span style="width: 110px;">{{category.name}}</span>
                     </td>
 
                     <td class="m-datatable__cell">
@@ -125,16 +167,15 @@
                     <td class="m-datatable__cell">
                       <span style="width: 110px;">{{category.created_at}}</span>
                     </td>
-                    <td v-show="category.id > 1" class="m-datatable__cell">
+                    <td class="m-datatable__cell">
                       <span style="overflow: visible; position: relative; width: 110px;">
-                        <router-link :to="`/admin/categories/${category.id}/edit`">
-                          <button
-                            class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
-                            title="View "
-                          >
-                            <i class="la la-edit"></i>
-                          </button>
-                        </router-link>
+                        <button
+                          @click="editModal(category)"
+                          class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                          title="View "
+                        >
+                          <i class="la la-edit"></i>
+                        </button>
                         <button
                           @click="remove(category)"
                           class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
@@ -165,12 +206,13 @@
 </template>
 
 <script>
-import { categoriesRoutes } from "../../../lib/apiRoutes";
 import DataTable from "../../../components/DataTable";
 import Pagination from "../../../components/Pagination";
+import Modal from "../../../components/Modal.vue";
+import { ModelSelect } from "vue-search-select";
 
 export default {
-  components: { DataTable, Pagination },
+  components: { DataTable, Pagination, Modal, ModelSelect },
 
   data() {
     let sortOrders = {};
@@ -186,7 +228,8 @@ export default {
     });
 
     return {
-      test: [],
+      modalType: "create",
+
       categories: [],
 
       columns,
@@ -218,49 +261,24 @@ export default {
   },
 
   methods: {
-    getLevel(source, val, level = 0) {
-      level++;
-      let tmp;
-
-      if (val.parent_id) {
-        for (let i in source) {
-          if (source[i].id == val.parent_id) tmp = source[i];
-        }
-
-        if (tmp) {
-          level = this.getLevel(source, tmp, level);
-        }
-      }
-      return level;
+    editModal(item) {
+      this.item = { ...item };
+      $("#category_modal").modal("show");
+      this.modalType = "edit";
     },
 
-    addChildren(source, identifier, dest) {
-      source
-        .filter(function(val) {
-          return val.parent_id == identifier;
-        })
-        .forEach(
-          function(val) {
-            val["level"] = this.getLevel(source, val);
-
-            dest.push(val);
-            this.addChildren(source, val.id, dest);
-          }.bind(this)
-        );
-    },
-    buildTree(source) {
-      var dest = [];
-      this.addChildren(source, null, dest);
-      return dest;
+    createModal(item) {
+      this.item = { name: "" ,slug: ""};
+      $("#category_modal").modal("show");
+      this.modalType = "create";
     },
 
     getcategories() {
       axios
-        .get(categoriesRoutes.index.url)
+        .get("/api/admin/categories")
         .then(response => {
-          this.categories = this.buildTree(response.data.data);
+          this.categories = response.data;
           this.pagination.total = this.categories.length;
-          this.test = this.buildTree(this.categories);
         })
         .catch(error => console.log(error));
     },
@@ -291,22 +309,179 @@ export default {
       return array.findIndex(i => i[key] == value);
     },
 
-    remove(category) {
-      const index = this.categories.indexOf(category);
+    store() {
       axios
-        .delete(categoriesRoutes.destroy.url + category.id)
+        .post("/api/admin/categories", this.item)
         .then(response => {
-          this.categories.splice(index, 1);
+          this.categories.push(response.data);
+          this.pagination.total = this.categories.length;
+          swal({
+            type: "success",
+            text: "دسته بندی با موفقیت اضافه شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
+          console.log(response.data);
         })
         .catch(error => {
-          console.log(error.response.data.errors.id[0]);
+          if (error.response.status == 422) {
+            error.response.data.errors = Object.values(
+              error.response.data.errors
+            )
+              .map(item => {
+                return item
+                  .map(i => {
+                    return i;
+                  })
+                  .join("<hr/>");
+              })
+              .join("<br/>");
 
-          flash(error.response.data.errors.id[0], "danger");
+            console.log(error.response.data);
+
+            swal({
+              html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
+              type: "error",
+
+              confirmButtonText:
+                "<span><i class='la'></i><span>متوجه شدم</span></span>",
+              confirmButtonClass:
+                "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+            });
+          }
         });
+    },
+
+    update(category) {
+      const index = this.categories.findIndex(item => item.id == category.id);
+      console.log(index);
+      axios
+        .put("/api/admin/categories/" + category.id, this.item)
+        .then(response => {
+          this.$set(this.categories, index, response.data);
+          swal({
+            type: "success",
+            text: "دسته بندی با موفقیت به روز شد",
+            timer: 2500,
+            showConfirmButton: false
+          });
+          console.log(this.categories);
+        })
+        .catch(error => {
+          if (error.response.status == 422) {
+            error.response.data.errors = Object.values(
+              error.response.data.errors
+            )
+              .map(item => {
+                return item
+                  .map(i => {
+                    return i;
+                  })
+                  .join("<hr/>");
+              })
+              .join("<br/>");
+
+            console.log(error.response.data);
+
+            swal({
+              html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
+              type: "error",
+
+              confirmButtonText:
+                "<span><i class='la'></i><span>متوجه شدم</span></span>",
+              confirmButtonClass:
+                "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+            });
+          }
+        });
+    },
+
+    remove(category) {
+      const index = this.categories.indexOf(category);
+      swal({
+        text: "آیا اطمینان دارید که میخواهید این مورد را حذف کنید؟",
+        type: "warning",
+        confirmButtonText: "<span><i class='la'></i><span>بله</span></span>",
+        confirmButtonClass:
+          "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon",
+        showCancelButton: !0,
+        cancelButtonText: "<span><i class='la'></i><span>خیر</span></span>",
+        cancelButtonClass: "btn btn-secondary m-btn m-btn--pill m-btn--icon"
+      }).then(answer => {
+        console.log(answer);
+        if (answer.value === true) {
+          axios
+            .delete("/api/admin/categories/" + category.id)
+            .then(response => {
+              this.categories.splice(index, 1);
+            })
+            .catch(error => {
+              switch (error.response.status) {
+                case 422: {
+                  error.response.data.errors = Object.values(
+                    error.response.data.errors
+                  )
+                    .map(item => {
+                      return item
+                        .map(i => {
+                          return i;
+                        })
+                        .join("<hr/>");
+                    })
+                    .join("<br/>");
+
+                  console.log(error.response.data);
+
+                  swal({
+                    html: `
+              <h2>داده ها نامعتبر میباشند</h2>
+              <p> ${error.response.data.errors} </p>
+              `,
+                    type: "error",
+
+                    confirmButtonText:
+                      "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                    confirmButtonClass:
+                      "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+                  });
+                  break;
+                }
+                case 500: {
+                  swal({
+                    text: "خطایی رخ داده!",
+                    type: "error",
+
+                    confirmButtonText:
+                      "<span><i class='la'></i><span>متوجه شدم</span></span>",
+                    confirmButtonClass:
+                      "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon"
+                  });
+                }
+              }
+            });
+        }
+      });
     }
   },
 
   computed: {
+    options() {
+      let options = [];
+      if (this.categories.length > 0)
+        this.categories.forEach(item => {
+          let name = item.name || null;
+          let id = item.id || null;
+          options.push({ text: name, value: id });
+        });
+      return options;
+    },
+
     filteredcategories() {
       let categories = this.categories;
 
