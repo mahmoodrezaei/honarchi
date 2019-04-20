@@ -20,10 +20,12 @@ class ProductController extends Controller
 
     public function store(StoreProduct $request)
     {
-        $request->validated();
+
+        $product = Product::create($request->all());
+//        $product->gallery()->save($request->gallery);
 
         $response_data = [
-            'product' => $request->all(),
+            'product' => $product,
             'response_code' => 200
         ];
 

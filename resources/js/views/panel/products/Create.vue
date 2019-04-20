@@ -71,7 +71,7 @@
                                 <div class="col-lg-6">
                                     <label for="gallery">گالری:</label>
                                     <div class="m-input-icon m-input-icon--right">
-                                        <multiselect v-model="product.gallery"
+                                        <multiselect v-model="selectedGallery"
                                                      placeholder=""
                                                      id="gallery"
                                                      :selectLabel="'انتخاب'"
@@ -82,8 +82,8 @@
                                                      :options="galleries"></multiselect>
                                         <span class="m-input-icon__icon m-input-icon__icon--right"><span><i class="la la-"></i></span></span>
                                     </div>
-                                    <span v-if="!errors.gallery_id" class="m-form__help">گالری این محصول را مشخص کنید</span>
-                                    <form-error v-if="errors.gallery_id" :errors="errors">{{ errors.gallery_id[0] }}</form-error>
+                                    <span v-if="!errors.gallery" class="m-form__help">گالری این محصول را مشخص کنید</span>
+                                    <form-error v-if="errors.gallery" :errors="errors">{{ errors.gallery[0] }}</form-error>
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="categories">دسته‌بندی:</label>
@@ -186,7 +186,7 @@
                             <div class="m-form__actions">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <button type="reset" class="btn btn-success" @click="submit" :class="submitBtnLoaderClasses">ثبت</button>
+                                        <button type="button" class="btn btn-success" @click="submit" :class="submitBtnLoaderClasses">ثبت</button>
                                     </div>
                                 </div>
                             </div>
@@ -226,8 +226,7 @@
         data() {
             return {
                 product: {
-                    gallery: {id: ''},
-                    gallery_id: {},
+                    gallery_id: this.getGalleryId,
                     sku: '',
                     name: '',
                     slug: '',
@@ -238,6 +237,8 @@
                     published_date: '',
                     enabled: true
                 },
+
+                selectedGallery: {},
 
                 galleries: [],
 
@@ -265,11 +266,12 @@
                 this.sending = true;
                 axios.post('/api/admin/products/', this.product)
                     .then(response => {
-                        console.log(response.data);
+
                         this.sending = false;
+                        console.log(response.data.response_data);
+
                     })
                     .catch(function (errors) {
-                        this.sending = false;
 
                         if (errors.message === 'Network Error') {
                             flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
@@ -281,10 +283,17 @@
                                 case 500:
                                     break;
                                 default:
-                                    console.log(errors.response.data);
+                                    console.log(errors.response);
                             }
                         }
+
+                        this.sending = false;
+
                     }.bind(this));
+            },
+
+            getGalleryId() {
+                return this.selectedGallery.id;
             }
         },
 
@@ -292,10 +301,6 @@
             submitBtnLoaderClasses() {
                 return this.sending ? 'm-loader m-loader--light m-loader--left' : '';
             },
-
-            getGalleryId() {
-                return this.product.gallery.id;
-            }
         }
     }
 </script>
