@@ -29,5 +29,7 @@
         "vue-search-select": "M0H314-hasani/vue-search-select#master",
         "vue-template-compiler": "^2.6.7"
     },
-    "dependencies": {}
+    "dependencies": {
+        "@tinymce/tinymce-vue": "^2.0.0"
+    }
 }
