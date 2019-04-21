@@ -7,7 +7,7 @@
 <script>
 import TinyMCE_Editor from "./tinyMCE.js";
 
-let init_props = function() {
+let editor_config = function() {
   return {
     skin: false,
     directionality: "rtl",
@@ -20,7 +20,33 @@ let init_props = function() {
     ],
     toolbar:
       "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
-    relative_urls: false
+    relative_urls: false,
+    file_browser_callback: function(field_name, url, type, win) {
+      var x =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.getElementsByTagName("body")[0].clientWidth;
+      var y =
+        window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.getElementsByTagName("body")[0].clientHeight;
+
+      var cmsURL = "/admin/filemanager?field_name=" + field_name;
+      if (type == "image") {
+        cmsURL = cmsURL + "&type=Images";
+      } else {
+        cmsURL = cmsURL + "&type=Files";
+      }
+
+      window.tinyMCE.activeEditor.windowManager.open({
+        file: cmsURL,
+        title: "مدیریت فایل ها",
+        width: x * 0.8,
+        height: y * 0.8,
+        resizable: "yes",
+        close_previous: "no"
+      });
+    }
   };
 };
 
@@ -32,7 +58,7 @@ export default {
   props: {
     init: {
       type: Object,
-      default: init_props
+      default: editor_config
     },
     value: {
       type: String,
