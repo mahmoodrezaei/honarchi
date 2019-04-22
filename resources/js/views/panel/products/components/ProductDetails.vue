@@ -41,7 +41,16 @@
             <div class="col-lg-6">
                 <label for="gallery">گالری:</label>
                 <div class="m-input-icon m-input-icon--right">
-                    <input type="text" id="gallery" class="form-control m-input" placeholder="">
+                    <multiselect v-model="productDetail.gallery"
+                                 placeholder=""
+                                 id="gallery"
+                                 :selectLabel="'انتخاب'"
+                                 :selectedLabel="'انتخاب شده'"
+                                 :deselectLabel="'حذف'"
+                                 label="gallery_name" track-by="gallery_name"
+                                 :value="productDetail.gallery.gallery_name"
+                                 :allow-empty="false"
+                                 :options="galleries"></multiselect>
                     <span class="m-input-icon__icon m-input-icon__icon--right"><span><i class="la la-"></i></span></span>
                 </div>
                 <span class="m-form__help">گالری این محصول را مشخص کنید</span>
@@ -154,6 +163,7 @@
 
 <script>
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+    import Multiselect from 'vue-multiselect'
 
     // config for VuePersianDatetimePicker
     Vue.use(VuePersianDatetimePicker, {
@@ -171,11 +181,14 @@
         name: "ProductDetails",
 
         components: {
+            Multiselect,
             VuePersianDatetimePicker
         },
 
         data() {
             return {
+                id: this.$route.params.id,
+
                 productDetail: {
                     sku: '',
                     name: '',
@@ -186,7 +199,43 @@
                     published_date: '',
                     enabled: '',
                     max_purchase_per_rate: ''
-                }
+                },
+
+                galleries: [],
+
+                errors: ''
+            }
+        },
+
+        created() {
+            this.retrieveProductDetail();
+            this.getGalleries();
+        },
+
+        methods: {
+            retrieveProductDetail() {
+                axios.get(`/api/admin/products/${this.id}/show`)
+                    .then(response => {
+                        this.productDetail = response.data.product;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            // this.loading = false;
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            // this.loading = false;
+                            console.log(error.response.data);
+                        }
+                    });
+            },
+
+            getGalleries() {
+                axios
+                    .get('/api/admin/galleries')
+                    .then(response => {
+                        this.galleries = response.data.galleries;
+                    })
+                    .catch(error => console.log(error.response));
             }
         }
     }

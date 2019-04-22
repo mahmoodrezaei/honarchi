@@ -23,15 +23,37 @@ class ProductController extends Controller
     public function store(StoreProduct $request)
     {
 
-        $product = Product::create($request->all());
-//        $product->gallery()->save($request->gallery);
+        $product = Product::create([
+            'name' => $request->name,
+            'sku' => $request->sku,
+            'slug' => $request->slug,
+            'location' => $request->location,
+            'gallery_id' => $request->gallery['id'],
+            'short_description' => $request->short_description,
+            'description' => $request->description,
+            'enabled' => $request->enabled,
+            'max_purchase_per_rate' => $request->max_purchase_per_rate,
+            'published_date' => $request->published_date
+        ]);
 
-        $response_data = [
-            'product' => $product,
+        $data = [
+            'message' => 'محصول با موفقیت ایجاد شد',
+            'product_id' => $product->id,
             'response_code' => 200
         ];
 
-        return response()->json($response_data, 200);
+        return response()->json($data, 200);
+    }
+
+
+    public function show(Product $product)
+    {
+        $data = [
+            'product' => $product,
+            'message' => __('successfully_data_received')
+        ];
+
+        return response()->json($data, 200);
     }
 
     public function syncAttribute(Request $request ,Product $product)

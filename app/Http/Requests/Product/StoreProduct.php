@@ -24,7 +24,8 @@ class StoreProduct extends FormRequest
     public function rules()
     {
         return [
-//            'gallery_id' => 'nullable|integer|min:1|exists:galleries,id',
+//            'gallery' => 'required|nullable|integer|min:1|exists:galleries,id',
+            'gallery' => 'required',
             'sku' => 'required|unique:products',
             'name' => 'required|max:50',
             'slug' => 'required|unique:products',

@@ -191,7 +191,8 @@ return [
         'location'              => 'محل تولید',
         'type'                  => 'نوع دست ساخته',
         'optionType'            => 'نوع گزینه',
-        'published_date'        => 'تاریخ انتشار'
+        'published_date'        => 'تاریخ انتشار',
+        'gallery_id'            => 'گالری'
     ],
 
     'entities' => [
