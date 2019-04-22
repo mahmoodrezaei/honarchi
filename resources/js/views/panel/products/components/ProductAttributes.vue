@@ -4,7 +4,7 @@
       <div class="m-form__section m-form__section--first">
         <div class="form-group m-form__group row">
           <label
-            class="col-lg-12 col-md-12 col-sm-12 col-form-label"
+                  class="col-lg-12 col-md-12 col-sm-12 col-form-label"
           >ویژگی‌‌های مورد نظر را انتخاب کنید:</label>
           <div data-repeater-list class="col-lg-12" v-for="(item, index) in items" :key="index">
             <div class="form-group m-form__group row align-items-center">
@@ -15,15 +15,15 @@
                   </div>
                   <div class="m-form__control">
                     <multiselect
-                      v-model="item.selectedAttribute"
-                      placeholder="انتخاب ویژگی"
-                      :selectLabel="'انتخاب'"
-                      :selectedLabel="'انتخاب شده'"
-                      :deselectLabel="'حذف'"
-                      label="name"
-                      track-by="name"
-                      :multiple="false"
-                      :options="attributeSelectBoxValues()"
+                            v-model="item.selectedAttribute"
+                            placeholder="انتخاب ویژگی"
+                            :selectLabel="'انتخاب'"
+                            :selectedLabel="'انتخاب شده'"
+                            :deselectLabel="'حذف'"
+                            label="name"
+                            track-by="name"
+                            :multiple="false"
+                            :options="attributeSelectBoxValues()"
                     ></multiselect>
                   </div>
                 </div>
@@ -36,12 +36,12 @@
                   </div>
                   <div class="m-form__control">
                     <input
-                      type="text"
-                      value
-                      v-model="item.textValue"
-                      id="text-value"
-                      class="form-control m-input"
-                      placeholder="مقدار ویژگی"
+                            type="text"
+                            value
+                            v-model="item.textValue"
+                            id="text-value"
+                            class="form-control m-input"
+                            placeholder="مقدار ویژگی"
                     >
                   </div>
                 </div>
@@ -49,8 +49,8 @@
               </div>
 
               <div
-                class="col-md-4"
-                v-else-if="item.selectedAttribute.type === 'انتخاب' && item.selectedAttribute.configuration.type === 'choices'"
+                      class="col-md-4"
+                      v-else-if="item.selectedAttribute.type === 'انتخاب' && item.selectedAttribute.configuration.type === 'choices'"
               >
                 <div class="m-form__group m-form__group--inline">
                   <div class="m-form__label">
@@ -58,15 +58,15 @@
                   </div>
                   <div class="m-form__control">
                     <multiselect
-                      v-model="item.singleChoice"
-                      placeholder="مقدار ویژگی"
-                      :selectLabel="'انتخاب'"
-                      :selectedLabel="'انتخاب شده'"
-                      :deselectLabel="'حذف'"
-                      label="value"
-                      track-by="value"
-                      :allow-empty="false"
-                      :options="singleChoiceSelectBoxValues(index)"
+                            v-model="item.singleChoice"
+                            placeholder="مقدار ویژگی"
+                            :selectLabel="'انتخاب'"
+                            :selectedLabel="'انتخاب شده'"
+                            :deselectLabel="'حذف'"
+                            label="value"
+                            track-by="value"
+                            :allow-empty="false"
+                            :options="singleChoiceSelectBoxValues(index)"
                     ></multiselect>
                   </div>
                 </div>
@@ -74,8 +74,8 @@
               </div>
 
               <div
-                class="col-md-4"
-                v-else-if="item.selectedAttribute.type === 'انتخاب' && item.selectedAttribute.configuration.type === 'multiple'"
+                      class="col-md-4"
+                      v-else-if="item.selectedAttribute.type === 'انتخاب' && item.selectedAttribute.configuration.type === 'multiple'"
               >
                 <div class="m-form__group m-form__group--inline">
                   <div class="m-form__label">
@@ -83,15 +83,15 @@
                   </div>
                   <div class="m-form__control">
                     <multiselect
-                      v-model="item.multipleChoice"
-                      placeholder="مقادیر ویژگی"
-                      :selectLabel="'انتخاب'"
-                      :selectedLabel="'انتخاب شده'"
-                      :deselectLabel="'حذف'"
-                      label="value"
-                      track-by="value"
-                      :multiple="true"
-                      :options="multipleChoiceSelectBoxValues(index)"
+                            v-model="item.multipleChoice"
+                            placeholder="مقادیر ویژگی"
+                            :selectLabel="'انتخاب'"
+                            :selectedLabel="'انتخاب شده'"
+                            :deselectLabel="'حذف'"
+                            label="value"
+                            track-by="value"
+                            :multiple="true"
+                            :options="multipleChoiceSelectBoxValues(index)"
                     ></multiselect>
                   </div>
                 </div>
@@ -100,9 +100,9 @@
 
               <div class="col-md-4">
                 <div
-                  data-repeater-delete
-                  @click="removeField(index)"
-                  class="btn-sm btn btn-danger m-btn m-btn--icon m-btn--pill"
+                        data-repeater-delete
+                        @click="removeField(index)"
+                        class="btn-sm btn btn-danger m-btn m-btn--icon m-btn--pill"
                 >
                   <span>
                     <i class="la la-trash-o"></i>
@@ -117,9 +117,9 @@
           <label class="col-form-label"></label>
           <div class="col-lg-4">
             <div
-              data-repeater-create
-              @click="addField"
-              class="btn btn btn-sm btn-brand m-btn m-btn--icon m-btn--pill m-btn--wide"
+                    data-repeater-create
+                    @click="addField"
+                    class="btn btn btn-sm btn-brand m-btn m-btn--icon m-btn--pill m-btn--wide"
             >
               <span>
                 <i class="la la-plus"></i>
@@ -130,7 +130,7 @@
         </div>
 
         <div
-          class="m-form__seperator m-form__seperator--dashed m-form__seperator--space m--margin-bottom-40"
+                class="m-form__seperator m-form__seperator--dashed m-form__seperator--space m--margin-bottom-40"
         ></div>
       </div>
     </div>
@@ -148,120 +148,120 @@
 </template>
 
 <script>
-import Multiselect from "vue-multiselect";
+  import Multiselect from "vue-multiselect";
 
-export default {
-  name: "ProductAttributes",
+  export default {
+    name: "ProductAttributes",
 
-  components: { Multiselect },
+    components: { Multiselect },
 
-  data() {
-    return {
-      attributes: [],
+    data() {
+      return {
+        attributes: [],
 
-      items: [
-        {
+        items: [
+          {
+            selectedAttribute: {},
+            textValue: "",
+            singleChoice: {},
+            multipleChoice: []
+          }
+        ],
+
+        tempMultipleChoices: []
+      };
+    },
+
+    created() {
+      this.retrieveAttributes();
+    },
+
+    methods: {
+      retrieveAttributes() {
+        axios
+                .get("/api/admin/attributes")
+                .then(response => {
+                  this.attributes = response.data.data;
+                  // console.log(response.data.data)
+                })
+                .catch(errors => console.log(errors.response.data));
+      },
+
+      multipleChoicesOnSelect(items, lastSelectItem) {
+        this.tempMultipleChoices = items;
+        /*if (this.items[index]) {
+                      this.items[index].multipleChoice = items;
+                  }*/
+      },
+
+      saveMultipleChoicesToSelectedAttribute(index) {
+        console.log("data changed");
+      },
+
+      addField() {
+        this.items.push({
           selectedAttribute: {},
           textValue: "",
           singleChoice: {},
           multipleChoice: []
+        });
+      },
+
+      removeField(index) {
+        if (this.items.length !== 1) {
+          this.items.splice(index, 1);
         }
-      ],
+      },
 
-      tempMultipleChoices: []
-    };
-  },
+      singleChoiceSelectBoxValues(index) {
+        let choices = this.items[index].selectedAttribute.configuration.values;
 
-  created() {
-    this.retrieveAttributes();
-  },
+        let temp = [];
 
-  methods: {
-    retrieveAttributes() {
-      axios
-        .get("/api/admin/attributes")
-        .then(response => {
-          this.attributes = response.data.data;
-          // console.log(response.data.data)
-        })
-        .catch(errors => console.log(errors.response.data));
-    },
-
-    multipleChoicesOnSelect(items, lastSelectItem) {
-      this.tempMultipleChoices = items;
-      /*if (this.items[index]) {
-                    this.items[index].multipleChoice = items;
-                }*/
-    },
-
-    saveMultipleChoicesToSelectedAttribute(index) {
-      console.log("data changed");
-    },
-
-    addField() {
-      this.items.push({
-        selectedAttribute: {},
-        textValue: "",
-        singleChoice: {},
-        multipleChoice: []
-      });
-    },
-
-    removeField(index) {
-      if (this.items.length !== 1) {
-        this.items.splice(index, 1);
-      }
-    },
-
-    singleChoiceSelectBoxValues(index) {
-      let choices = this.items[index].selectedAttribute.configuration.values;
-
-      let temp = [];
-
-      if (choices.length > 0) {
-        choices.forEach(item => {
-          temp.push({
-            value: item.value,
-            slug: item.slug,
-            code: item.code
+        if (choices.length > 0) {
+          choices.forEach(item => {
+            temp.push({
+              value: item.value,
+              slug: item.slug,
+              code: item.code
+            });
           });
-        });
-      }
+        }
 
-      return temp;
-    },
+        return temp;
+      },
 
-    multipleChoiceSelectBoxValues(index) {
-      let multipleChoices = this.items[index].selectedAttribute.configuration
-        ? this.items[index].selectedAttribute.configuration.values
-        : [];
+      multipleChoiceSelectBoxValues(index) {
+        let multipleChoices = this.items[index].selectedAttribute.configuration
+                ? this.items[index].selectedAttribute.configuration.values
+                : [];
 
-      let temp = [];
+        let temp = [];
 
-      if (multipleChoices.length > 0) {
-        multipleChoices.forEach(item => {
-          temp.push({
-            value: item.value,
-            slug: item.slug,
-            code: item.code
+        if (multipleChoices.length > 0) {
+          multipleChoices.forEach(item => {
+            temp.push({
+              value: item.value,
+              slug: item.slug,
+              code: item.code
+            });
           });
-        });
-      }
+        }
 
-      return temp;
+        return temp;
+      },
+
+      attributeSelectBoxValues() {
+        let attributes = this.attributes;
+
+        return attributes;
+      }
     },
 
-    attributeSelectBoxValues() {
-      let attributes = this.attributes;
-
-      return attributes;
+    computed: {
+      submitBtnLoaderClasses() {}
     }
-  },
-
-  computed: {
-    submitBtnLoaderClasses() {}
-  }
-};
+  };
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
