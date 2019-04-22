@@ -5,8 +5,8 @@ import Roles from "../views/panel/roles/Roles.vue";
 import Galleries from "../views/panel/galleries/Galleries";
 
 import Products from "../views/panel/products/Products";
-import ProductsCreate from "../views/panel/products/Create"
-import ProductsEdit from "../views/panel/products/Edit"
+import ProductsCreate from "../views/panel/products/Create";
+import ProductsEdit from "../views/panel/products/Edit";
 
 import Features from "../views/panel/attributes/Features";
 
@@ -21,6 +21,8 @@ import AttributesEdit from "../views/panel/attributes/Edit";
 import Categories from "../views/panel/categories/Categories";
 import CategoriesCreate from "../views/panel/categories/Create";
 import CategoriesEdit from "../views/panel/categories/Edit";
+
+import FileManager from "../views/panel/file_manager/File_Manager";
 
 Vue.use(VueRouter);
 
@@ -56,8 +58,8 @@ let routes = [
     },
 
     { path: "/admin/products", component: Products },
-    { path: "/admin/products/create", component: ProductsCreate},
-    { path: "/admin/products/:id/edit", component: ProductsEdit},
+    { path: "/admin/products/create", component: ProductsCreate },
+    { path: "/admin/products/:id/edit", component: ProductsEdit },
 
     { path: "/admin/options", component: Options },
     { path: "/admin/options/create", component: OptionsCreate },
@@ -69,7 +71,9 @@ let routes = [
 
     { path: "/admin/categories", component: Categories },
     { path: "/admin/categories/create", component: CategoriesCreate },
-    { path: "/admin/categories/:id/edit", component: CategoriesEdit }
+    { path: "/admin/categories/:id/edit", component: CategoriesEdit },
+
+    { path: "/admin/file_manager", component: FileManager }
 ];
 
 let router = new VueRouter({

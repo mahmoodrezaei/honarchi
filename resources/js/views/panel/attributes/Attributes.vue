@@ -118,6 +118,7 @@
                           </button>
                         </router-link>
                         <button
+                          @click="remove(attribute)"
                           class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
                           title="حذف"
                         >
@@ -144,6 +145,7 @@
 </template>
 
 <script>
+import { attributesRoutes } from "../../../lib/apiRoutes";
 import DataTable from "../../../components/DataTable";
 import Pagination from "../../../components/Pagination";
 
@@ -196,12 +198,22 @@ export default {
   methods: {
     retrieveAttributes() {
       axios
-        .get("/api/admin/attributes")
+        .get(attributesRoutes.index.url)
         .then(response => {
           this.attributes = response.data.data;
           this.pagination.total = this.attributes.length;
         })
         .catch(error => console.log(error.response));
+    },
+
+    remove(attribute) {
+      const index = this.attributes.indexOf(attribute);
+      axios
+        .delete(attributesRoutes.destroy.url + attribute.id)
+        .then(response => {
+          this.attributes.splice(index, 1);
+        })
+        .catch(error => {});
     },
 
     paginate(data, perPage, pageNumber) {

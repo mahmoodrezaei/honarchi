@@ -12,7 +12,7 @@ return [
 
     // Middlewares which should be applied to all package routes.
     // For laravel 5.1 and before, remove 'web' from the array.
-    'middlewares' => ['web', 'auth'],
+    'middlewares' => ['web'],
 
     // The url to this package. Change it if necessary.
     'url_prefix' => 'admin/filemanager',
@@ -24,7 +24,7 @@ return [
     */
 
     // If true, private folders will be created for each signed-in user.
-    'allow_multi_user' => true,
+    'allow_multi_user' => false,
     // If true, share folder will be created when allow_multi_user is true.
     'allow_share_folder' => false,
 
@@ -92,7 +92,6 @@ return [
         'image/pjpeg',
         'image/png',
         'image/gif',
-        'image/svg+xml',
     ],
 
     // If true, image thumbnails would be created during upload
@@ -110,7 +109,7 @@ return [
 
     // permissions to be set on file upload.
     'create_file_mode' => 0644,
-    
+
     // If true, it will attempt to chmod the file after upload
     'should_change_file_mode' => true,
 
@@ -120,10 +119,8 @@ return [
         'image/jpeg',
         'image/pjpeg',
         'image/png',
-        'image/gif',
         'image/svg+xml',
-        'application/pdf',
-        'text/plain',
+
     ],
 
     /*

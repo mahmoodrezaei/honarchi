@@ -174,17 +174,23 @@ class ProductAttributeController extends Controller
 
         $model->update($requestData);
 
-//        foreach ($request['deletedAttributeItemConfigurationValues'] as $item){
-//            $products = Product::where('configuration', 'LIKE', "%$item%")->get();
-//            foreach ($products as $product){
-//                foreach ($product->configuration['values'] as $index => $value){
-//                    if($value == $item){
-//                        unset($product->configuration['values'][$index]);
-//                        $product->save();
-//                    }
-//                }
-//            }
-//        }
+
+
+        foreach ($request['deletedAttributeItemConfigurationValues'] as $item){
+            $productAttributeValues = \DB::table('product_attribute_value')->where('attribute_id', $model->id)->get();
+            foreach ($productAttributeValues as $productAttributeValue){
+                $value = json_decode($productAttributeValue['json_values']);
+                if($key = array_search($item, $productAttributeValue)){
+                 unset($value[$key]);
+                 if(empty($value))
+                     \DB::table('product_attribute_value')->where('product_id', $productAttributeValue['product_id'])->delete();
+                 else{
+                     $value = json_encode($value);
+                     \DB::table('product_attribute_value')->where('product_id', $productAttributeValue['product_id'])->update(['json_value' => $value]);
+                 }
+                }
+            }
+        }
 
 
         $responseData = [
@@ -205,6 +211,7 @@ class ProductAttributeController extends Controller
      */
     public function destroy(ProductAttribute $model)
     {
+        $model->delete();
 
         $responseData = [
             'status_code' => 200,
