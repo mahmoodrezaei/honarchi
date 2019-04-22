@@ -65,6 +65,48 @@
                     </div>
                   </div>
 
+                  <hr>
+
+                  <div class="form-group m-form__group row">
+                    <label class="col-lg-2 col-form-label">توضیحات متا</label>
+                    <div class="col-lg-12">
+                      <input
+                        @click="errors['meta_description'] = ''"
+                        v-model="categoryItem.meta_description"
+                        type="text"
+                        class="form-control m-input"
+                      >
+                      <span
+                        v-if="!errors.meta_description"
+                        class="m-form__help"
+                      >توضیحات متا (meta description) در این فیلد بنویسید</span>
+                      <form-error
+                        v-if="errors.meta_description"
+                        :errors="errors"
+                      >{{ errors.meta_description[0] }}</form-error>
+                    </div>
+                  </div>
+
+                  <div class="form-group m-form__group row">
+                    <label class="col-lg-2 col-form-label">کلمات کلیدی</label>
+                    <div class="col-lg-12">
+                      <input
+                        @click="errors['meta_keywords'] = ''"
+                        v-model="categoryItem.meta_keywords"
+                        type="text"
+                        class="form-control m-input"
+                      >
+                      <span
+                        v-if="!errors.meta_keywords"
+                        class="m-form__help"
+                      >کلمات کلیدی دسته بندی را وارد کنید</span>
+                      <form-error
+                        v-if="errors.meta_keywords"
+                        :errors="errors"
+                      >{{ errors.meta_keywords[0] }}</form-error>
+                    </div>
+                  </div>
+
                   <!--                                        <div class="m-form__seperator m-form__seperator&#45;&#45;dashed  m-form__seperator&#45;&#45;space m&#45;&#45;margin-bottom-40"></div>-->
                 </div>
               </div>
