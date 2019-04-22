@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductCategory extends Model
 {
-    protected $guarded = ['id'];
+    protected $fillable = ['name', 'slug', 'parent_id'];
+
 
     public function products()
     {
@@ -23,16 +24,18 @@ class ProductCategory extends Model
         return $this->hasMany('App\ProductCategory', 'parent_id');
     }
 
-    public function hasChildren(){
-        if($this->children()->count()){
+    public function hasChildren()
+    {
+        if ($this->children()->count()) {
             return true;
         }
 
         return false;
     }
 
-    public function hasParent(){
-        if($this->parent()->get()){
+    public function hasParent()
+    {
+        if ($this->parent()->get()) {
             return true;
         }
 
@@ -48,5 +51,4 @@ class ProductCategory extends Model
 
         return  1;
     }
-
 }
