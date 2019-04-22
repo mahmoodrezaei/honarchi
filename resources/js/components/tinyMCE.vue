@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import TinyMCE_Editor from "./tinyMCE.js";
+import TinyMCE_Editor from "../lib/tinyMCE/tinyMCE.js";
 
 let editor_config = function() {
   return {

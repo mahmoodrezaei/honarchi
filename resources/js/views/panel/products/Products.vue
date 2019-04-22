@@ -28,19 +28,13 @@
           <div class="m-portlet__body"></div>
         </div>
       </div>
-      <TinyMCE_Editor/>
     </div>
   </div>
 </template>
 
 <script>
-import TinyMCE_Editor from "../../../lib/tinyMCE/tinyMCE.vue";
-
 export default {
-  name: "Products",
-  components: {
-    TinyMCE_Editor
-  }
+  name: "Products"
 };
 </script>
 

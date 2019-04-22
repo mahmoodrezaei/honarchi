@@ -253,7 +253,7 @@
 
 <script>
 import VuePersianDatetimePicker from "vue-persian-datetime-picker";
-import TinyMCE_Editor from "../../../lib/tinyMCE/tinyMCE.vue";
+import TinyMCE_Editor from "../../../components/tinyMCE.vue";
 
 // config for VuePersianDatetimePicker
 Vue.use(VuePersianDatetimePicker, {
