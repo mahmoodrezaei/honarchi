@@ -92,7 +92,6 @@ return [
         'image/pjpeg',
         'image/png',
         'image/gif',
-        'image/svg+xml',
     ],
 
     // If true, image thumbnails would be created during upload
@@ -120,10 +119,8 @@ return [
         'image/jpeg',
         'image/pjpeg',
         'image/png',
-        'image/gif',
         'image/svg+xml',
-        'application/pdf',
-        'text/plain',
+
     ],
 
     /*
