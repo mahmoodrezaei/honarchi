@@ -80,7 +80,8 @@
             <div class="col-lg-12">
                 <label for="description">توضیحات محصول:</label>
                 <div class="m-input-icon m-input-icon--right">
-                    <textarea id="description" v-model="productDetail.description" class="form-control m-input" rows="5" placeholder=""></textarea>
+<!--                    <textarea id="description" v-model="productDetail.description" class="form-control m-input" rows="5" placeholder=""></textarea>-->
+                    <TinyMCE_Editor id="description" v-model="productDetail.description" />
                 </div>
                 <span class="m-form__help">توضیحات محصول را اینجا بنویسید</span>
             </div>
@@ -140,7 +141,7 @@
 
         <div class="form-group m-form__group row">
             <div class="col-lg-12">
-                <label for="meta_keywords">کلماتت کلیدی:</label>
+                <label for="meta_keywords">کلمات کلیدی:</label>
                 <div class="m-input-icon m-input-icon--right">
                     <input type="text" id="meta_keywords" class="form-control m-input" placeholder="">
                 </div>
@@ -164,14 +165,15 @@
 <script>
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
     import Multiselect from 'vue-multiselect'
+    import TinyMCE_Editor from '../../../../components/tinyMCE'
 
     // config for VuePersianDatetimePicker
     Vue.use(VuePersianDatetimePicker, {
         name: 'datePicker',
         props: {
-            inputFormat: 'YYYY-MM-DD HH:mm',
-            format: 'jYYYY-jMM-jDD HH:mm',
-            placeholder: 'YYYY-MM-DD HH:mm',
+            inputFormat: 'YYYY/MM/DD HH:mm',
+            format: 'jYYYY/jMM/jDD HH:mm',
+            placeholder: 'YYYY/MM/DD HH:mm',
             type: 'datetime',
             color: '#34bfa3'
         }
@@ -182,7 +184,8 @@
 
         components: {
             Multiselect,
-            VuePersianDatetimePicker
+            VuePersianDatetimePicker,
+            TinyMCE_Editor
         },
 
         data() {
@@ -190,15 +193,16 @@
                 id: this.$route.params.id,
 
                 productDetail: {
+                    gallery: '',
                     sku: '',
                     name: '',
                     slug: '',
                     location: '',
                     short_description: '',
                     description: '',
+                    max_purchase_per_rate: '',
                     published_date: '',
-                    enabled: '',
-                    max_purchase_per_rate: ''
+                    enabled: ''
                 },
 
                 galleries: [],

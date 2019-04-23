@@ -241,9 +241,9 @@
     Vue.use(VuePersianDatetimePicker, {
         name: 'datePicker',
         props: {
-            inputFormat: 'YYYY-MM-DD HH:mm',
-            format: 'jYYYY-jMM-jDD HH:mm',
-            placeholder: 'YYYY-MM-DD HH:mm',
+            inputFormat: 'YYYY/MM/DD HH:mm',
+            format: 'jYYYY/jMM/jDD HH:mm',
+            placeholder: 'YYYY/MM/DD HH:mm',
             type: 'datetime',
             color: '#34bfa3'
         }

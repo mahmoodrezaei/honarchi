@@ -18,13 +18,17 @@
                 </div>
             </div>
             <div class="col-lg-6" v-show="!isSimple">
-                <label for="published_date">تاریخ انتشار:</label>
-                <multi-select
-                        id="published_date"
-                        :selected-options="selectedOptions"
-                        @select="optionsOnSelect"
-                        :options="optionsSelectBoxValues"
-                ></multi-select>
+                <label for="options">گزینه‌های محصول:</label>
+                <multiselect v-model="selectedOptions"
+                             placeholder=""
+                             id="options"
+                             :disabled="false"
+                             :selectLabel="'انتخاب'"
+                             :selectedLabel="'انتخاب شده'"
+                             :deselectLabel="'حذف'"
+                             label="name" track-by="name"
+                             :multiple="true"
+                             :options="options"></multiselect>
                 <span class="m-form__help">گزینه‌های محصول متغیر را مشخص کنید</span>
             </div>
         </div>
@@ -35,7 +39,7 @@
         <div class="m-form__actions">
             <div class="row">
                 <div class="col-lg-6">
-                    <button type="reset" class="btn btn-success" :class="submitBtnLoaderClasses">ثبت</button>
+                    <button type="button" @click="submit" class="btn btn-success" :class="submitBtnLoaderClasses">ثبت</button>
                 </div>
             </div>
         </div>
@@ -44,20 +48,24 @@
 </template>
 
 <script>
-    import {MultiSelect} from 'vue-search-select'
+    import Multiselect from 'vue-multiselect'
 
     export default {
         name: "ProductOptions",
 
-        components: { MultiSelect },
+        components: { Multiselect },
 
         data() {
             return {
+                product_id: this.$route.params.id,
+
                 isSimple: true,
 
                 options: [],
 
-                selectedOptions: [],
+                selectedOptions: '',
+
+                sending: false,
             }
         },
 
@@ -80,24 +88,14 @@
                     });
             },
 
-            optionsOnSelect(items, lastSelectItem) {
-                this.selectedOptions = items;
+            submit() {
+                this.sending = true;
             }
         },
 
         computed: {
-            optionsSelectBoxValues() {
-                let temp = [];
-
-                this.options.forEach(item => {
-                    temp.push({text: item.name, value: item.id, id: item.id})
-                });
-
-                return temp;
-            },
-
             submitBtnLoaderClasses() {
-
+                return this.sending ? 'm-loader m-loader--light m-loader--left' : '';
             }
         }
     }

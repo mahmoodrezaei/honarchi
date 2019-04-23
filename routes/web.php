@@ -46,6 +46,7 @@ Route::patch('/api/admin/galleries/{gallery}/unblock', 'API\Admin\GalleryControl
 
 Route::prefix('/api/admin/products')->group(function () {
     Route::get('/', 'API\Admin\ProductController@index');
+    Route::get('/names', 'API\Admin\ProductController@indexNames');
     Route::post('/', 'API\Admin\ProductController@store');
     Route::get('/{product}/show', 'API\Admin\ProductController@show');
 });

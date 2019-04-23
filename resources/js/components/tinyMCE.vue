@@ -19,7 +19,7 @@ let editor_config = function() {
       "emoticons template paste textcolor colorpicker textpattern"
     ],
     toolbar:
-      "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image ",
+      "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image  | rtl ltr",
     relative_urls: false,
     file_browser_callback: function(field_name, url, type, win) {
       var x =

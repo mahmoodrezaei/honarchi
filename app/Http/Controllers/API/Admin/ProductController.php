@@ -17,7 +17,14 @@ class ProductController extends Controller
 
     public function index()
     {
+        $products = Product::orderBy('id', 'desc')->get();
+        return response()->json($products);
+    }
 
+    public function indexNames()
+    {
+        $products = Product::orderBy('id', 'desc')->get(['id', 'name']);
+        return response()->json($products, 200);
     }
 
     public function store(StoreProduct $request)
@@ -55,6 +62,7 @@ class ProductController extends Controller
 
         return response()->json($data, 200);
     }
+
 
     public function syncAttribute(Request $request ,Product $product)
     {
