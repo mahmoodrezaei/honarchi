@@ -161,23 +161,39 @@
                           <td>
                             <div>
                               <input
+                                @click="errors['configuration.values.'+index+'.value'] = ''"
                                 v-model="attributeItem.configuration.values[index]['value']"
                                 type="text"
                                 class="form-control m-input"
                               >
-                              <span class="m-form__help">مقدار ویژگی خود را وارد کنید</span>
+                              <span
+                                v-if="!errors['configuration.values.'+index+'.value']"
+                                class="m-form__help"
+                              >مقدار ویژگی خود را وارد کنید</span>
+                              <form-error
+                                v-if="errors['configuration.values.'+index+'.value']"
+                                :errors="errors"
+                              >{{ errors['configuration.values.'+index+'.value'][0] }}</form-error>
                             </div>
                           </td>
 
                           <td>
                             <div>
                               <input
+                                @click="errors['configuration.values.'+index+'.slug'] = ''"
                                 v-model="attributeItem.configuration.values[index]['slug']"
                                 type="text"
                                 class="form-control m-input"
                                 :disabled="!attributeItem.linkable"
                               >
-                              <span class="m-form__help">نامک این مقدار را وارد کنید</span>
+                              <span
+                                v-if="!errors['configuration.values.'+index+'.slug']"
+                                class="m-form__help"
+                              >نامک این مقدار را وارد کنید</span>
+                              <form-error
+                                v-if="errors['configuration.values.'+index+'.slug']"
+                                :errors="errors"
+                              >{{ errors['configuration.values.'+index+'.slug'][0] }}</form-error>
                             </div>
                           </td>
 
@@ -353,8 +369,6 @@ export default {
         )
         .catch(
           function(errors) {
-            console.log(errors.response.data.errors);
-
             if (errors.message == "Network Error") {
               this.sending = false;
               flash("خطایی در اتصال به شبکه رخ داده است.", "warning");
