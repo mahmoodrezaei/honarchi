@@ -25,7 +25,7 @@ class ProductAttributeController extends Controller
             'data' => $allModels
         ];
 
-        return response()->json($responseData,200);
+        return response()->json($responseData, 200);
     }
 
     /**
@@ -42,45 +42,47 @@ class ProductAttributeController extends Controller
             'slug' => [
                 'required_if:linkable,1',
                 function ($attribute, $value, $fail) use ($request) {
-                    if($request['linkable']){
+                    if ($request['linkable']) {
                         $query =  \DB::table('product_attributes')->where('slug', $value);
-                        if($query->count()){
+                        if ($query->count()) {
                             $fail(__('validation.unique', [$attribute]));
                         }
-                    } else $fail($attribute.' must not sent.1');
+                    } else $fail($attribute . ' must not sent.1');
                 },
-                ],
+            ],
             'type' => 'required|in:متن,انتخاب',
             'configuration' => 'array',
             'configuration.type' => 'required_if:type,انتخاب',
             'configuration.values.*.value' => 'required_if:type,انتخاب',
             'configuration.values.*.slug' =>
-                [
-                    Rule::requiredIf(function () use ($request)
-                    {
-                        return $request['type'] == 'انتخاب' && $request['linkable'] == true;
-                    }),
+            [
+                Rule::requiredIf(function () use ($request) {
+                    return $request['type'] == 'انتخاب' && $request['linkable'] == true;
+                }),
 
-                    function ($attribute, $value, $fail) use ($request)
-                    {
-                        if($request['linkable']){
-                            if(count(array_filter($request['configuration']['values'], function ($item) use ($value){return $item['slug'] == $value ? true : false;})) > 1)
-                                $fail(__('validation.unique', [$attribute]));
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request['linkable']) {
+                        if (count(array_filter($request['configuration']['values'], function ($item) use ($value) {
+                            if (isset($item['slug']))
+                                return $item['slug'] == $value ? true : false;
+                            else return false;
+                        })) > 1)
+                            $fail(__('validation.unique', [$attribute]));
 
-                            $query =  \DB::table('product_attributes')->where('configuration', 'LIKE', '%'.str_replace("\\","\\\\\\",json_encode($value)).'%');
-                            if($query->count() == 1){
-                                $fail(__('validation.unique', [$attribute]));
-                            }
-                        } else $fail($attribute.' must not sent.2');
-                    }
-                ]
+                        $query =  \DB::table('product_attributes')->where('configuration', 'LIKE', '%' . str_replace("\\", "\\\\\\", json_encode($value)) . '%');
+                        if ($query->count() == 1) {
+                            $fail(__('validation.unique', [$attribute]));
+                        }
+                    } else $fail($attribute . ' must not sent.2');
+                }
+            ]
         ]);
         $requestData = $request->all();
 
-        if($requestData['type'] == 'انتخاب')
-        foreach ($requestData['configuration']['values'] as $key => $item){
-            $requestData['configuration']['values'][$key]['code'] = uniqid();
-        }
+        if ($requestData['type'] == 'انتخاب')
+            foreach ($requestData['configuration']['values'] as $key => $item) {
+                $requestData['configuration']['values'][$key]['code'] = uniqid();
+            }
 
 
 
@@ -92,8 +94,7 @@ class ProductAttributeController extends Controller
             'data' => $model
         ];
 
-        return response()->json($responseData,201);
-
+        return response()->json($responseData, 201);
     }
 
     /**
@@ -110,8 +111,7 @@ class ProductAttributeController extends Controller
             'data' => $model
         ];
 
-        return response()->json($responseData,200);
-
+        return response()->json($responseData, 200);
     }
 
     /**
@@ -130,64 +130,67 @@ class ProductAttributeController extends Controller
             'slug' => [
                 'required_if:linkable,1',
                 function ($attribute, $value, $fail) use ($request, $model) {
-                if($request['linkable']){
-                   $query =  \DB::table('product_attributes')->where('slug', $value);
-                   if($query->count() == 1 && $query->first()->id != $model->id){
-                       $fail(__('validation.unique', [$attribute]));
-                   }
-                } else $fail($attribute.' must not sent.');
-            }],
+                    if ($request['linkable']) {
+                        $query =  \DB::table('product_attributes')->where('slug', $value);
+                        if ($query->count() == 1 && $query->first()->id != $model->id) {
+                            $fail(__('validation.unique', [$attribute]));
+                        }
+                    } else $fail($attribute . ' must not sent.');
+                }
+            ],
             'type' => 'required|in:متن,انتخاب',
             'configuration' => 'array',
             'configuration.type' => 'required_if:type,انتخاب',
             'configuration.values.*.value' => 'required_if:type,انتخاب',
             'configuration.values.*.slug' =>
-                [
-                    Rule::requiredIf(function () use ($request)
-                    {
-                        return $request['type'] == 'انتخاب' && $request['linkable'] == true;
-                    }),
+            [
+                Rule::requiredIf(function () use ($request) {
+                    return $request['type'] == 'انتخاب' && $request['linkable'] == true;
+                }),
 
-                    function ($attribute, $value, $fail) use ($request, $model)
-                    {
-                        if($request['linkable']){
+                function ($attribute, $value, $fail) use ($request, $model) {
+                    if ($request['linkable']) {
 
-                            if(count(array_filter($request['configuration']['values'], function ($item) use ($value){return $item['slug'] == $value ? true : false;})) > 1)
-                                $fail(__('validation.unique', [$attribute]));
+                        if (count(array_filter($request['configuration']['values'], function ($item) use ($value) {
+                            if (isset($item['slug']))
+                                return $item['slug'] == $value ? true : false;
+                            else return false;
+                        })) > 1)
+                            $fail(__('validation.unique', [$attribute]));
 
-                            $query =  \DB::table('product_attributes')->where('configuration', 'LIKE', '%'.str_replace("\\","\\\\\\",json_encode($value)).'%');
-                            if($query->count() == 1 && $query->first()->id != $model->id){
-                                $fail(__('validation.unique', [$attribute]));
-                            }
-                        } else $fail($attribute.' must not sent.');
-                    }
-                ]
+                        $query =  \DB::table('product_attributes')->where('configuration', 'LIKE', '%' . str_replace("\\", "\\\\\\", json_encode($value)) . '%');
+                        if ($query->count() == 1 && $query->first()->id != $model->id) {
+                            $fail(__('validation.unique', [$attribute]));
+                        }
+                    } else $fail($attribute . ' must not sent.');
+                }
+            ]
         ]);
 
         $requestData = $request->except(['deletedAttributeItemConfigurationValues']);
 
-        if($requestData['type'] == 'انتخاب')
-        foreach ($requestData['configuration']['values'] as $key => $item){
-            if(!$requestData['configuration']['values'][$key]['code'])
-            $requestData['configuration']['values'][$key]['code'] = uniqid();
-        }
+        if ($requestData['type'] == 'انتخاب')
+            foreach ($requestData['configuration']['values'] as $key => $item) {
+                if (!$requestData['configuration']['values'][$key]['code'])
+                    $requestData['configuration']['values'][$key]['code'] = uniqid();
+            }
 
         $model->update($requestData);
 
 
 
-        foreach ($request['deletedAttributeItemConfigurationValues'] as $item){
+        foreach ($request['deletedAttributeItemConfigurationValues'] as $item) {
             $productAttributeValues = \DB::table('product_attribute_value')->where('attribute_id', $model->id)->get();
-            foreach ($productAttributeValues as $productAttributeValue){
+            foreach ($productAttributeValues as $productAttributeValue) {
                 $value = json_decode($productAttributeValue['json_values']);
-                if($key = array_search($item, $productAttributeValue)){
-                 unset($value[$key]);
-                 if(empty($value))
-                     \DB::table('product_attribute_value')->where('product_id', $productAttributeValue['product_id'])->delete();
-                 else{
-                     $value = json_encode($value);
-                     \DB::table('product_attribute_value')->where('product_id', $productAttributeValue['product_id'])->update(['json_value' => $value]);
-                 }
+                if ($key = array_search($item, $productAttributeValue)) {
+                    unset($value[$key]);
+                    if (empty($value))
+                        \DB::table('product_attribute_value')->where('product_id', $productAttributeValue['product_id'])->delete();
+                    else {
+                        $value = json_encode($value);
+                        \DB::table('product_attribute_value')->where('product_id', $productAttributeValue['product_id'])->update(['json_value' => $value]);
+                    }
                 }
             }
         }
@@ -199,7 +202,7 @@ class ProductAttributeController extends Controller
             'data' => $model
         ];
 
-        return response()->json($responseData,200);
+        return response()->json($responseData, 200);
     }
 
     /**
@@ -219,6 +222,6 @@ class ProductAttributeController extends Controller
             'data' => null
         ];
 
-        return response()->json($responseData,200);
+        return response()->json($responseData, 200);
     }
 }
