@@ -93,4 +93,34 @@ class ProductController extends Controller
 
         return response()->json($responseData,200);
     }
+
+
+    // Recommendations
+    public function getRecommendations(Product $product)
+    {
+        $data = [
+            'recommendations' => $product->recommendations,
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function syncRecommendations(Request $request, Product $product)
+    {
+        $request->validate([
+            'recommendations' => 'array|min:0'
+        ]);
+
+        $recommendedIds = collect($request->recommendations)->pluck('id')->toArray();
+
+        $product->recommendations()->sync($recommendedIds);
+
+        $data = [
+            'message' => 'محصولات پیشنهادی با موفقیت ثبت شدند.',
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
+    }
 }

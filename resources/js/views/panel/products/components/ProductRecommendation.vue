@@ -16,14 +16,15 @@
                              label="name" track-by="name"
                              :multiple="true"
                              :options="products"></multiselect>
-                <span class="m-form__help">محصولات پیشنهادی را انتخاب کنید</span>
+                <span v-if="!errors.recommendations" class="m-form__help">محصولات پیشنهادی را انتخاب کنید</span>
+                <form-error v-if="errors.recommendations" :errors="errors">{{ errors.recommendations[0] }}</form-error>
             </div>
             <div class="col-lg-6">
                 <div class="m-list-timeline">
                     <div class="m-list-timeline__items">
                         <div class="m-list-timeline__item" v-for="item in recommendations">
                             <span class="m-list-timeline__badge"></span>
-                            <h4 class="m-list-timeline__text">{{ item.name }}</h4>
+                            <h3 class="m-list-timeline__text">{{ item.name }}</h3>
                         </div>
                     </div>
                 </div>
@@ -46,11 +47,12 @@
 
 <script>
     import Multiselect from 'vue-multiselect'
+    import FormError from '../../../../components/FormError'
 
     export default {
         name: "ProductRecommendation",
 
-        components: { Multiselect },
+        components: { Multiselect, FormError },
 
         data() {
             return {
@@ -60,12 +62,17 @@
 
                 recommendations: [],
 
+                errors: '',
+
+                temp: [],
+
                 sending: false,
             }
         },
 
         created() {
             this.retrieveProducts();
+            this.retrieveRecommendedProducts();
         },
 
         methods: {
@@ -83,8 +90,57 @@
                     });
             },
 
-            submit() {
+            retrieveRecommendedProducts() {
+                axios.get(`/api/admin/products/${this.id}/recommendations`)
+                    .then(response => {
+                        let temp = response.data.recommendations;
 
+                        temp.map(item => {
+                            return {gallery: item.gallery, id: item.id, name: item.name}
+                        });
+
+                        console.log(temp)
+
+                        this.recommendations = temp;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            console.log(errors.response.data);
+                        }
+                    })
+            },
+
+            submit() {
+                this.sending = true;
+
+                axios.post(`/api/admin/products/${this.id}/recommendations`, { recommendations: this.recommendations })
+                    .then(response => {
+                        this.errors = '';
+                        this.sending = false;
+                        if (response.status === 200) {
+                            flash(response.data.message)
+                        }
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            switch (errors.response.status) {
+                                case 422:
+                                    this.errors = errors.response.data.errors;
+                                    break;
+                                case 500:
+                                    break;
+                                default:
+                                    console.log(errors.response);
+                            }
+                        }
+
+                        console.log(errors.response);
+                        this.sending = false;
+                    });
             },
         },
 

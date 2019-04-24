@@ -40,14 +40,19 @@ class Product extends Model
         return $published_date;
     }
 
-    public function options()
-    {
-        return $this->hasMany('App\ProductOption', 'option_id');
-    }
-
     public function gallery()
     {
         return $this->belongsTo('App\Gallery');
+    }
+
+    public function isSimple()
+    {
+        return $this->isSimple;
+    }
+
+    public function options()
+    {
+        return $this->hasMany('App\ProductOption', 'option_id');
     }
 
     public function recommendations()
