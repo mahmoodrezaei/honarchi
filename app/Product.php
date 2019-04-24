@@ -33,6 +33,6 @@ class Product extends Model
 
     public function attributes()
     {
-        return $this->belongsToMany('App\ProductAttribute', 'product_attribute_value', 'attribute_id', 'product_id')->withPivot(['text_value', 'json_value']);
+        return $this->belongsToMany('App\ProductAttribute', 'product_attribute_value', 'product_id', 'attribute_id')->withPivot(['text_value', 'json_value']);
     }
 }

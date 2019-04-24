@@ -65,13 +65,13 @@ class ProductController extends Controller
         foreach ($requestData as $item){
             switch ($item['selectedAttribute']['type']){
                 case 'متن':
-                    $product->attributes()->attach($item['id'], ['text_value' => $item['textValue']]);
+                    $product->attributes()->attach($item['selectedAttribute']['id'], ['text_value' => $item['textValue']]);
                     break;
                 case 'انتخاب':
                     if ($item['selectedAttribute']['configuration']['type'] == 'choices')
-                        $product->attributes()->attach($item['id'], ['json_value' =>  json_decode([$item['singleChoice']['code']])]);
+                        $product->attributes()->attach($item['selectedAttribute']['id'], ['json_value' =>  json_encode([$item['singleChoice']['code']])]);
                     elseif ($item['selectedAttribute']['configuration']['type'] == 'multiple')
-                        $product->attributes()->attach($item['id'], ['json_value' =>  json_decode(array_column($item['multipleChoice'], 'code'))]);
+                        $product->attributes()->attach($item['selectedAttribute']['id'], ['json_value' =>  json_encode(array_column($item['multipleChoice'], 'code'))]);
                     break;
             }
 

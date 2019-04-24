@@ -48,4 +48,5 @@ Route::prefix('/api/admin/products')->group(function () {
     Route::get('/', 'API\Admin\ProductController@index');
     Route::post('/', 'API\Admin\ProductController@store');
     Route::get('/{product}/show', 'API\Admin\ProductController@show');
+    Route::post('{product}/attributes','API\Admin\ProductController@syncAttribute');
 });
