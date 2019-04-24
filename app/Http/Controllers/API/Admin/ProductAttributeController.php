@@ -182,14 +182,14 @@ class ProductAttributeController extends Controller
         foreach ($request['deletedAttributeItemConfigurationValues'] as $item) {
             $productAttributeValues = \DB::table('product_attribute_value')->where('attribute_id', $model->id)->get();
             foreach ($productAttributeValues as $productAttributeValue) {
-                $value = json_decode($productAttributeValue['json_values']);
-                if ($key = array_search($item, $productAttributeValue)) {
+                $value = json_decode($productAttributeValue->json_value);
+                if (($key = array_search($item, $value)) !== false) {
                     unset($value[$key]);
                     if (empty($value))
-                        \DB::table('product_attribute_value')->where('product_id', $productAttributeValue['product_id'])->delete();
+                        \DB::table('product_attribute_value')->where('product_id', $productAttributeValue->product_id)->where('attribute_id', $productAttributeValue->attribute_id)->delete();
                     else {
-                        $value = json_encode($value);
-                        \DB::table('product_attribute_value')->where('product_id', $productAttributeValue['product_id'])->update(['json_value' => $value]);
+                        $value = json_encode(array_values($value));
+                        \DB::table('product_attribute_value')->where('product_id', $productAttributeValue->product_id)->where('attribute_id', $productAttributeValue->attribute_id)->update(['json_value' => $value]);
                     }
                 }
             }
@@ -214,6 +214,7 @@ class ProductAttributeController extends Controller
      */
     public function destroy(ProductAttribute $model)
     {
+        \DB::table('product_attribute_value')->where('attribute_id', $model->id)->delete();
         $model->delete();
 
         $responseData = [
