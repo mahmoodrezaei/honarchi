@@ -1,5 +1,5 @@
 export default {};
-export { optionRoutes, attributesRoutes, categoriesRoutes };
+export { optionRoutes, attributesRoutes, categoriesRoutes, productRoutes };
 
 let optionRoutes = {
     index: { url: "/api/admin/options" },
@@ -20,4 +20,13 @@ let categoriesRoutes = {
     show: { url: "/api/admin/categories/" },
     update: { url: "/api/admin/categories/" },
     destroy: { url: "/api/admin/categories/" }
+};
+
+let productRoutes = {
+    attributeStore(product) {
+        return { url: "/api/admin/products/" + product + "/attributes" };
+    },
+    attributeRetrieve(product) {
+        return { url: "/api/admin/products/" + product + "/attributes" };
+    }
 };
