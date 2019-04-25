@@ -5,7 +5,8 @@
             <div class="col-lg-6">
                 <label for="name">نام محصول:</label>
                 <input type="text" v-model="productDetail.name" id="name" class="form-control m-input" placeholder="">
-                <span class="m-form__help">لطقا نام مخصول را وارد کنید</span>
+                <span v-if="!errors.name" class="m-form__help">لطقا نام مخصول را وارد کنید</span>
+                <form-error v-if="errors.name" :errors="errors">{{ errors.name[0] }}</form-error>
             </div>
             <div class="col-lg-6">
                 <label for="sku">کد محصول</label>
@@ -13,7 +14,8 @@
                     <input type="text" v-model="productDetail.sku" id="sku" class="form-control m-input" placeholder="">
                     <span class="m-input-icon__icon m-input-icon__icon--right"><span><i class="la la-barcode"></i></span></span>
                 </div>
-                <span class="m-form__help">لطفا کد محصول را وارد کنید</span>
+                <span v-if="!errors.sku" class="m-form__help">لطفا کد محصول را وارد کنید</span>
+                <form-error v-if="errors.sku" :errors="errors">{{ errors.sku[0] }}</form-error>
             </div>
         </div>
         <div class="form-group m-form__group row">
@@ -23,7 +25,8 @@
                     <input type="text" v-model="productDetail.slug" id="slug" class="form-control m-input" placeholder="">
                     <span class="m-input-icon__icon m-input-icon__icon--right"><span><i class="la la-"></i></span></span>
                 </div>
-                <span class="m-form__help">لطفا نامک محصول را بدون فاصله وارد کنید</span>
+                <span v-if="!errors.slug" class="m-form__help">لطفا نامک محصول را بدون فاصله وارد کنید</span>
+                <form-error v-if="errors.slug" :errors="errors">{{ errors.slug[0] }}</form-error>
             </div>
             <div class="col-lg-6">
                 <label for="location">محل تولید:</label>
@@ -31,7 +34,8 @@
                     <input type="text" v-model="productDetail.location" id="location" class="form-control m-input" placeholder="">
                     <span class="m-input-icon__icon m-input-icon__icon--right"><span><i class="la la-map-marker"></i></span></span>
                 </div>
-                <span class="m-form__help">لطفا محل تولید محصول را وارد کنید</span>
+                <span v-if="!errors.location" class="m-form__help">لطفا محل تولید محصول را وارد کنید</span>
+                <form-error v-if="errors.location" :errors="errors">{{ errors.location[0] }}</form-error>
             </div>
         </div>
 
@@ -53,7 +57,8 @@
                                  :options="galleries"></multiselect>
                     <span class="m-input-icon__icon m-input-icon__icon--right"><span><i class="la la-"></i></span></span>
                 </div>
-                <span class="m-form__help">گالری این محصول را مشخص کنید</span>
+                <span v-if="!errors.gallery" class="m-form__help">گالری این محصول را مشخص کنید</span>
+                <form-error v-if="errors.gallery" :errors="errors">{{ errors.gallery[0] }}</form-error>
             </div>
             <div class="col-lg-6">
                 <label for="categories">دسته‌بندی:</label>
@@ -73,7 +78,8 @@
                 <div class="m-input-icon m-input-icon--right">
                     <input type="text" v-model="productDetail.short_description" id="short_description" class="form-control m-input" placeholder="">
                 </div>
-                <span class="m-form__help">توضیحات کوتاهی درباره این محصول بنویسید</span>
+                <span v-if="!errors.short_description" class="m-form__help">توضیحات کوتاهی درباره این محصول بنویسید</span>
+                <form-error v-if="errors.short_description" :errors="errors">{{errors.short_description[0] }}</form-error>
             </div>
         </div>
         <div class="form-group m-form__group row">
@@ -83,7 +89,8 @@
 <!--                    <textarea id="description" v-model="productDetail.description" class="form-control m-input" rows="5" placeholder=""></textarea>-->
                     <TinyMCE_Editor id="description" v-model="productDetail.description" />
                 </div>
-                <span class="m-form__help">توضیحات محصول را اینجا بنویسید</span>
+                <span v-if="!errors.description" class="m-form__help">توضیحات محصول را اینجا بنویسید</span>
+                <form-error v-if="errors.description" :errors="errors">{{ errors.description[0] }}</form-error>
             </div>
         </div>
 
@@ -108,7 +115,7 @@
                 <div class="m-input-icon m-input-icon--right">
                     <input type="text" v-model="productDetail.max_purchase_per_rate" id="max-purchased-per-rate" class="form-control m-input" placeholder="">
                 </div>
-                <span class="m-form__help"></span>
+                <form-error v-if="errors.max_purchase_per_rate" :errors="errors">{{ errors.max_purchase_per_rate[0] }}</form-error>
             </div>
             <div class="col-lg-4">
                 <label for="published_date">تاریخ انتشار:</label>
@@ -121,7 +128,8 @@
                     </div>
                     <date-picker v-model="productDetail.published_date" element="published_date"></date-picker>
                 </div>
-                <span class="m-form__help">تاریخ انتشار محصول را مشخص کنید</span>
+                <span v-if="!errors.published_date" class="m-form__help">تاریخ انتشار محصول را مشخص کنید</span>
+                <form-error v-if="errors.published_date" :errors="errors">{{ errors.published_date[0] }}</form-error>
             </div>
         </div>
 
@@ -154,7 +162,7 @@
         <div class="m-form__actions">
             <div class="row">
                 <div class="col-lg-6">
-                    <button type="reset" class="btn btn-success">ثبت</button>
+                    <button type="button" @click="updateProduct" class="btn btn-success" :class="submitBtnLoaderClasses">بروزرسانی</button>
                 </div>
             </div>
         </div>
@@ -165,6 +173,7 @@
 <script>
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
     import Multiselect from 'vue-multiselect'
+    import FormError from '../../../../components/FormError'
     import TinyMCE_Editor from '../../../../components/tinyMCE'
 
     // config for VuePersianDatetimePicker
@@ -185,6 +194,7 @@
         components: {
             Multiselect,
             VuePersianDatetimePicker,
+            FormError,
             TinyMCE_Editor
         },
 
@@ -207,7 +217,9 @@
 
                 galleries: [],
 
-                errors: ''
+                errors: '',
+
+                sending: false,
             }
         },
 
@@ -240,6 +252,43 @@
                         this.galleries = response.data.galleries;
                     })
                     .catch(error => console.log(error.response));
+            },
+
+            updateProduct() {
+                this.sending = true;
+
+                axios.patch(`/api/admin/products/${this.id}/update`, this.productDetail)
+                    .then(response => {
+                        this.sending = false;
+                        if (response.status === 200) {
+                            this.productDetail = response.data.product;
+                            flash(response.data.message);
+                        }
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            switch (errors.response.status) {
+                                case 422:
+                                    this.errors = errors.response.data.errors;
+                                    break;
+                                case 500:
+                                    break;
+                                default:
+                                    console.log(errors.response);
+                            }
+                        }
+
+                        console.log(errors.response);
+                        this.sending = false;
+                    });
+            }
+        },
+
+        computed: {
+            submitBtnLoaderClasses() {
+                return this.sending ? 'm-loader m-loader--light m-loader--left' : '';
             }
         }
     }

@@ -93,15 +93,7 @@
             retrieveRecommendedProducts() {
                 axios.get(`/api/admin/products/${this.id}/recommendations`)
                     .then(response => {
-                        let temp = response.data.recommendations;
-
-                        temp.map(item => {
-                            return {gallery: item.gallery, id: item.id, name: item.name}
-                        });
-
-                        console.log(temp)
-
-                        this.recommendations = temp;
+                        this.recommendations = response.data.recommendations;
                     })
                     .catch(errors => {
                         if (errors.message === 'Network Error') {

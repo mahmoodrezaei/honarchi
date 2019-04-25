@@ -39,6 +39,8 @@ import "tinymce/plugins/paste/plugin.js";
 import "tinymce/plugins/textcolor/plugin.js";
 import "tinymce/plugins/colorpicker/plugin.js";
 import "tinymce/plugins/textpattern/plugin.js";
+import "tinymce/plugins/imagetools/plugin.js";
+import "tinymce/plugins/autoresize/plugin.js";
 
 // Langs
 import "./langs/fa_IR.js";

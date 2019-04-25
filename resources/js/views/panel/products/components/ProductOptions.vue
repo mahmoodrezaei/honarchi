@@ -57,9 +57,9 @@
 
         data() {
             return {
-                product_id: this.$route.params.id,
+                id: this.$route.params.id,
 
-                isSimple: true,
+                isSimple: '',
 
                 options: [],
 
@@ -71,6 +71,7 @@
 
         created() {
             this.retrieveOptions();
+            this.isProductSimple();
         },
 
         methods: {
@@ -88,8 +89,55 @@
                     });
             },
 
+            retrieveProductOptions() {
+
+            },
+
             submit() {
                 this.sending = true;
+                axios.post(`/api/admin/products/${this.id}/options`, { isSimple: this.isSimple, options: this.selectedOptions })
+                    .then(response => {
+                        if (response.status === 200) {
+                            flash(response.data.message);
+                            console.log(response.data);
+                        }
+                        this.sending = false;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            switch (errors.response.status) {
+                                case 422:
+                                    this.errors = errors.response.data.errors;
+                                    break;
+                                case 500:
+                                    break;
+                                default:
+                                    console.log(errors.response);
+                            }
+                        }
+
+                        console.log(errors.response);
+                        this.sending = false;
+                    });
+            },
+
+            isProductSimple() {
+                axios.get(`/api/admin/products/${this.id}/show`)
+                    .then(response => {
+                        // console.log(response.data)
+                        this.isSimple = response.data.product.is_simple;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            // this.loading = false;
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            // this.loading = false;
+                            console.log(errors.response.data);
+                        }
+                    });
             }
         },
 

@@ -16,7 +16,12 @@ class Product extends Model
         'description',
         'max_purchase_per_rate',
         'published_date',
+        'is_simple',
         'enabled'
+    ];
+
+    protected $casts = [
+        'is_simple' => 'boolean'
     ];
 
     protected $with = ['gallery'];
@@ -47,12 +52,12 @@ class Product extends Model
 
     public function isSimple()
     {
-        return $this->isSimple;
+        return $this->is_simple;
     }
 
     public function options()
     {
-        return $this->hasMany('App\ProductOption', 'option_id');
+        return $this->belongsToMany('App\ProductOption', 'product_options', 'product_id', 'option_id');
     }
 
     public function recommendations()

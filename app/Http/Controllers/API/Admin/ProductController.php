@@ -10,6 +10,7 @@ use File;
 use App\Product;
 use DB;
 use Illuminate\Http\Request;
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
 
 
 class ProductController extends Controller
@@ -52,6 +53,29 @@ class ProductController extends Controller
         return response()->json($data, 200);
     }
 
+    public function update(UpdateProduct $request, Product $product)
+    {
+        $product->update([
+            'name' => $request->name,
+            'sku' => $request->sku,
+            'slug' => $request->slug,
+            'location' => $request->location,
+            'gallery_id' => $request->gallery['id'],
+            'short_description' => $request->short_description,
+            'description' => $request->description,
+            'enabled' => $request->enabled,
+            'max_purchase_per_rate' => $request->max_purchase_per_rate,
+            'published_date' => $request->published_date
+        ]);
+
+        $data = [
+            'message' => 'محصول با موفقیت بروزرسانی شد',
+            'product' => $product,
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
+    }
 
     public function show(Product $product)
     {
@@ -62,7 +86,6 @@ class ProductController extends Controller
 
         return response()->json($data, 200);
     }
-
 
     public function syncAttribute(Request $request ,Product $product)
     {
@@ -94,6 +117,37 @@ class ProductController extends Controller
         return response()->json($responseData,200);
     }
 
+
+    public function getOptions(Product $product)
+    {
+        $data = [
+            'isSimple' => $product->isSimple,
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function syncOptions(Request $request, Product $product)
+    {
+        $request->validate([
+            'options' => 'array'
+        ]);
+
+        $product->update([
+            'is_simple' => $request->isSimple
+        ]);
+
+        $optionIds = collect($request->options)->pluck('id')->toArray();
+        $product->options()->sync($optionIds);
+
+        $data = [
+            'message' => 'گزینه‌های مورد نظر با موفقیت ثبت شدند.',
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
+    }
 
     // Recommendations
     public function getRecommendations(Product $product)

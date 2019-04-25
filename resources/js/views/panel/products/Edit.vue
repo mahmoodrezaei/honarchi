@@ -45,9 +45,14 @@
                                     <i class="fa fa-puzzle-piece m--font-info"></i>محصولات پیشنهادی
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li v-if="!isSimple" class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#product_variants">
                                     <i class="fa fa-code-branch m--font-primary" style="transform: rotate(180deg)"></i>مدیریت متغیرها
+                                </a>
+                            </li>
+                            <li v-else-if="isSimple" class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#product_variants">
+                                    <i class="fa fa-code-branch m--font-primary" style="transform: rotate(180deg)"></i>قیمت و مشخصه‌ها
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -99,7 +104,42 @@
     export default {
         name: "ProductsEdit",
 
-        components: {ProductDetails, ProductAttributes, ProductOptions, ProductRecommendation, ProductVariants, ProductGallery}
+        components: {ProductDetails, ProductAttributes, ProductOptions, ProductRecommendation, ProductVariants, ProductGallery},
+
+        data() {
+            return {
+                id: this.$route.params.id,
+
+                isSimple: '',
+            }
+        },
+
+        created() {
+            this.isProductSimple();
+        },
+
+        updated() {
+            this.isProductSimple();
+        },
+
+        methods: {
+            isProductSimple() {
+                axios.get(`/api/admin/products/${this.id}/show`)
+                    .then(response => {
+                        // console.log(response.data)
+                        this.isSimple = response.data.product.is_simple;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            // this.loading = false;
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            // this.loading = false;
+                            console.log(error.response.data);
+                        }
+                    });
+            }
+        }
     }
 </script>
 
