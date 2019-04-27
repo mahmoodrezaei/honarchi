@@ -70,7 +70,7 @@
                                 <product-attributes></product-attributes>
                             </div>
                             <div class="tab-pane" id="product_options" role="tabpanel">
-                                <product-options></product-options>
+                                <product-options v-on:isSimpleChanged="isSimpleIsChanged"></product-options>
                             </div>
                             <div class="tab-pane" id="product_recommendation" role="tabpanel">
                                 <product-recommendation></product-recommendation>
@@ -118,9 +118,9 @@
             this.isProductSimple();
         },
 
-        updated() {
+        /*updated() {
             this.isProductSimple();
-        },
+        },*/
 
         methods: {
             isProductSimple() {
@@ -138,6 +138,10 @@
                             console.log(error.response.data);
                         }
                     });
+            },
+
+            isSimpleIsChanged(isSimple) {
+                this.isSimple = isSimple;
             }
         }
     }

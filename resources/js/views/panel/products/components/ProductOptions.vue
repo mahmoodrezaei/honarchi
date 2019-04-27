@@ -9,8 +9,8 @@
                     <label class="col-form-label">محصول ساده:</label>
                     <div class="col-6">
                         <span class="m-switch m-switch--outline m-switch--icon m-switch--success">
-                            <label>
-                                <input type="checkbox" checked="checked" v-model="isSimple" name="">
+                            <label> <!--@change="$emit('isSimpleChanged', isSimple)"-->
+                                <input type="checkbox" checked="checked" v-model="isSimple" @change="isSimpleChanged" name="">
                                 <span></span>
                             </label>
                         </span>
@@ -71,7 +71,7 @@
 
         created() {
             this.retrieveOptions();
-            this.isProductSimple();
+            this.retrieveProductOptions();
         },
 
         methods: {
@@ -90,7 +90,22 @@
             },
 
             retrieveProductOptions() {
+                axios.get(`/api/admin/products/${this.id}/options`)
+                    .then(response => {
+                        this.selectedOptions = response.data.options;
+                        this.isSimple = response.data.isSimple;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            console.log(errors.response.data);
+                        }
+                    })
+            },
 
+            isSimpleChanged() {
+                this.$emit('isSimpleChanged', this.isSimple);
             },
 
             submit() {
@@ -99,7 +114,6 @@
                     .then(response => {
                         if (response.status === 200) {
                             flash(response.data.message);
-                            console.log(response.data);
                         }
                         this.sending = false;
                     })
@@ -122,23 +136,6 @@
                         this.sending = false;
                     });
             },
-
-            isProductSimple() {
-                axios.get(`/api/admin/products/${this.id}/show`)
-                    .then(response => {
-                        // console.log(response.data)
-                        this.isSimple = response.data.product.is_simple;
-                    })
-                    .catch(errors => {
-                        if (errors.message === 'Network Error') {
-                            // this.loading = false;
-                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
-                        } else {
-                            // this.loading = false;
-                            console.log(errors.response.data);
-                        }
-                    });
-            }
         },
 
         computed: {

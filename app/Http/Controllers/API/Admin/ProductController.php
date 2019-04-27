@@ -121,7 +121,8 @@ class ProductController extends Controller
     public function getOptions(Product $product)
     {
         $data = [
-            'isSimple' => $product->isSimple,
+            'options' => $product->options,
+            'isSimple' => $product->is_simple,
             'status_code' => 200
         ];
 
@@ -131,7 +132,7 @@ class ProductController extends Controller
     public function syncOptions(Request $request, Product $product)
     {
         $request->validate([
-            'options' => 'array'
+            'options' => 'required_if:isSimple,false'
         ]);
 
         $product->update([
@@ -139,7 +140,12 @@ class ProductController extends Controller
         ]);
 
         $optionIds = collect($request->options)->pluck('id')->toArray();
-        $product->options()->sync($optionIds);
+
+        if ($request->isSimple) {
+            $product->options()->detach($optionIds);
+        } else {
+            $product->options()->sync($optionIds);
+        }
 
         $data = [
             'message' => 'گزینه‌های مورد نظر با موفقیت ثبت شدند.',
