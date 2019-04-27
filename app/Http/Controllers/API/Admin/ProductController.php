@@ -158,6 +158,20 @@ class ProductController extends Controller
 
     }
 
+    public function getVariants(Product $product)
+    {
+        $product->load(['variants.pricing', 'variants.optionValue']);
+
+        $responseData = [
+            'status_code' => 200,
+            'message' => __('successfully_data_sync'),
+            'data' => $product
+        ];
+
+        return response()->json($responseData,200);
+
+    }
+
     public function destroyVariant(ProductVariant $variant)
     {
         $variant->optionValue()->detach();
