@@ -192,7 +192,8 @@ return [
         'type'                  => 'نوع دست ساخته',
         'optionType'            => 'نوع گزینه',
         'published_date'        => 'تاریخ انتشار',
-        'gallery_id'            => 'گالری'
+        'gallery_id'            => 'گالری',
+        'recommendations'       => 'محصولات پیشنهادی'
     ],
 
     'entities' => [

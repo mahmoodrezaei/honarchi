@@ -26,19 +26,17 @@ class UpdateProduct extends FormRequest
         $id = $this->product->id;
 
         return [
-            'category_id' => 'nullable|integer|min:1|exists:categories,id',
-            'gallery_id' => 'nullable|integer|min:1|exists:galleries,id',
+//            'category_id' => 'nullable|integer|min:1|exists:categories,id',
+            'gallery' => 'required',
+            'sku' => 'required|unique:products,sku,'.$id,
             'name' => 'required|max:50',
             'slug' => 'required|unique:products,slug,'.$id,
-            'code' => 'required|unique:products,slug,'.$id,
-            'intro' => 'required|max:255',
             'location' => 'required|string',
+            'short_description' => 'required|max:255',
             'description' => 'required|string',
-            'no' => 'required|integer',
-            'major_no' => 'required|integer',
-            'features' => 'nullable|array',
-            'pics' => 'nullable|array',
             'max_purchase_per_rate' => 'required|integer',
+            'published_date' => 'required',
+            'enabled' => 'required'
         ];
     }
 }

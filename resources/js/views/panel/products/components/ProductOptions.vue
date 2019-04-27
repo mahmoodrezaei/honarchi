@@ -9,8 +9,8 @@
                     <label class="col-form-label">محصول ساده:</label>
                     <div class="col-6">
                         <span class="m-switch m-switch--outline m-switch--icon m-switch--success">
-                            <label>
-                                <input type="checkbox" checked="checked" v-model="isSimple" name="">
+                            <label> <!--@change="$emit('isSimpleChanged', isSimple)"-->
+                                <input type="checkbox" checked="checked" v-model="isSimple" @change="isSimpleChanged" name="">
                                 <span></span>
                             </label>
                         </span>
@@ -18,13 +18,17 @@
                 </div>
             </div>
             <div class="col-lg-6" v-show="!isSimple">
-                <label for="published_date">تاریخ انتشار:</label>
-                <multi-select
-                        id="published_date"
-                        :selected-options="selectedOptions"
-                        @select="optionsOnSelect"
-                        :options="optionsSelectBoxValues"
-                ></multi-select>
+                <label for="options">گزینه‌های محصول:</label>
+                <multiselect v-model="selectedOptions"
+                             placeholder=""
+                             id="options"
+                             :disabled="false"
+                             :selectLabel="'انتخاب'"
+                             :selectedLabel="'انتخاب شده'"
+                             :deselectLabel="'حذف'"
+                             label="name" track-by="name"
+                             :multiple="true"
+                             :options="options"></multiselect>
                 <span class="m-form__help">گزینه‌های محصول متغیر را مشخص کنید</span>
             </div>
         </div>
@@ -35,7 +39,7 @@
         <div class="m-form__actions">
             <div class="row">
                 <div class="col-lg-6">
-                    <button type="reset" class="btn btn-success" :class="submitBtnLoaderClasses">ثبت</button>
+                    <button type="button" @click="submit" class="btn btn-success" :class="submitBtnLoaderClasses">ثبت</button>
                 </div>
             </div>
         </div>
@@ -44,25 +48,30 @@
 </template>
 
 <script>
-    import {MultiSelect} from 'vue-search-select'
+    import Multiselect from 'vue-multiselect'
 
     export default {
         name: "ProductOptions",
 
-        components: { MultiSelect },
+        components: { Multiselect },
 
         data() {
             return {
-                isSimple: true,
+                id: this.$route.params.id,
+
+                isSimple: '',
 
                 options: [],
 
-                selectedOptions: [],
+                selectedOptions: '',
+
+                sending: false,
             }
         },
 
         created() {
             this.retrieveOptions();
+            this.retrieveProductOptions();
         },
 
         methods: {
@@ -80,24 +89,58 @@
                     });
             },
 
-            optionsOnSelect(items, lastSelectItem) {
-                this.selectedOptions = items;
-            }
+            retrieveProductOptions() {
+                axios.get(`/api/admin/products/${this.id}/options`)
+                    .then(response => {
+                        this.selectedOptions = response.data.options;
+                        this.isSimple = response.data.isSimple;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            console.log(errors.response.data);
+                        }
+                    })
+            },
+
+            isSimpleChanged() {
+                this.$emit('isSimpleChanged', this.isSimple);
+            },
+
+            submit() {
+                this.sending = true;
+                axios.post(`/api/admin/products/${this.id}/options`, { isSimple: this.isSimple, options: this.selectedOptions })
+                    .then(response => {
+                        if (response.status === 200) {
+                            flash(response.data.message);
+                        }
+                        this.sending = false;
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            switch (errors.response.status) {
+                                case 422:
+                                    this.errors = errors.response.data.errors;
+                                    break;
+                                case 500:
+                                    break;
+                                default:
+                                    console.log(errors.response);
+                            }
+                        }
+
+                        console.log(errors.response);
+                        this.sending = false;
+                    });
+            },
         },
 
         computed: {
-            optionsSelectBoxValues() {
-                let temp = [];
-
-                this.options.forEach(item => {
-                    temp.push({text: item.name, value: item.id, id: item.id})
-                });
-
-                return temp;
-            },
-
             submitBtnLoaderClasses() {
-
+                return this.sending ? 'm-loader m-loader--light m-loader--left' : '';
             }
         }
     }

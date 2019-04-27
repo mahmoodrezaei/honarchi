@@ -68,10 +68,8 @@
                                         <span class="m-input-icon__icon m-input-icon__icon--right"><span><i
                                                 class="la la-map-marker"></i></span></span>
                                     </div>
-                                    <span v-if="!errors.location"
-                                          class="m-form__help">لطفا محل تولید محصول را وارد کنید</span>
-                                    <form-error v-if="errors.location" :errors="errors">{{ errors.location[0] }}
-                                    </form-error>
+                                    <span v-if="!errors.location" class="m-form__help">لطفا محل تولید محصول را وارد کنید</span>
+                                    <form-error v-if="errors.location" :errors="errors">{{ errors.location[0] }}</form-error>
                                 </div>
                             </div>
 
@@ -93,10 +91,8 @@
                                         <span class="m-input-icon__icon m-input-icon__icon--right"><span><i
                                                 class="la la-"></i></span></span>
                                     </div>
-                                    <span v-if="!errors.gallery"
-                                          class="m-form__help">گالری این محصول را مشخص کنید</span>
-                                    <form-error v-if="errors.gallery" :errors="errors">{{ errors.gallery[0] }}
-                                    </form-error>
+                                    <span v-if="!errors.gallery" class="m-form__help">گالری این محصول را مشخص کنید</span>
+                                    <form-error v-if="errors.gallery" :errors="errors">{{ errors.gallery[0] }}</form-error>
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="categories">دسته‌بندی:</label>
@@ -119,9 +115,7 @@
                                                class="form-control m-input" placeholder="">
                                     </div>
                                     <span v-if="!errors.short_description" class="m-form__help">توضیحات کوتاهی درباره این محصول بنویسید</span>
-                                    <form-error v-if="errors.short_description" :errors="errors">{{
-                                        errors.short_description[0] }}
-                                    </form-error>
+                                    <form-error v-if="errors.short_description" :errors="errors">{{errors.short_description[0] }}</form-error>
                                 </div>
                             </div>
                             <div class="form-group m-form__group row">
@@ -130,10 +124,8 @@
                                     <div class="m-input-icon m-input-icon--right">
                                         <TinyMCE_Editor id="description" v-model="product.description"/>
                                     </div>
-                                    <span v-if="!errors.description"
-                                          class="m-form__help">توضیحات محصول را اینجا بنویسید</span>
-                                    <form-error v-if="errors.description" :errors="errors">{{ errors.description[0] }}
-                                    </form-error>
+                                    <span v-if="!errors.description" class="m-form__help">توضیحات محصول را اینجا بنویسید</span>
+                                    <form-error v-if="errors.description" :errors="errors">{{ errors.description[0] }}</form-error>
                                 </div>
                             </div>
 
@@ -160,9 +152,7 @@
                                         <input type="text" v-model="product.max_purchase_per_rate"
                                                id="max-purchased-per-rate" class="form-control m-input" placeholder="">
                                     </div>
-                                    <form-error v-if="errors.max_purchase_per_rate" :errors="errors">{{
-                                        errors.max_purchase_per_rate[0] }}
-                                    </form-error>
+                                    <form-error v-if="errors.max_purchase_per_rate" :errors="errors">{{ errors.max_purchase_per_rate[0] }}</form-error>
                                 </div>
                                 <div class="col-lg-4">
                                     <label for="published_date">تاریخ انتشار:</label>
@@ -174,13 +164,10 @@
                                                 <i class="la la-calendar m--font-success"></i>
                                             </span>
                                         </div>
-                                        <date-picker v-model="product.published_date"
-                                                     element="published_date"></date-picker>
+                                        <date-picker v-model="product.published_date" element="published_date"></date-picker>
                                     </div>
                                     <span v-if="!errors.published_date" class="m-form__help">تاریخ انتشار محصول را مشخص کنید</span>
-                                    <form-error v-if="errors.published_date" :errors="errors">{{
-                                        errors.published_date[0] }}
-                                    </form-error>
+                                    <form-error v-if="errors.published_date" :errors="errors">{{ errors.published_date[0] }}</form-error>
                                 </div>
                             </div>
 
@@ -241,9 +228,9 @@
     Vue.use(VuePersianDatetimePicker, {
         name: 'datePicker',
         props: {
-            inputFormat: 'YYYY-MM-DD HH:mm',
-            format: 'jYYYY-jMM-jDD HH:mm',
-            placeholder: 'YYYY-MM-DD HH:mm',
+            inputFormat: 'YYYY/MM/DD HH:mm',
+            format: 'jYYYY/jMM/jDD HH:mm',
+            placeholder: 'YYYY/MM/DD HH:mm',
             type: 'datetime',
             color: '#34bfa3'
         }

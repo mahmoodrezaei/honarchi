@@ -13,13 +13,13 @@ let editor_config = function() {
     directionality: "rtl",
     language: "fa_IR",
     plugins: [
-      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen autoresize",
       "insertdatetime nonbreaking save table contextmenu directionality",
       "emoticons template paste textcolor colorpicker textpattern"
     ],
     toolbar:
-      "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image ",
+      "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image  | rtl ltr",
     relative_urls: false,
     file_browser_callback: function(field_name, url, type, win) {
       var x =
