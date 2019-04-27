@@ -15,6 +15,7 @@ class CreateProductVariantTable extends Migration
     {
         Schema::create('product_variant', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('product_id');
 
             $table->string('name');
             $table->string('code');
@@ -28,6 +29,7 @@ class CreateProductVariantTable extends Migration
 
             $table->timestamps();
 
+            $table->foreign('product_id')->references('id')->on('products');
             $table->boolean('trashed')->default(false);
         });
     }

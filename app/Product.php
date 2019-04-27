@@ -35,4 +35,9 @@ class Product extends Model
     {
         return $this->belongsToMany('App\ProductAttribute', 'product_attribute_value', 'product_id', 'attribute_id')->withPivot(['text_value', 'json_value']);
     }
+
+    public function variants()
+    {
+        return $this->hasMany('App\ProductVariant', 'product_id');
+    }
 }
