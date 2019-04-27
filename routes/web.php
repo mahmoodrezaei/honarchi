@@ -50,6 +50,8 @@ Route::prefix('/api/admin/products')->group(function () {
     Route::post('/', 'API\Admin\ProductController@store');
     Route::get('/{product}/show', 'API\Admin\ProductController@show');
     Route::patch('/{product}/update', 'API\Admin\ProductController@update');
+    Route::get('{product}/attributes','API\Admin\ProductController@getAttributes');
+    Route::post('{product}/attributes','API\Admin\ProductController@syncAttributes');
     Route::get('/{product}/options', 'API\Admin\ProductController@getOptions');
     Route::post('/{product}/options', 'API\Admin\ProductController@syncOptions');
     Route::get('/{product}/recommendations', 'API\Admin\ProductController@getRecommendations');

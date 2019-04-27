@@ -97,13 +97,13 @@
                         class="form-control m-input"
                       >
                       <span
-                        v-if="!errors.meta_keywords"
+                        v-if="!errors['meta_keywords']"
                         class="m-form__help"
                       >کلمات کلیدی دسته بندی را وارد کنید</span>
                       <form-error
-                        v-if="errors.meta_keywords"
+                        v-if="errors['meta_keywords']"
                         :errors="errors"
-                      >{{ errors.meta_keywords[0] }}</form-error>
+                      >{{ errors['meta_keywords'][0] }}</form-error>
                     </div>
                   </div>
 
