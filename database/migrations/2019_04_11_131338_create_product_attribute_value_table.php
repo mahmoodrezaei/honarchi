@@ -17,13 +17,14 @@ class CreateProductAttributeValueTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('attribute_id');
-            $table->string('text_value');
-            $table->json('json_value');
-            $table->boolean('boolean_value');
-            $table->integer('integer_value');
-            $table->float('float_value');
-            $table->dateTime('date_time_value');
-            $table->date('date_value');
+
+            $table->string('text_value')->nullable();
+            $table->json('json_value')->nullable();
+            $table->boolean('boolean_value')->nullable();
+            $table->integer('integer_value')->nullable();
+            $table->float('float_value')->nullable();
+            $table->dateTime('date_time_value')->nullable();
+            $table->date('date_value')->nullable();
 
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('attribute_id')->references('id')->on('product_attributes');

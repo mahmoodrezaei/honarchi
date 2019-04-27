@@ -147,13 +147,14 @@ class ProductController extends Controller
     {
 
         $request->validate([
+            'isSimple' => 'required',
             'on_hand' => 'required',
             'name' => [
-                'required_if:is_simple,1',
+                'required_if:isSimple,false',
                 Rule::unique('product_variants')->where(function ($query) use($request, $product) { return $query->where('name', $request['name'])->where('parent_id', $product->id); })
             ],
             'code' => [
-                'required_if:is_simple,true',
+                'required_if:isSimple,false',
                 Rule::unique('product_variants')->where(function ($query) use($request, $product) { return $query->where('code', $request['code'])->where('parent_id', $product->id); })
             ],
             'height' => 'present',
@@ -161,7 +162,7 @@ class ProductController extends Controller
             'depth' => 'present',
             'weight' => 'present',
             'pricing_configuration' => 'required',
-            'option' => 'present'
+            'options' => 'required_if:isSimple,false'
         ]);
 
             foreach ($request->all() as $item){
@@ -180,11 +181,12 @@ class ProductController extends Controller
 
                 $variantPricing = isset($item['id']) ? ProductVariantPricing::find($item['id']) : new ProductVariantPricing();
                 $variantPricing->variant_id = $variant->id;
-                $variantPricing->configuration = $request['pricing_configuration'];
+                $variantPricing->configuration = $request['pricingConfiguration'];
                 $variantPricing->save();
 
-                $variant->optionValue()->sync($request['options']);
-
+                if (!$product->is_simple) {
+                    $variant->optionValue()->sync($request['options']);
+                }
             }
 
         $responseData = [
