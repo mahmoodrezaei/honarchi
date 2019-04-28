@@ -13,6 +13,9 @@ use File;
 use App\Product;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+use Validator;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
 
 
@@ -143,34 +146,59 @@ class ProductController extends Controller
     }
 
 
-    public function syncVariant(Request $request, Product $product)
+    public function syncVariants(Request $request, Product $product)
     {
 
-        $request->validate([
-            'isSimple' => 'required',
-            'on_hand' => 'required',
-            'name' => [
-                'required_if:isSimple,false',
-                Rule::unique('product_variants')->where(function ($query) use($request, $product) { return $query->where('name', $request['name'])->where('parent_id', $product->id); })
-            ],
-            'code' => [
-                'required_if:isSimple,false',
-                Rule::unique('product_variants')->where(function ($query) use($request, $product) { return $query->where('code', $request['code'])->where('parent_id', $product->id); })
-            ],
-            'height' => 'present',
-            'width' => 'present',
-            'depth' => 'present',
-            'weight' => 'present',
-            'pricing_configuration' => 'required',
-            'options' => 'required_if:isSimple,false'
-        ]);
+//        \Log::info($request->all());
+
+        foreach ($request->all() as $item) {
+            Validator::make($item, [
+                'on_hand' => 'required|integer',
+                'name' => [
+                    Rule::requiredIf(!$product->is_simple),
+                    Rule::unique('product_variants')->where(function ($query) use ($item, $product) {
+                        if (!isset($item['id'])) {
+                            return $query->where('name', $item['name'])->where('product_id', $product->id);
+                        } elseif (($variant = ProductVariant::find($item['id'])) !== false) {
+                            if ($item['name'] == $variant->name)
+                                return $query->where('id', -1);
+                            else
+                                return $query->where('name', $item['name'])->where('product_id', $product->id);
+                        } else {
+                            return $query->where('name', $item['name'])->where('product_id', $product->id);
+                        }
+                    })
+                ],
+                'code' => [
+                    Rule::requiredIf(!$product->is_simple),
+                    Rule::unique('product_variants')->where(function ($query) use ($item, $product) {
+                        if (!isset($item['id'])) {
+                            return $query->where('code', $item['code'])->where('product_id', $product->id);
+                        } elseif (($variant = ProductVariant::find($item['id'])) !== false) {
+                            if ($item['code'] == $variant->code)
+                                return $query->where('id', -1);
+                            else
+                                return $query->where('code', $item['code'])->where('product_id', $product->id);
+                        } else {
+                            return $query->where('code', $item['code'])->where('product_id', $product->id);
+                        }
+                    })
+                ],
+                'height' => 'present',
+                'width' => 'present',
+                'depth' => 'present',
+                'weight' => 'present',
+                'pricing_configuration' => 'required',
+                'options' => Rule::requiredIf(!$product->is_simple),
+            ])->validate();
+        }
 
             foreach ($request->all() as $item){
 
-                $variant =  isset($item['id']) ? ProductVariant::find($item['id']) : new ProductVariant();
+                $variant = isset($item['id']) ? ProductVariant::find($item['id']) : new ProductVariant();
                 $variant->product_id = $product->id;
-                $variant->name = $product->is_simple ? $item->name : "1";
-                $variant->code = $product->is_simple ? $item->code : "1";
+                $variant->name = $product->is_simple ? $item['name'] : "1";
+                $variant->code = $product->is_simple ? $item['code'] : "1";
                 $variant->on_hand = $item['on_hand'];
                 $variant->on_hold = 0;
                 $variant->height  = $item['height'];
@@ -179,13 +207,13 @@ class ProductController extends Controller
                 $variant->weight  = $item['weight'];
                 $variant->save();
 
-                $variantPricing = isset($item['id']) ? ProductVariantPricing::find($item['id']) : new ProductVariantPricing();
-                $variantPricing->variant_id = $variant->id;
-                $variantPricing->configuration = $request['pricingConfiguration'];
+                $variantPricing = isset($item['pricing_id']) ? ProductVariantPricing::find($item['pricing_id']) : new ProductVariantPricing();
+                $variantPricing->product_variant_id = $variant->id;
+                $variantPricing->configuration = $item['pricing_configuration'];
                 $variantPricing->save();
 
                 if (!$product->is_simple) {
-                    $variant->optionValue()->sync($request['options']);
+                    $variant->optionValue()->sync($item['options']);
                 }
             }
 
@@ -202,7 +230,8 @@ class ProductController extends Controller
   
     public function getVariants(Product $product)
     {
-        $product->load(['variants.pricing', 'variants.optionValue']);
+//        $product = Product::where('id', $product)->with(['variants.pricingConfiguration' => function($query) { return $query->select(['configuration']);}, 'variants.optionValue'])->get();
+        $product->load(['variants.pricingConfiguration', 'variants.optionValue']);
 
         $responseData = [
             'status_code' => 200,
