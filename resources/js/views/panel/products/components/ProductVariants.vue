@@ -120,12 +120,12 @@
 
 
         <!--******************************************** Variant Section ********************************************-->
-        <div v-else-if="!isSimple">
+        <div v-else>
             <form>
                 <div class="row mb-5">
                     <div class="col-lg-6">
-                        <button type="button" class="btn btn-primary" @click="newItem">آیتم جدید</button>
-                        <button type="button" class="btn btn-primary">ساخت آیتم از همه متغیرها</button>
+                        <button type="button" class="btn btn-primary" @click="newItem">متغیر جدید</button>
+                        <button type="button" class="btn btn-primary" @click="createAllVariants">ساخت متغیر از همه متغیرها</button>
                     </div>
                 </div>
 
@@ -133,16 +133,59 @@
                     <!--begin::Item-->
                     <div class="m-accordion__item" v-for="(item, index) in productVariant" :key="index">
                         <div class="m-accordion__item-head collapsed" role="tab" :id="`head` + index" data-toggle="collapse" :href="`#body` + index" aria-expanded="false">
-                            <span class="m-accordion__item-icon"><i class="fa flaticon-user-ok"></i></span>
-                            <span class="m-accordion__item-title">When an unknown printer took</span>
+<!--                            <span class="m-accordion__item-icon"><i class="fa "></i></span>-->
+                            <span class="m-accordion__item-title">{{ product.sku }} - {{ item.code }}</span>
                             <span class="m-accordion__item-mode"></span>
                         </div>
                         <div class="m-accordion__item-body collapse" :id="`body` + index" role="tabpanel" :aria-labelledby="`head` + index" data-parent="#m_accordion_2" style="">
                             <div class="m-accordion__item-content">
                                 <div class="form-group m-form__group row">
+                                    <div class="col-lg-12 mb-2">گزینه‌های محصول:</div>
+                                    <div v-for="(option, index) in product.options" :key="index" class="col-lg-6 pb-2">
+                                        <multiselect v-model="item.options[index]"
+                                                     openDirection="bottom"
+                                                     :placeholder="option.name + ` ` + `را انتخاب کنید`"
+                                                     id="options"
+                                                     :disabled="false"
+                                                     :selectLabel="'انتخاب'"
+                                                     :selectedLabel="'انتخاب شده'"
+                                                     :deselectLabel="'حذف'"
+                                                     label="value" track-by="value"
+                                                     :options="option.values">
+                                            <template slot="singleLabel" slot-scope="{ option }">
+                                                <span v-if="option.name === null">{{ option.value }}</span>
+                                                <span v-else style="display: flex;">
+                                                    <span style="display: block; width: 15px; height: 15px; float: left;" :style="`backgroundColor:` + option.value"></span>
+                                                    <span style="display: block; position: relative; bottom: 5px; padding-right: 5px;">{{ option.name }}</span>
+                                                </span>
+                                            </template>
+                                            <template slot="option" slot-scope="{ option }">
+                                                <span v-if="option.name === null">{{ option.value }}</span>
+                                                <span v-else style="display: flex;">
+                                                    <span style="display: block; width: 15px; height: 15px; float: left;" :style="`backgroundColor:` + option.value"></span>
+                                                    <span style="display: block; position: relative; bottom: 5px; padding-right: 5px;">{{ option.name }}</span>
+                                                </span>
+                                            </template>
+                                        </multiselect>
+                                        <!--<span v-if="!errors.options" class="m-form__help">گزینه‌های محصول متغیر را مشخص کنید</span>
+                                        <form-error v-if="errors.options" :errors="errors">{{ errors.options[0] }}</form-error>-->
+                                    </div>
+                                </div>
+
+                                <div class="form-group m-form__group row">
+                                    <div class="col-lg-6">
+                                        <label for="onHand">کد محصول متغیر:</label>
+<!--                                        <input type="text" v-model="item.code" id="onHand" class="form-control m-input" placeholder="">-->
+                                        <div class="input-group m-input-group" style="direction: ltr">
+                                            <div class="input-group-prepend"><span class="input-group-text">{{ product.sku }}</span></div>
+                                            <input type="text" v-model="item.code" class="form-control m-input" placeholder="" aria-describedby="basic-addon1">
+                                        </div>
+                                        <!--<span v-if="!errors.name" class="m-form__help">لطقا نام مخصول را وارد کنید</span>
+                                        <form-error v-if="errors.name" :errors="errors">{{ errors.name[0] }}</form-error>-->
+                                    </div>
                                     <div class="col-lg-6">
                                         <label for="onHand">موجودی در انبار:</label>
-                                        <input type="text" v-model="item.on_hand" id="onHand" class="form-control m-input" placeholder="">
+                                        <input type="text" v-model.number="item.on_hand" id="onHand" class="form-control m-input" placeholder="">
                                         <!--<span v-if="!errors.name" class="m-form__help">لطقا نام مخصول را وارد کنید</span>
                                         <form-error v-if="errors.name" :errors="errors">{{ errors.name[0] }}</form-error>-->
                                     </div>
@@ -247,8 +290,9 @@
                     <!--end::Item-->
                 </div>
             </div>
-                <div class="m-form__actions">
-                    <div class="row">
+
+                <div class="m-form__actions" v-show="productVariant.length !== 0">
+                    <div class="row mt-5">
                         <div class="col-lg-6">
                             <button type="button" class="btn btn-success" @click="submit"
                                     :class="submitBtnLoaderClasses">ثبت
@@ -265,6 +309,7 @@
 
 <script>
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+    import Multiselect from 'vue-multiselect'
 
     // config for VuePersianDatetimePicker
     Vue.use(VuePersianDatetimePicker, {
@@ -281,15 +326,19 @@
     export default {
         name: "ProductVariants",
 
+        components: { Multiselect },
+
         data() {
             return {
                 id: this.$route.params.id,
 
                 isSimple: '',
 
+                product: '',
+
                 productVariant: [{
-                    name: '',
-                    code: '',
+                    name: '1',
+                    code: 1,
                     height: '',
                     width: '',
                     depth: '',
@@ -311,7 +360,7 @@
                         promotionPrice: ''
                     },
 
-                    options: '',
+                    options: [],
                 }],
 
                 sending: false,
@@ -328,25 +377,55 @@
             retrieveProductVariants() {
                 axios.get(`/api/admin/products/${this.id}/variants`)
                     .then(response => {
-                        console.log(response.data.data);
+                        // console.log(response.data.data);
+                        this.product = response.data.data;
+
+                        // add value.value to value-value, value.name to value-name
+                        for(let option in this.product.options){
+                            for( let value in  this.product.options[option].values){
+                                this.product.options[option].values[value]["name"] = this.product.options[option].values[value].value.name;
+                                this.product.options[option].values[value]["value"] = this.product.options[option].values[value].value.value;
+
+                            }
+                        }
+
                         this.isSimple = response.data.data.is_simple;
-                        this.productVariant = [];
+
                         let variants = response.data.data.variants;
-                        variants.forEach(item => {
-                            this.productVariant.push({
-                                id: item.id,
-                                pricing_id: item.pricing_configuration.id,
-                                name: item.name,
-                                code: item.code,
-                                height: item.height,
-                                width: item.width,
-                                depth: item.depth,
-                                weight: item.weight,
-                                on_hand: item.on_hand,
-                                pricing_configuration: item.pricing_configuration.configuration,
-                                options: item.option_value
+
+                        if (variants.length !== 0) {
+
+                            this.productVariant = [];
+                            variants.forEach(item => {
+                                this.productVariant.push({
+                                    id: item.id,
+                                    pricing_id: item.pricing_configuration.id,
+                                    name: item.name,
+                                    code: item.code,
+                                    height: item.height,
+                                    width: item.width,
+                                    depth: item.depth,
+                                    weight: item.weight,
+                                    on_hand: item.on_hand,
+                                    pricing_configuration: item.pricing_configuration.configuration,
+                                    options: item.option_value
+                                })
+                            });
+
+                            /*for (let variant in variants){
+                                for(let option in variants[variant].options){
+                                        this.productVariant[variant].options[option]["name"] = variants[variant].options[option].value['name'];
+                                        this.productVariant[variant].options[option]["value"] = variants[variant].options[option].value['value'];
+                                }
+                            }*/
+
+                            this.productVariant.forEach(variant => {
+                                variant.options.forEach(option => {
+                                    option['name'] = option.value.name;
+                                    option['value'] = option.value.value;
+                                })
                             })
-                        })
+                        }
                     })
                     .catch(errors => {
                         if (errors.message === 'Network Error') {
@@ -359,6 +438,13 @@
 
             submit() {
                 this.sending = true;
+                this.productVariant.forEach(item => {
+                    item.options = item.options.map(i => {
+                        return i.id;
+                    })
+                });
+
+                // console.log(this.productVariant)
                 axios.post(`/api/admin/products/${this.id}/variants`, this.productVariant)
                     .then(response => {
                         if (response.status === 200) {
@@ -388,8 +474,8 @@
 
             newItem() {
                 this.productVariant.push({
-                    name: '',
-                    code: '',
+                    name: this.productVariant.length + 1,
+                    code: this.productVariant.length + 1,
                     height: '',
                     width: '',
                     depth: '',
@@ -411,8 +497,12 @@
                         promotionPrice: ''
                     },
 
-                    options: '',
+                    options: [],
                 })
+            },
+
+            createAllVariants() {
+                
             }
         },
 

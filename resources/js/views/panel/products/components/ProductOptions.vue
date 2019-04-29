@@ -29,7 +29,8 @@
                              label="name" track-by="name"
                              :multiple="true"
                              :options="options"></multiselect>
-                <span class="m-form__help">گزینه‌های محصول متغیر را مشخص کنید</span>
+                <span v-if="!errors.options" class="m-form__help">گزینه‌های محصول متغیر را مشخص کنید</span>
+                <form-error v-if="errors.options" :errors="errors">{{ errors.options[0] }}</form-error>
             </div>
         </div>
 
@@ -49,11 +50,12 @@
 
 <script>
     import Multiselect from 'vue-multiselect'
+    import FormError from '../../../../components/FormError'
 
     export default {
         name: "ProductOptions",
 
-        components: { Multiselect },
+        components: { Multiselect, FormError },
 
         data() {
             return {
@@ -66,6 +68,8 @@
                 selectedOptions: '',
 
                 sending: false,
+
+                errors: ''
             }
         },
 

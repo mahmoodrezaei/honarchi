@@ -11,6 +11,8 @@ class ProductOption extends Model
 
     protected $fillable = ['type', 'name', 'position'];
 
+    protected $with = ['values'];
+
     public function getCreatedAtAttribute($created_at)
     {
         $verta = new Verta($created_at);

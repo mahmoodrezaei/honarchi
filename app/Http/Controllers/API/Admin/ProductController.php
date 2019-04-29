@@ -231,7 +231,7 @@ class ProductController extends Controller
     public function getVariants(Product $product)
     {
 //        $product = Product::where('id', $product)->with(['variants.pricingConfiguration' => function($query) { return $query->select(['configuration']);}, 'variants.optionValue'])->get();
-        $product->load(['variants.pricingConfiguration', 'variants.optionValue']);
+        $product->load(['variants.pricingConfiguration', 'variants.optionValue', 'options']);
 
         $responseData = [
             'status_code' => 200,
