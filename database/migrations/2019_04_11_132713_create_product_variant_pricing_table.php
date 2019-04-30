@@ -19,7 +19,7 @@ class CreateProductVariantPricingTable extends Migration
             $table->unsignedInteger('product_variant_id');
             $table->json('configuration');
 
-            $table->foreign('product_variant_id')->references('id')->on('product_variant')->delete('cascade');
+            $table->foreign('product_variant_id')->references('id')->on('product_variants')->delete('cascade');
 
             $table->timestamps();
         });

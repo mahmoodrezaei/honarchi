@@ -49,7 +49,10 @@ class ProductController extends Controller
             'description' => $request->description,
             'enabled' => $request->enabled,
             'max_purchase_per_rate' => $request->max_purchase_per_rate,
-            'published_date' => $request->published_date
+            'published_date' => $request->published_date,
+            'prebuy' => $request->prebuy,
+            'prebuy_min' => $request->prebuy_min,
+            'prebuy_max' => $request->prebuy_max,
         ]);
 
         $data = [
@@ -74,7 +77,10 @@ class ProductController extends Controller
             'description' => $request->description,
             'enabled' => $request->enabled,
             'max_purchase_per_rate' => $request->max_purchase_per_rate,
-            'published_date' => $request->published_date
+            'published_date' => $request->published_date,
+            'prebuy' => $request->prebuy,
+            'prebuy_min' => $request->prebuy_min,
+            'prebuy_max' => $request->prebuy_max,
         ]);
 
         $data = [

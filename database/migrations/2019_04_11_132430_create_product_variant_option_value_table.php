@@ -19,7 +19,7 @@ class CreateProductVariantOptionValueTable extends Migration
             $table->unsignedInteger('product_variant_id');
             $table->unsignedInteger('product_option_value_id');
 
-            $table->foreign('product_variant_id')->references('id')->on('product_variant');
+            $table->foreign('product_variant_id')->references('id')->on('product_variants');
             $table->foreign('product_option_value_id')->references('id')->on('product_option_values');
 
             $table->timestamps();

@@ -17,11 +17,15 @@ class Product extends Model
         'max_purchase_per_rate',
         'published_date',
         'is_simple',
-        'enabled'
+        'enabled',
+        'prebuy',
+        'prebuy_min',
+        'prebuy_max',
     ];
 
     protected $casts = [
-        'is_simple' => 'boolean'
+        'is_simple' => 'boolean',
+        'prebuy' => 'boolean'
     ];
 
     protected $with = ['gallery'];

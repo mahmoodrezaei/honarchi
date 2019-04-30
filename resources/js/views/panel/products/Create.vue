@@ -173,6 +173,40 @@
 
                             <div class="m-form__seperator m-form__seperator--dashed"></div>
 
+                            <div class="m-form__group form-group row">
+                                <div class="col-lg-4">
+                                    <div class="m-form__group form-group row">
+                                        <label class="col-form-label">امکان پیش‌خرید محصول:</label>
+                                        <div class="col-4">
+                                            <span class="m-switch m-switch--outline m-switch--icon m-switch--success">
+                                                <label>
+                                                    <input type="checkbox" v-model="product.prebuy" checked="checked" name="">
+                                                    <span></span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" v-show="product.prebuy">
+                                    <label for="prebuy_min">حداقل زمان لازم برای آماده شدن محصول:</label>
+                                    <div class="m-input-icon m-input-icon--right">
+                                        <input type="text" v-model="product.prebuy_min" id="prebuy_min" class="form-control m-input" placeholder="">
+                                    </div>
+                                    <span v-if="!errors.prebuy_min" class="m-form__help"></span>
+                                    <form-error v-if="errors.prebuy_min" :errors="errors">{{ errors.prebuy_min[0] }}</form-error>
+                                </div>
+                                <div class="col-lg-4" v-show="product.prebuy">
+                                    <label for="prebuy_max">حداکثر زمان لازم برای آماده شدن محصول:</label>
+                                    <div class="m-input-icon m-input-icon--right">
+                                        <input type="text" v-model="product.prebuy_max" id="prebuy_max" class="form-control m-input" placeholder="">
+                                    </div>
+                                    <span v-if="!errors.prebuy_max" class="m-form__help"></span>
+                                    <form-error v-if="errors.prebuy_max" :errors="errors">{{ errors.prebuy_max[0] }}</form-error>
+                                </div>
+                            </div>
+
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+
                             <div class="form-group m-form__group row">
                                 <div class="col-lg-12">
                                     <label for="meta_description">توضیحات متا:</label>
@@ -253,7 +287,10 @@
                     description: '',
                     max_purchase_per_rate: '',
                     published_date: '',
-                    enabled: true
+                    enabled: true,
+                    prebuy: false,
+                    prebuy_min: '',
+                    prebuy_max: ''
                 },
 
                 galleries: [],
@@ -280,6 +317,7 @@
 
             submit() {
                 this.sending = true;
+                this.errors = '';
                 axios.post('/api/admin/products/', this.product)
                     .then(response => {
                         this.sending = false;
@@ -287,8 +325,7 @@
                         // this.$router.push({ path: '/admin/products' });
                         console.log(response.data);
                     })
-                    .catch(function (errors) {
-
+                    .catch(errors => {
                         if (errors.message === 'Network Error') {
                             flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
                         } else {
@@ -305,8 +342,7 @@
 
                         console.log(errors.response);
                         this.sending = false;
-
-                    }.bind(this));
+                    });
             },
         },
 

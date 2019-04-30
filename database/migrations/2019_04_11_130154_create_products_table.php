@@ -27,6 +27,9 @@ class CreateProductsTable extends Migration
             $table->dateTime('published_date')->nullable();
             $table->timestamps();
             $table->boolean('enabled')->default(false);
+            $table->boolean('prebuy')->default(false);
+            $table->integer('prebuy_min')->nullable();
+            $table->integer('prebuy_max')->nullable();
             $table->boolean('is_simple')->default(true);
             $table->boolean('trashed')->default(false);
 
