@@ -240,7 +240,7 @@
         created() {
             this.retrieveProductDetail();
             this.getGalleries();
-            this.get
+            this.getCategories();
         },
 
         methods: {
@@ -280,8 +280,8 @@
 
             updateProduct() {
 
-                 for(let item in this.product.categories){
-                    this.product.categories[item] = this.product.categories[item].id;
+                 for(let item in this.productDetail.categories){
+                    this.productDetail.categories[item] = this.productDetail.categories[item].id;
                 }
 
                 this.sending = true;
