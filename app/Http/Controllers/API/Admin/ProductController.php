@@ -52,6 +52,8 @@ class ProductController extends Controller
             'published_date' => $request->published_date
         ]);
 
+        $product->categories()->attach($request['categories']);
+
         $data = [
             'message' => 'محصول با موفقیت ایجاد شد',
             'product_id' => $product->id,
@@ -76,6 +78,8 @@ class ProductController extends Controller
             'max_purchase_per_rate' => $request->max_purchase_per_rate,
             'published_date' => $request->published_date
         ]);
+
+        $product->categories()->sync($request['categories']);
 
         $data = [
             'message' => 'محصول با موفقیت بروزرسانی شد',
