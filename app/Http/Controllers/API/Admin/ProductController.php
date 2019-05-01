@@ -55,6 +55,8 @@ class ProductController extends Controller
             'prebuy_max' => $request->prebuy_max,
         ]);
 
+        $product->categories()->attach($request['categories']);
+
         $data = [
             'message' => 'محصول با موفقیت ایجاد شد',
             'product_id' => $product->id,
@@ -82,6 +84,8 @@ class ProductController extends Controller
             'prebuy_min' => $request->prebuy_min,
             'prebuy_max' => $request->prebuy_max,
         ]);
+
+        $product->categories()->sync($request['categories']);
 
         $data = [
             'message' => 'محصول با موفقیت بروزرسانی شد',

@@ -63,10 +63,21 @@
             <div class="col-lg-6">
                 <label for="categories">دسته‌بندی:</label>
                 <div class="m-input-icon m-input-icon--right">
-                    <input type="text" id="categories" class="form-control m-input" placeholder="">
-                    <span class="m-input-icon__icon m-input-icon__icon--right"><span><i class="la la-tags"></i></span></span>
+                    <multiselect v-model="productDetail.categories"
+                                    placeholder=""
+                                    id="category"
+                                    :selectLabel="'انتخاب'"
+                                    :selectedLabel="'انتخاب شده'"
+                                    :deselectLabel="'حذف'"
+                                    label="name" track-by="name"
+                                    :allow-empty="false"
+                                    :multiple="true"
+                                    :options="categories"></multiselect>
+                    <span class="m-input-icon__icon m-input-icon__icon--right"><span><i
+                            class="la la-tags"></i></span></span>
                 </div>
-                <span class="m-form__help">دسته‌بندی این محصول را مشخص کنید</span>
+                <span v-if="!errors.categories" class="m-form__help">دسته‌بندی این محصول را مشخص کنید</span>
+                <form-error v-if="errors.categories" :errors="errors">{{ errors.categories[0] }}</form-error>
             </div>
         </div>
 
@@ -209,6 +220,7 @@
     import Multiselect from 'vue-multiselect'
     import FormError from '../../../../components/FormError'
     import TinyMCE_Editor from '../../../../components/tinyMCE'
+    import { categoriesRoutes } from "../../../../lib/apiRoutes";
 
     // config for VuePersianDatetimePicker
     Vue.use(VuePersianDatetimePicker, {
@@ -238,6 +250,7 @@
 
                 productDetail: {
                     gallery: '',
+                    categories: [],
                     sku: '',
                     name: '',
                     slug: '',
@@ -253,6 +266,7 @@
                 },
 
                 galleries: [],
+                categories: [],
 
                 errors: '',
 
@@ -263,6 +277,7 @@
         created() {
             this.retrieveProductDetail();
             this.getGalleries();
+            this.getCategories();
         },
 
         methods: {
@@ -291,7 +306,21 @@
                     .catch(error => console.log(error.response));
             },
 
+            getCategories() {
+                axios
+                    .get(categoriesRoutes.index.url)
+                    .then(response => {
+                        this.categories = response.data.data
+                    })
+                    .catch(error => console.log(error.response));
+            },
+
             updateProduct() {
+
+                 for(let item in this.productDetail.categories){
+                    this.productDetail.categories[item] = this.productDetail.categories[item].id;
+                }
+
                 this.sending = true;
 
                 axios.patch(`/api/admin/products/${this.id}/update`, this.productDetail)

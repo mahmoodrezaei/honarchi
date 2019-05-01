@@ -28,7 +28,7 @@ class Product extends Model
         'prebuy' => 'boolean'
     ];
 
-    protected $with = ['gallery'];
+    protected $with = ['gallery', 'categories'];
 
     public function setPublishedDateAttribute($value)
     {
@@ -77,5 +77,10 @@ class Product extends Model
     public function variants()
     {
         return $this->hasMany('App\ProductVariant', 'product_id');
+    }
+
+    public function categories()
+    {
+        return  $this->belongsToMany('App\ProductCategory');
     }
 }
