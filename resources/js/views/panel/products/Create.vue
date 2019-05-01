@@ -99,7 +99,7 @@
                                     <div class="m-input-icon m-input-icon--right">
                                         <multiselect v-model="product.categories"
                                                      placeholder=""
-                                                     id="category"
+                                                     id="categories"
                                                      :selectLabel="'انتخاب'"
                                                      :selectedLabel="'انتخاب شده'"
                                                      :deselectLabel="'حذف'"

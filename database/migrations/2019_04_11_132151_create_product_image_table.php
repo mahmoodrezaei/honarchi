@@ -19,6 +19,7 @@ class CreateProductImageTable extends Migration
             $table->unsignedInteger('product_id');
 
             $table->string('alt')->nullable();
+            $table->string('type')->nullable();
             $table->text('path');
 
             $table->foreign('product_id')->references('id')->on('products');
