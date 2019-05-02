@@ -57,6 +57,8 @@ class ProductController extends Controller
 
         $product->categories()->attach($request['categories']);
 
+        $product->load(['categories', 'gallery']);
+
         $data = [
             'message' => 'محصول با موفقیت ایجاد شد',
             'product_id' => $product->id,
@@ -86,6 +88,8 @@ class ProductController extends Controller
         ]);
 
         $product->categories()->sync($request['categories']);
+
+        $product->load(['categories', 'gallery']);
 
         $data = [
             'message' => 'محصول با موفقیت بروزرسانی شد',
@@ -159,7 +163,7 @@ class ProductController extends Controller
     public function syncVariants(Request $request, Product $product)
     {
 
-//        \Log::info($request->all());
+        \Log::info($request->all());
 
         foreach ($request->all() as $item) {
             Validator::make($item, [
@@ -203,34 +207,36 @@ class ProductController extends Controller
             ])->validate();
         }
 
-            foreach ($request->all() as $item){
+        foreach ($request->all() as $item){
 
-                $variant = isset($item['id']) ? ProductVariant::find($item['id']) : new ProductVariant();
-                $variant->product_id = $product->id;
-                $variant->name = $product->is_simple ? $item['name'] : "1";
-                $variant->code = $product->is_simple ? $item['code'] : "1";
-                $variant->on_hand = $item['on_hand'];
-                $variant->on_hold = 0;
-                $variant->height  = $item['height'];
-                $variant->width  = $item['width'];
-                $variant->depth   = $item['depth'];
-                $variant->weight  = $item['weight'];
-                $variant->save();
+            $variant = isset($item['id']) ? ProductVariant::find($item['id']) : new ProductVariant();
+            $variant->product_id = $product->id;
+            $variant->name = $product->is_simple ? "1" : $item['name'];
+            $variant->code = $product->is_simple ? "1" : $item['code'];
+            $variant->on_hand = $item['on_hand'];
+            $variant->on_hold = 0;
+            $variant->height  = $item['height'];
+            $variant->width  = $item['width'];
+            $variant->depth   = $item['depth'];
+            $variant->weight  = $item['weight'];
+            $variant->save();
 
-                $variantPricing = isset($item['pricing_id']) ? ProductVariantPricing::find($item['pricing_id']) : new ProductVariantPricing();
-                $variantPricing->product_variant_id = $variant->id;
-                $variantPricing->configuration = $item['pricing_configuration'];
-                $variantPricing->save();
+            $variantPricing = isset($item['pricing_id']) ? ProductVariantPricing::find($item['pricing_id']) : new ProductVariantPricing();
+            $variantPricing->product_variant_id = $variant->id;
+            $variantPricing->configuration = $item['pricing_configuration'];
+            $variantPricing->save();
 
-                if (!$product->is_simple) {
-                    $variant->optionValue()->sync($item['options']);
-                }
+            if (!$product->is_simple) {
+                $variant->optionValue()->sync($item['options']);
             }
+        }
+
+        $product->load(['variants.pricingConfiguration', 'variants.optionValue', 'options']);
 
         $responseData = [
             'status_code' => 200,
             'message' => __('successfully_data_sync'),
-            'data' => null
+            'data' => $product,
         ];
 
         return response()->json($responseData,200);

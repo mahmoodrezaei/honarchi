@@ -448,6 +448,7 @@
                 axios.post(`/api/admin/products/${this.id}/variants`, this.productVariant)
                     .then(response => {
                         if (response.status === 200) {
+                            this.retrieveProductVariants();
                             flash(response.data.message);
                         }
                         this.sending = false;
