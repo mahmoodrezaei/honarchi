@@ -6,6 +6,7 @@ namespace App\Http\Controllers\API\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProduct;
 use App\Http\Requests\Product\UpdateProduct;
+use App\ProductImage;
 use App\ProductOption;
 use App\ProductVariant;
 use App\ProductVariantPricing;
@@ -342,5 +343,49 @@ class ProductController extends Controller
         ];
 
         return response()->json($data, 200);
+    }
+
+    public function syncGallery(Request $request, Product $product){
+
+        foreach($request->all() as $requestItem)
+        {
+            if(isset($requestItem['image'])){
+            $uploadedImage = new File($requestItem['image']);
+              $imageName = time().$uploadedImage->getClientOriginalName();
+              Storage::disk('local')->putFileAs(
+                'products/gallery/'.$imageName,
+                $uploadedImage,
+                $imageName
+            );
+        }
+
+            $productImage = isset($requestItem['id']) ? ProductImage::find($requestItem['id']) : new ProductImage();
+            $productImage->product_id = $product->id;
+            $productImage->alt  =  $requestItem['alt'];
+            $productImage->type =  $requestItem['type'];
+            $productImage->path = isset($requestItem['id']) ?  isset($imageName) ? $imageName : $productImage->path : $imageName;
+            $productImage->save();
+        }
+
+        $data = [
+            'message' => 'success',
+            'status_code' => 200
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function getGallery(Product $product)
+    {
+        $productImages =  ProductImage::where('product_id', $product->id)->get();
+
+        $data = [
+            'message' => 'success',
+            'status_code' => 200,
+            'data' => $productImages
+        ];
+
+        return response()->json($data, 200);
+
     }
 }
