@@ -1,17 +1,71 @@
 <template>
-    <form class="m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed">
-
-        <div class="m-form__group form-group row">
-            <div class="form-group m-form__group col-md-3 ml-2 mb-2">
-                <div style="width: 100%; height: 100%;">
-                    <img src="http://via.placeholder.com/300" alt="">
-                </div>
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="customFile">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
-                </div>
+    <div>
+        <div class="row mb-5">
+            <div class="col-lg-6">
+                <button type="button" class="btn btn-primary" @click="newItem">عکس جدید</button>
             </div>
+        </div>
 
+        <div class="row">
+            <div class="col-xl-4" v-for="(item, index) in gallery"  :key="index">
+
+                <!--begin:: Packages-->
+                <div class="m-portlet m-portlet--border-bottom-primary m-portlet--bordered-semi m-portlet--full-height ">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text m--font-light">
+                                    <!--<label class="m-radio m-radio&#45;&#45;state-success" style="width: 100px;">
+                                        <input type="radio" name="example_2" value="1">
+                                        <span></span>
+
+                                    </label>-->
+                                    <a @click.prevent="featureImage(index)" class="btn m-btn btn-sm m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill btn-success m-btn--hover-success">
+                                        <i v-if="item.type" class="la la-check m--font-success"></i>
+                                    </a>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav">
+                                <li class="m-portlet__nav-item m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover">
+                                    <button v-show="gallery.length !== 1" @click="deleteItem(index)" class="btn m-btn btn-sm m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill btn-outline-danger m-btn--hover-danger">
+                                        <i class="la la-remove m--font-danger"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="m-portlet__body">
+
+                        <!--<form class="m-form m-form&#45;&#45;fit m-form&#45;&#45;label-align-right m-form&#45;&#45;group-seperator-dashed"
+                              method="POST"
+                              enctype="multipart/form-data">-->
+
+                        <div class="form-group m-form__group">
+                            <input type="text" v-model="item.alt" class="form-control m-input m-input--square" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="توضیحات تصویر">
+                            <span class="m-form__help"></span>
+                        </div>
+
+                        <div class="m-widget29">
+                            <div class="m-widget_content">
+                                <img :src="item.src" class="mb-3" alt="" width="190" height="190">
+
+                                <div class="custom-file">
+                                    <input class="d-none" type="file" @change="loadImage($event, index)" accept="image/*" :id="`customFile` + index">
+                                    <label class="custom-file-label" :for="`customFile` + index">انتخاب فایل</label>
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        </form>-->
+
+                    </div>
+                </div>
+
+                <!--end:: Packages-->
+            </div>
         </div>
 
         <div class="m-form__seperator m-form__seperator--dashed"></div>
@@ -23,18 +77,99 @@
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+
 </template>
 
 <script>
+    import ImageUpload from '../../../../components/ImageUpload'
+
     export default {
         name: "ProductGallery",
 
+        components: { ImageUpload },
+
         data() {
             return {
+                id: this.$route.params.id,
+
                 sending: false,
 
+                gallery: [{
+                    alt: '',
+                    type: true,
+                    src: '',
+                    file: ''
+                    // image: {src: '', file: ''}
+                }],
+
+                image: '',
+
                 errors: ''
+            }
+        },
+
+        methods: {
+
+
+            submit() {
+
+                // let data = '';
+
+                /*let data = new FormData();
+                data.append('imageFile', this.gallery[0].file);*/
+
+                this.gallery.forEach(item => {
+                    let form = new FormData();
+
+                    form.append('alt', item.alt);
+                    form.append('type', item.type);
+                    form.append('image', item.file);
+
+                    axios.post(`/api/admin/products/${this.id}/gallery`, form)
+                        .then()
+                        .catch()
+                });
+
+            },
+
+            featureImage(selectedIndex) {
+
+                this.gallery.forEach((item, index) => {
+                    if (selectedIndex === index)  this.gallery[index].type = true;
+                    else this.gallery[index].type = false;
+                });
+
+                this.$forceUpdate();
+                /*this.gallery[index].type = true;*/
+            },
+
+            loadImage(e, index) {
+
+                // this.gallery[index].image.file = e.target.files[index]
+
+                let file = e.target.files[0];
+
+  /*              let data = new FormData();
+                data.append('imageFile', file);*/
+
+                this.gallery[index].file = file;
+                this.gallery[index].src = URL.createObjectURL(file)
+            },
+
+            newItem() {
+                this.gallery.push({
+                    alt: '',
+                    type: false,
+                    src: '',
+                    file: ''
+                })
+            },
+
+            deleteItem(index) {
+                if (this.gallery.length !== 1) {
+                    this.gallery.splice(index, 1);
+                }
             }
         },
 

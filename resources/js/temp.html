@@ -1,0 +1,38 @@
+<form class="m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed"
+      method="POST"
+      enctype="multipart/form-data">
+
+    <div class="m-form__group form-group row">
+
+        <div v-for="(item, index) in gallery" :key="index" class="form-group m-form__group col-md-3 ml-2 mb-2">
+
+            <div class="col-12 mb-3" style="margin-left: 0; margin-right: 0; width: 100%;">
+                <label for="meta"></label>
+                <input type="text" id="meta" v-model="item.alt" class="form-control m-input" placeholder="توضیحات">
+                <!--<span v-if="!errors.name" class="m-form__help">لطقا نام مخصول را وارد کنید</span>
+            <form-error v-if="errors.name" :errors="errors">{{ errors.name[0] }}</form-error>-->
+            </div>
+
+            <label class="m-radio mb-3">
+                <input type="radio" name="example_1" value="2" v-model="item.type"> تصویر شاخص
+                <span></span>
+            </label>
+
+            <img :src="item.image.src" class="mb-3" alt="" width="190" height="190">
+
+            <div class="custom-file">
+                <input type="file" @change="loadImage($event, index)" accept="image/*" :id="`customFile` + index">
+                <label class="custom-file-label" :for="`customFile` + index">انتخاب فایل</label>
+            </div>
+
+            <!--<img :src="image" class="mb-3" alt="" width="190" height="190">
+                <image-upload class="mb-3" name="image" @loaded="onLoad"></image-upload>-->
+
+            <button v-show="gallery.length !== 1" type="button" class="btn btn-danger btn-sm"
+                    @click="deleteItem(index)">حذف
+            </button>
+        </div>
+
+    </div>
+
+</form>

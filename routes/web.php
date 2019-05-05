@@ -59,4 +59,7 @@ Route::prefix('/api/admin/products')->group(function () {
     Route::get('/{product}/variants', 'API\Admin\ProductController@getVariants');
     Route::post('/{product}/variants', 'API\Admin\ProductController@syncVariants');
     Route::delete('/{product}/variants', 'API\Admin\ProductController@destroyVariants');
+
+    Route::post('/{product}/gallery', 'API\Admin\ProductController@syncGallery');
+    Route::get('/{product}/gallery', 'API\Admin\ProductController@getGallery');
 });

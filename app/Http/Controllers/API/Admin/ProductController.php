@@ -345,27 +345,30 @@ class ProductController extends Controller
         return response()->json($data, 200);
     }
 
-    public function syncGallery(Request $request, Product $product){
 
-        foreach($request->all() as $requestItem)
-        {
-            if(isset($requestItem['image'])){
-            $uploadedImage = new File($requestItem['image']);
-              $imageName = time().$uploadedImage->getClientOriginalName();
-              Storage::disk('local')->putFileAs(
+    public function syncGallery(Request $request, Product $product)
+    {
+
+//        Log::info($request->file('imageFile')->getClientOriginalName());
+
+        if(isset($request->image)){
+            $uploadedImage = $request->file('image');
+
+            $imageName = time().$uploadedImage->getClientOriginalName();
+            \Storage::disk('local')->putFileAs(
                 'products/gallery/'.$imageName,
                 $uploadedImage,
                 $imageName
             );
+//            request()->file('image')->store('products/gallery/', 'public');
         }
 
-            $productImage = isset($requestItem['id']) ? ProductImage::find($requestItem['id']) : new ProductImage();
-            $productImage->product_id = $product->id;
-            $productImage->alt  =  $requestItem['alt'];
-            $productImage->type =  $requestItem['type'];
-            $productImage->path = isset($requestItem['id']) ?  isset($imageName) ? $imageName : $productImage->path : $imageName;
-            $productImage->save();
-        }
+        $productImage = isset($request['id']) ? ProductImage::find($request['id']) : new ProductImage();
+        $productImage->product_id = $product->id;
+        $productImage->alt  =  $request['alt'];
+//        $productImage->type =  $request['type'];
+        $productImage->path = isset($request['id']) ?  isset($imageName) ? $imageName : $productImage->path : $imageName;
+        $productImage->save();
 
         $data = [
             'message' => 'success',
@@ -377,6 +380,7 @@ class ProductController extends Controller
 
     public function getGallery(Product $product)
     {
+
         $productImages =  ProductImage::where('product_id', $product->id)->get();
 
         $data = [
@@ -386,6 +390,5 @@ class ProductController extends Controller
         ];
 
         return response()->json($data, 200);
-
     }
 }
