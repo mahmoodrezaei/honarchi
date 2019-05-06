@@ -15,11 +15,6 @@
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
                                 <h3 class="m-portlet__head-text m--font-light">
-                                    <!--<label class="m-radio m-radio&#45;&#45;state-success" style="width: 100px;">
-                                        <input type="radio" name="example_2" value="1">
-                                        <span></span>
-
-                                    </label>-->
                                     <a @click.prevent="featureImage(index)" class="btn m-btn btn-sm m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill btn-success m-btn--hover-success">
                                         <i v-if="item.type" class="la la-check m--font-success"></i>
                                     </a>
@@ -39,14 +34,23 @@
 
                     <div class="m-portlet__body">
 
-                        <!--<form class="m-form m-form&#45;&#45;fit m-form&#45;&#45;label-align-right m-form&#45;&#45;group-seperator-dashed"
-                              method="POST"
-                              enctype="multipart/form-data">-->
-
                         <div class="form-group m-form__group">
                             <input type="text" v-model="item.alt" class="form-control m-input m-input--square" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="توضیحات تصویر">
                             <span class="m-form__help"></span>
                         </div>
+
+                         <!-- <div class="form-group m-form__group">
+                           <multiselect
+                                 placeholder="وابسته به متغیر"
+                                 :selectLabel="'انتخاب'"
+                                 :selectedLabel="'انتخاب شده'"
+                                 :deselectLabel="'حذف'"
+                                 label="name" track-by="name"
+                                 :value="item.variant"
+                                 :allow-empty="false"
+                                 :options="variants"></multiselect>
+                            <span class="m-form__help"></span>
+                        </div> -->
 
                         <div class="m-widget29">
                             <div class="m-widget_content">
@@ -83,11 +87,12 @@
 
 <script>
     import ImageUpload from '../../../../components/ImageUpload'
+    import Multiselect from 'vue-multiselect'
 
     export default {
         name: "ProductGallery",
 
-        components: { ImageUpload },
+        components: { ImageUpload, Multiselect },
 
         data() {
             return {
@@ -109,7 +114,20 @@
             }
         },
 
+        created () {
+            this.retrieveProductVariants();
+        },
+
         methods: {
+
+            retrieveProductVariants() {
+                axios.get(`/api/admin/products/${this.id}/variants`)
+                    .then(response => {
+                        console.log(response.data.data);
+                        // this.verints = response.data.data;
+                    })
+                    .catch();
+            },
 
 
             submit() {
