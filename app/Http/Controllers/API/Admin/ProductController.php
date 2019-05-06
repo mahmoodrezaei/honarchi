@@ -353,21 +353,23 @@ class ProductController extends Controller
 
         if(isset($request->image)){
             $uploadedImage = $request->file('image');
-
             $imageName = time().$uploadedImage->getClientOriginalName();
             \Storage::disk('local')->putFileAs(
-                'products/gallery/'.$imageName,
+                'products/gallery/'.$product->code,
                 $uploadedImage,
                 $imageName
             );
-//            request()->file('image')->store('products/gallery/', 'public');
         }
 
         $productImage = isset($request['id']) ? ProductImage::find($request['id']) : new ProductImage();
         $productImage->product_id = $product->id;
         $productImage->alt  =  $request['alt'];
-//        $productImage->type =  $request['type'];
+        $productImage->type =  filter_var($request['type'], FILTER_VALIDATE_BOOLEAN);
         $productImage->path = isset($request['id']) ?  isset($imageName) ? $imageName : $productImage->path : $imageName;
+
+        if (isset($request['variant']))
+            $productImage->variants()->attach($request['variant']);
+
         $productImage->save();
 
         $data = [
@@ -381,7 +383,7 @@ class ProductController extends Controller
     public function getGallery(Product $product)
     {
 
-        $productImages =  ProductImage::where('product_id', $product->id)->get();
+        $productImages =  $product->images()->get();
 
         $data = [
             'message' => 'success',

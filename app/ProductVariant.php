@@ -26,4 +26,9 @@ class ProductVariant extends Model
     {
         return $this->hasOne("App\ProductVariantPricing");
     }
+
+    public function images()
+    {
+        return $this->belongsToMany('App\ProductImage', 'product_image_product_variant');
+    }
 }
