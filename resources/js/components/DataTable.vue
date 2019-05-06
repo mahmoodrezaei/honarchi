@@ -8,7 +8,7 @@
           class="m-datatable__cell m-datatable__cell--sort"
           @click="$emit('sort', column.name)"
         >
-          <span style="width: 150px; cursor: pointer">
+          <span style="width: 110px; cursor: pointer" class="text-center">
             {{ column.label }}
             <span>
               <i
@@ -18,7 +18,7 @@
           </span>
         </th>
         <th class="m-datatable__cell m-datatable__cell--sort">
-          <span style="width: 150px;">
+          <span style="width: 110px;">
             عملیات
             <span>
               <i class="fa fa-toolbox"></i>

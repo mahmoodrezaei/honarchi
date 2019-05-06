@@ -39,22 +39,21 @@
                             <span class="m-form__help"></span>
                         </div>
 
-                         <!-- <div class="form-group m-form__group">
-                           <multiselect
-                                 placeholder="وابسته به متغیر"
-                                 :selectLabel="'انتخاب'"
-                                 :selectedLabel="'انتخاب شده'"
-                                 :deselectLabel="'حذف'"
-                                 label="name" track-by="name"
-                                 :value="item.variant"
-                                 :allow-empty="false"
-                                 :options="variants"></multiselect>
+                        <div class="form-group m-form__group">
+                            <multiselect
+                                    v-model="item.variant"
+                                    placeholder="متغیر مورد نظر"
+                                    :selectLabel="'انتخاب'"
+                                    :selectedLabel="'انتخاب شده'"
+                                    :deselectLabel="'حذف'"
+                                    label="code" track-by="code"
+                                    :options="variants"></multiselect>
                             <span class="m-form__help"></span>
-                        </div> -->
+                        </div>
 
                         <div class="m-widget29">
                             <div class="m-widget_content">
-                                <img :src="item.src" class="mb-3" alt="" width="190" height="190">
+                                <img :src="item.path" class="mb-3" alt="" width="190" height="190">
 
                                 <div class="custom-file">
                                     <input class="d-none" type="file" @change="loadImage($event, index)" accept="image/*" :id="`customFile` + index">
@@ -103,12 +102,12 @@
                 gallery: [{
                     alt: '',
                     type: true,
-                    src: '',
+                    path: '',
                     file: ''
                     // image: {src: '', file: ''}
                 }],
 
-                image: '',
+                variants: [],
 
                 errors: ''
             }
@@ -116,6 +115,7 @@
 
         created () {
             this.retrieveProductVariants();
+            this.retrieveImages();
         },
 
         methods: {
@@ -123,30 +123,78 @@
             retrieveProductVariants() {
                 axios.get(`/api/admin/products/${this.id}/variants`)
                     .then(response => {
-                        console.log(response.data.data);
+                        this.variants = response.data.data.variants;
                         // this.verints = response.data.data;
                     })
                     .catch();
             },
 
+            retrieveImages() {
+                axios.get(`/api/admin/products/${this.id}/gallery`)
+                    .then(response => {
+                        if (response.data.data.length !== 0) {
+
+                            this.gallery = response.data.data;
+
+                           /* this.gallery.forEach((item, index) => {
+                                // this.gallery[index]['variant'] = item.variants[0];
+                                this.gallery[index]['variant'] = this.variants.find(i => i.id === item.variants[0].id);
+                                // console.log(temp);
+                            });*/
+                        }
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            console.log(errors.response.data);
+                        }
+                    });
+            },
 
             submit() {
-
-                // let data = '';
-
-                /*let data = new FormData();
-                data.append('imageFile', this.gallery[0].file);*/
+                this.sending = true;
 
                 this.gallery.forEach(item => {
                     let form = new FormData();
+
+                    if (item.id) {
+                        form.append('id', item.id);
+                    }
+
+                    if (item.variant) {
+                        form.append('variant', item.variant.id)
+                    }
 
                     form.append('alt', item.alt);
                     form.append('type', item.type);
                     form.append('image', item.file);
 
                     axios.post(`/api/admin/products/${this.id}/gallery`, form)
-                        .then()
-                        .catch()
+                        .then(response => {
+                            if (response.status === 200) {
+                                flash(response.data.message);
+                            }
+                            this.sending = false;
+                        })
+                        .catch(errors => {
+                            if (errors.message === 'Network Error') {
+                                flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                            } else {
+                                switch (errors.response.status) {
+                                    case 422:
+                                        this.errors = errors.response.data.errors;
+                                        break;
+                                    case 500:
+                                        break;
+                                    default:
+                                        console.log(errors.response.data);
+                                }
+                            }
+
+                            console.log(errors.response.data);
+                            this.sending = false;
+                        })
                 });
 
             },
@@ -164,22 +212,17 @@
 
             loadImage(e, index) {
 
-                // this.gallery[index].image.file = e.target.files[index]
-
                 let file = e.target.files[0];
 
-  /*              let data = new FormData();
-                data.append('imageFile', file);*/
-
                 this.gallery[index].file = file;
-                this.gallery[index].src = URL.createObjectURL(file)
+                this.gallery[index].path = URL.createObjectURL(file)
             },
 
             newItem() {
                 this.gallery.push({
                     alt: '',
                     type: false,
-                    src: '',
+                    path: '',
                     file: ''
                 })
             },
@@ -187,6 +230,33 @@
             deleteItem(index) {
                 if (this.gallery.length !== 1) {
                     this.gallery.splice(index, 1);
+
+                    if (this.gallery[index].id !== 'undefined') {
+                        axios.delete(`/api/admin/products/${this.id}/image/${this.gallery[index].id}`)
+                            .then(response => {
+                                if (response.status === 200) {
+                                    flash(response.data.message);
+                                }
+                            })
+                            .catch(errors => {
+                                if (errors.message === 'Network Error') {
+                                    flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                                } else {
+                                    switch (errors.response.status) {
+                                        case 422:
+                                            this.errors = errors.response.data.errors;
+                                            break;
+                                        case 500:
+                                            break;
+                                        default:
+                                            console.log(errors.response.data);
+                                    }
+                                }
+
+                                console.log(errors.response.data);
+                                this.sending = false;
+                            })
+                    }
                 }
             }
         },

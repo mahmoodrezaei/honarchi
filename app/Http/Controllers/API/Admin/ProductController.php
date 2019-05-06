@@ -16,6 +16,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Ramsey\Uuid\Uuid;
 use Validator;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
 
@@ -25,7 +26,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::orderBy('id', 'desc')->get();
+        $products = Product::orderBy('created_at', 'desc')->get();
         return response()->json($products);
     }
 
@@ -348,14 +349,13 @@ class ProductController extends Controller
 
     public function syncGallery(Request $request, Product $product)
     {
+        Log::info($request->all());
 
-//        Log::info($request->file('imageFile')->getClientOriginalName());
-
-        if(isset($request->image)){
+        if($request->image !== 'undefined'){
             $uploadedImage = $request->file('image');
-            $imageName = time().$uploadedImage->getClientOriginalName();
-            \Storage::disk('local')->putFileAs(
-                'products/gallery/'.$product->code,
+            $imageName = uniqid() . $uploadedImage->getClientOriginalName();
+            \Storage::disk('public')->putFileAs(
+                'productImages',
                 $uploadedImage,
                 $imageName
             );
@@ -365,15 +365,15 @@ class ProductController extends Controller
         $productImage->product_id = $product->id;
         $productImage->alt  =  $request['alt'];
         $productImage->type =  filter_var($request['type'], FILTER_VALIDATE_BOOLEAN);
-        $productImage->path = isset($request['id']) ?  isset($imageName) ? $imageName : $productImage->path : $imageName;
-
-        if (isset($request['variant']))
-            $productImage->variants()->attach($request['variant']);
+        $productImage->path = isset($request['id']) ?  isset($imageName) ? $imageName : preg_replace('/(.*)\/(.*)\/(.*)/', '$3', $productImage->path) : $imageName;
 
         $productImage->save();
 
+        if (isset($request['variant']))
+            $productImage->variants()->sync($request['variant']);
+
         $data = [
-            'message' => 'success',
+            'message' => 'عکس با موفقیت ذخیره شد',
             'status_code' => 200
         ];
 
@@ -385,10 +385,28 @@ class ProductController extends Controller
 
         $productImages =  $product->images()->get();
 
+        foreach ($productImages as $key => $image) {
+            $productImages[$key]['variant'] = $image->variants->first();
+        }
+
         $data = [
             'message' => 'success',
             'status_code' => 200,
             'data' => $productImages
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function destroyImage(Product $product, ProductImage $productImage)
+    {
+        $productImage->variants()->detach();
+
+        $product->images()->delete($productImage);
+
+        $data = [
+            'message' => 'عکس با موفقیت حذف شد',
+            'status_code' => 200,
         ];
 
         return response()->json($data, 200);
