@@ -85,7 +85,10 @@
                                     <tr v-for="product in paginated" :key="product.id" class="m-datatable__row m-datatable__row" style="left: 0px;">
 
                                         <td class="m-datatable__cell text-center">
-                                            <span style="width: 110px;"></span>
+                                            <span style="width: 110px;" v-if="product.feature_image">
+                                                <img :src="product.feature_image.path" width="100" alt="">
+                                            </span>
+                                            <span style="width: 110px;" v-else></span>
                                         </td>
 
                                         <td class="m-datatable__cell text-center">
@@ -97,19 +100,22 @@
                                         </td>
 
                                         <td class="m-datatable__cell text-center">
-                                            <span style="width: 110px;"></span>
+                                            <span style="width: 110px;" v-if="product.price">{{ product.price.originalPrice }}</span>
+                                            <span style="width: 110px;" v-else></span>
                                         </td>
 
                                         <td class="m-datatable__cell text-center">
-                                            <span style="width: 110px;"></span>
+                                            <span style="width: 110px;" v-if="product.price">{{ product.price.discountPrice.price }}</span>
+                                            <span style="width: 110px;" v-else></span>
                                         </td>
 
                                         <td class="m-datatable__cell text-center">
-                                            <span style="width: 110px;"></span>
+                                            <span style="width: 110px;" v-if="product.price">{{ product.price.purchasedPrice }}</span>
+                                            <span style="width: 110px;" v-else></span>
                                         </td>
 
                                         <td class="m-datatable__cell text-center">
-                                            <span style="width: 110px;">{{product.created_at}}</span>
+                                            <span style="width: 110px;">{{product.is_simple}}</span>
                                         </td>
 
                                         <td class="m-datatable__cell">
@@ -164,7 +170,7 @@
                 { label: "قیمت‌عادی", name: "price" },
                 { label: "قیمت فروش ویژه", name: "discount_price" },
                 { label: "قیمت خرید", name: "purchased_price" },
-                { label: "تاریخ ایجاد", name: "created", type: "number" }
+                { label: "نوع محصول", name: "created" }
             ];
 
             columns.forEach(column => {
@@ -213,10 +219,10 @@
         created() {
             window.pics = [];
             this.getproducts();
-            this.getcategories();
+            /*this.getcategories();
             this.getgalleries();
             this.getfeatures();
-            this.editorInit();
+            this.editorInit();*/
         },
 
         methods: {
@@ -226,6 +232,7 @@
                     .get("/api/admin/products")
                     .then(response => {
                         this.products = response.data;
+                        console.log(response.data);
                         this.pagination.total = this.products.length;
                     })
                     .catch(error => console.log(error));

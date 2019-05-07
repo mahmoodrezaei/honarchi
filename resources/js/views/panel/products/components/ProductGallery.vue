@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="m-widget29">
-                            <div class="m-widget_content">
+                            <div class="m-widget_content text-center align-content-center">
                                 <img :src="item.path" class="mb-3" alt="" width="190" height="190">
 
                                 <div class="custom-file">

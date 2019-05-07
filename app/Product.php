@@ -30,6 +30,21 @@ class Product extends Model
 
     protected $with = ['gallery', 'categories'];
 
+    protected $appends = ['feature_image', 'price'];
+
+    public function getFeatureImageAttribute()
+    {
+        return $this->images()->where('type', 1)->first();
+    }
+
+    public function getPriceAttribute()
+    {
+        if ($this->variants()->first() == null) return null;
+        else {
+            return $this->variants()->first()->pricingConfiguration()->first()->configuration;
+        }
+    }
+
     public function setPublishedDateAttribute($value)
     {
         \Log::info($value);

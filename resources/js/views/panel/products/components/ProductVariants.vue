@@ -244,7 +244,7 @@
 
                                 <div class="form-group m-form__group row">
                                     <div class="col-lg-6">
-                                        <label for="major_no">حداقل تعدا برای فروش عمده:</label>
+                                        <label for="major_no">حداقل تعداد برای فروش عمده:</label>
                                         <input type="text" id="major_no" v-model.number="item.pricing_configuration.majorPrice.no" class="form-control m-input" placeholder="">
                                         <!--<span v-if="!errors.slug" class="m-form__help">لطفا نامک محصول را بدون فاصله وارد کنید</span>
                                         <form-error v-if="errors.slug" :errors="errors">{{ errors.slug[0] }}</form-error>-->
