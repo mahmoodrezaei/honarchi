@@ -28,6 +28,7 @@ class UpdateProduct extends FormRequest
         return [
 //            'category_id' => 'nullable|integer|min:1|exists:categories,id',
             'gallery' => 'required',
+            'categories' => 'required',
             'sku' => 'required|unique:products,sku,'.$id,
             'name' => 'required|max:50',
             'slug' => 'required|unique:products,slug,'.$id,
