@@ -143,11 +143,16 @@ class ProductCategoryController extends Controller
                         $fail(trans('validation.unauthorized_wont_able_to_delete'));
                     }
                 },
-
-
                 ]
         ])->validate();
 
+        if(!empty($model->products())) {
+            foreach($model->products()->get() as $product){
+                if($product->categories->count() == 1){
+                    $product->categories()->sync(1);
+                }
+            }
+        }
         $model->delete();
 
         $responseData = [

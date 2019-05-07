@@ -26,6 +26,7 @@ class StoreProduct extends FormRequest
         return [
 //            'gallery' => 'required|nullable|integer|min:1|exists:galleries,id',
             'gallery' => 'required',
+            'categories' => 'required',
             'sku' => 'required|unique:products',
             'name' => 'required|max:50',
             'slug' => 'required|unique:products',
