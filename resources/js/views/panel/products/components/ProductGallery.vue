@@ -24,7 +24,7 @@
                         <div class="m-portlet__head-tools">
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover">
-                                    <button v-show="gallery.length !== 1" @click="deleteItem(index)" class="btn m-btn btn-sm m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill btn-outline-danger m-btn--hover-danger">
+                                    <button v-if="!item.type" @click="deleteItem(item, index)" class="btn m-btn btn-sm m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill btn-outline-danger m-btn--hover-danger">
                                         <i class="la la-remove m--font-danger"></i>
                                     </button>
                                 </li>
@@ -227,15 +227,18 @@
                 })
             },
 
-            deleteItem(index) {
+            deleteItem(item, index) {
                 if (this.gallery.length !== 1) {
+
                     this.gallery.splice(index, 1);
 
-                    if (this.gallery[index].id !== 'undefined') {
-                        axios.delete(`/api/admin/products/${this.id}/image/${this.gallery[index].id}`)
+                    if (item.id != null) {
+                        console.log(item);
+                        axios.delete(`/api/admin/products/${this.id}/image/${item.id}`)
                             .then(response => {
                                 if (response.status === 200) {
                                     flash(response.data.message);
+                                    console.log(response.data)
                                 }
                             })
                             .catch(errors => {

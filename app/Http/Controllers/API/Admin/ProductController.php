@@ -265,6 +265,8 @@ class ProductController extends Controller
     public function destroyVariant(ProductVariant $variant)
     {
         $variant->optionValue()->detach();
+        $variant->images()->detach();
+        $variant->pricingConfiguration()->delete();
         $variant->delete();
 
         $responseData = [
@@ -369,7 +371,7 @@ class ProductController extends Controller
 
         $productImage->save();
 
-        if (isset($request['variant']))
+        if (isset($request['variant']) || $request['variant'] == null)
             $productImage->variants()->sync($request['variant']);
 
         $data = [
@@ -398,14 +400,21 @@ class ProductController extends Controller
         return response()->json($data, 200);
     }
 
-    public function destroyImage(Product $product, ProductImage $productImage)
+    public function destroyImage(Product $product, int $image)
     {
-        $productImage->variants()->detach();
+//        $productImage->variants()->delete();
 
-        $product->images()->delete($productImage);
+        $image = $product->images()->where('id', $image)->first();
+
+        if ($image->type == 1) {
+            $message = 'عکس شاخص حذف نمی‌شود';
+        } else {
+            $message = 'عکس با موفقیت حذف شد';
+            $image->delete();
+        }
 
         $data = [
-            'message' => 'عکس با موفقیت حذف شد',
+            'message' => $message,
             'status_code' => 200,
         ];
 

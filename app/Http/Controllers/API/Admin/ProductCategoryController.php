@@ -153,6 +153,7 @@ class ProductCategoryController extends Controller
                 }
             }
         }
+
         $model->delete();
 
         $responseData = [

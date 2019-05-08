@@ -299,7 +299,7 @@ export default {
           this.categories.splice(index, 1);
         })
         .catch(error => {
-          console.log(error.response.data.errors.id[0]);
+          console.log(error.response.data);
 
           flash(error.response.data.errors.id[0], "danger");
         });

@@ -133,9 +133,11 @@
                     <!--begin::Item-->
                     <div class="m-accordion__item" v-for="(item, index) in productVariant" :key="index">
                         <div class="m-accordion__item-head collapsed" role="tab" :id="`head` + index" data-toggle="collapse" :href="`#body` + index" aria-expanded="false">
-<!--                            <span class="m-accordion__item-icon"><i class="fa "></i></span>-->
+                            <!--<span class="m-accordion__item-mode"></span>-->
                             <span class="m-accordion__item-title">{{ product.sku }} - {{ item.code }}</span>
-                            <span class="m-accordion__item-mode"></span>
+                            <button @click.prevent="deleteItem(item, index)" class="btn m-btn btn-sm m-btn--icon m-btn--icon-only m-btn--custom m-btn--air m-btn--pill btn-outline-danger m-btn--hover-danger">
+                                <i class="la la-remove m--font-danger"></i>
+                            </button>
                         </div>
                         <div class="m-accordion__item-body collapse" :id="`body` + index" role="tabpanel" :aria-labelledby="`head` + index" data-parent="#m_accordion_2" style="">
                             <div class="m-accordion__item-content">
@@ -500,6 +502,17 @@
 
                     options: [],
                 })
+            },
+
+            deleteItem(item, index) {
+                this.productVariant.splice(index, 1)
+                axios.delete(`/api/admin/products/variants/${item.id}`)
+                    .then(response => {
+                        console.log(response.data.message);
+                    })
+                    .catch(errors => {
+                        console.log(errors.response.data);
+                    });
             },
 
             createAllVariants() {

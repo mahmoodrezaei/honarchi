@@ -196,13 +196,14 @@ export default {
             this.sending = false;
             flash(response.data.message);
             this.resetData();
+            this.retrieveCategories();
           }.bind(this)
         )
         .catch(
           function(errors) {
             console.log(errors.response.data.errors);
 
-            if (errors.message == "Network Error") {
+            if (errors.message === "Network Error") {
               this.sending = false;
               flash("خطایی در اتصال به شبکه رخ داده است.", "warning");
             } else

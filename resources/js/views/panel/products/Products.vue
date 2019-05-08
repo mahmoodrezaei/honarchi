@@ -232,7 +232,6 @@
                     .get("/api/admin/products")
                     .then(response => {
                         this.products = response.data;
-                        console.log(response.data);
                         this.pagination.total = this.products.length;
                     })
                     .catch(error => console.log(error));
