@@ -345,7 +345,7 @@
                
                 this.sending = true;
                 this.errors = '';
-                axios.post('/api/admin/products/', this.product)
+                axios.post('/api/admin/products', this.product)
                     .then(response => {
                         this.sending = false;
                         this.$router.push({path: `/admin/products/${response.data.product_id}/edit`});
