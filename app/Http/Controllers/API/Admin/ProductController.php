@@ -59,6 +59,11 @@ class ProductController extends Controller
 
         $product->categories()->attach($request['categories']);
 
+        $product->seo()->create([
+            'meta_description' => $request->meta_description,
+            'meta_keywords' => $request->meta_keywords
+        ]);
+
         $product->load(['categories', 'gallery']);
 
         $data = [
@@ -91,7 +96,12 @@ class ProductController extends Controller
 
         $product->categories()->sync($request['categories']);
 
-        $product->load(['categories', 'gallery']);
+        $product->seo()->update([
+            'meta_description' => $request->meta_description,
+            'meta_keywords' => $request->meta_keywords
+        ]);
+
+        $product->load(['categories', 'gallery', 'seo']);
 
         $data = [
             'message' => 'محصول با موفقیت بروزرسانی شد',

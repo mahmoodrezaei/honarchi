@@ -222,7 +222,7 @@
                                     <label for="meta_description">توضیحات متا:</label>
                                     <div class="m-input-icon m-input-icon--right">
                                         <input type="text" id="meta_description" class="form-control m-input"
-                                               placeholder="">
+                                               v-model="product.meta_description" placeholder="">
                                     </div>
                                     <span class="m-form__help">توضیحات متا (meta description) در این فیلد بنویسید</span>
                                 </div>
@@ -235,7 +235,7 @@
                                     <label for="meta_keywords">کلمات کلیدی:</label>
                                     <div class="m-input-icon m-input-icon--right">
                                         <input type="text" id="meta_keywords" class="form-control m-input"
-                                               placeholder="">
+                                               v-model="product.meta_keywords" placeholder="">
                                     </div>
                                     <span class="m-form__help">کلمات کلیدی مخصول را وارد کنید</span>
                                 </div>
@@ -302,7 +302,9 @@
                     enabled: true,
                     prebuy: false,
                     prebuy_min: '',
-                    prebuy_max: ''
+                    prebuy_max: '',
+                    meta_description: '',
+                    meta_keywords: ''
                 },
 
                 galleries: [],

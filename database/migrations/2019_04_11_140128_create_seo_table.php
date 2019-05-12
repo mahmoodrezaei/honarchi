@@ -16,12 +16,12 @@ class CreateSeoTable extends Migration
         Schema::create('seo', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('title');
-            $table->text('meta_description');
-            $table->text('meta_key_words');
+            $table->string('title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->text('meta_keywords')->nullable();
 
-            $table->string('seo_type');
-            $table->unsignedInteger('seo_id');
+            $table->string('seoble_type');
+            $table->unsignedInteger('seoble_id');
 
             $table->timestamps();
         });

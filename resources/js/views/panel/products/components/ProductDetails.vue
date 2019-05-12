@@ -184,7 +184,7 @@
             <div class="col-lg-12">
                 <label for="meta_description">توضیحات متا:</label>
                 <div class="m-input-icon m-input-icon--right">
-                    <input type="text" id="meta_description" class="form-control m-input" placeholder="">
+                    <input type="text" id="meta_description" class="form-control m-input" placeholder="" v-model="productDetail.meta_description">
                 </div>
                 <span class="m-form__help">توضیحات متا (meta description) در این فیلد بنویسید</span>
             </div>
@@ -196,7 +196,7 @@
             <div class="col-lg-12">
                 <label for="meta_keywords">کلمات کلیدی:</label>
                 <div class="m-input-icon m-input-icon--right">
-                    <input type="text" id="meta_keywords" class="form-control m-input" placeholder="">
+                    <input type="text" id="meta_keywords" class="form-control m-input" placeholder="" v-model="productDetail.meta_keywords">
                 </div>
                 <span class="m-form__help">کلمات کلیدی مخصول را وارد کنید</span>
             </div>
@@ -262,7 +262,9 @@
                     enabled: '',
                     prebuy: '',
                     prebuy_min: '',
-                    prebuy_max: ''
+                    prebuy_max: '',
+                    meta_description: '',
+                    meta_keywords: ''
                 },
 
                 galleries: [],
@@ -285,6 +287,8 @@
                 axios.get(`/api/admin/products/${this.id}/show`)
                     .then(response => {
                         this.productDetail = response.data.product;
+                        this.productDetail['meta_description'] = response.data.product.seo.meta_description;
+                        this.productDetail['meta_keywords'] = response.data.product.seo.meta_keywords;
                     })
                     .catch(errors => {
                         if (errors.message === 'Network Error') {
@@ -328,6 +332,8 @@
                         this.sending = false;
                         if (response.status === 200) {
                             this.productDetail = response.data.product;
+                            this.productDetail['meta_description'] = response.data.product.seo.meta_description;
+                            this.productDetail['meta_keywords'] = response.data.product.seo.meta_keywords;
                             flash(response.data.message);
                         }
                     })

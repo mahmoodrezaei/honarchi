@@ -223,6 +223,8 @@ export default {
         .get(categoriesRoutes.show.url + this.$route.params.id)
         .then(response => {
           this.categoryItem = response.data.data;
+          this.categoryItem['meta_description'] = response.data.data.seo.meta_description;
+          this.categoryItem['meta_keywords'] = response.data.data.seo.meta_keywords;
         })
         .catch(errors => {
           this.loading = false;

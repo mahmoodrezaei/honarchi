@@ -51,4 +51,9 @@ class ProductCategory extends Model
 
         return  1;
     }
+
+    public function seo()
+    {
+        return $this->morphOne('App\Seo', 'seoble');
+    }
 }

@@ -28,7 +28,7 @@ class Product extends Model
         'prebuy' => 'boolean'
     ];
 
-    protected $with = ['gallery', 'categories'];
+    protected $with = ['gallery', 'categories', 'seo'];
 
     protected $appends = ['feature_image', 'price'];
 
@@ -102,5 +102,10 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany('App\ProductImage', 'product_id');
+    }
+
+    public function seo()
+    {
+        return $this->morphOne('App\Seo', 'seoble');
     }
 }

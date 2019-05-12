@@ -31,7 +31,7 @@ class ProductCategoryController extends Controller
         $responseData = [
             'status_code' => 200,
             'message' => __('successfully_data_received'),
-            'data' => $model
+            'data' => $model->load(['seo'])
         ];
 
         return response()->json($responseData,200);
@@ -62,7 +62,13 @@ class ProductCategoryController extends Controller
 
         $model = ProductCategory::make($request->all());
         $model->position = $model->getLastPosition();
+
         $model->save();
+
+        $model->seo()->create([
+            'meta_description' => $request->meta_description,
+            'meta_keywords' => $request->meta_keywords
+        ]);
 
         $responseData = [
             'status_code' => 201,
@@ -118,10 +124,15 @@ class ProductCategoryController extends Controller
 
         $model->update($request->all());
 
+        $model->seo()->update([
+            'meta_description' => $request->meta_description,
+            'meta_keywords' => $request->meta_keywords
+        ]);
+
         $responseData = [
             'status_code' => 200,
             'message' => __('successfully_data_updated'),
-            'data' => $model
+            'data' => $model->load(['seo'])
         ];
 
         return response()->json($responseData,200);
