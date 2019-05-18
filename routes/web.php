@@ -21,11 +21,6 @@ Auth::routes();
 Route::get('/admin/{any?}', 'AdminController@index')
     ->where('any', '.*');
 
-
-Route::get('test', function() {
-    return view('public.index');
-});
-
 Route::get('/api/admin/options', 'API\Admin\ProductOptionController@index');
 Route::post('/api/admin/options', 'API\Admin\ProductOptionController@store');
 Route::get('/api/admin/options/{option}/show', 'API\Admin\ProductOptionController@show');
@@ -64,3 +59,15 @@ Route::prefix('/api/admin/products')->group(function () {
     Route::get('/{product}/gallery', 'API\Admin\ProductController@getGallery');
     Route::delete('/{product}/image/{image}', 'API\Admin\ProductController@destroyImage');
 });
+
+
+// Public Routes
+// index page
+Route::get('/', function() {
+    return view('public.index');
+});
+
+
+// profile routes
+Route::get('/profile/{any?}', 'User\ProfileController@index')
+    ->where('any', '.*');

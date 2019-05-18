@@ -4,6 +4,7 @@
 /public/css/app.css
 /public/js/app.js
 /public/js/panel.js
+/public/js/profile.js
 /storage/*.key
 /vendor
 package-lock.json
