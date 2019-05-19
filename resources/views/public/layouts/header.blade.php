@@ -25,7 +25,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-4 col-lg-3 logo-area">
-                <a href="#">
+                <a href="/">
                     <img src="{{ asset('assets/images/front/logo.svg') }}" alt="هنرچی">
                 </a>
             </div>
@@ -35,9 +35,9 @@
                         <div class="input-group ">
                             <input type="search" class="form-control" placeholder="محصول موردنظرت رو پیدا کن...">
                             <div class="input-group-prepend">
-											<span class="input-group-text">
-												 <i class="fal fa-search"></i>
-											</span>
+                                <span class="input-group-text">
+                                     <i class="fal fa-search"></i>
+                                </span>
                             </div>
                         </div>
                     </li>

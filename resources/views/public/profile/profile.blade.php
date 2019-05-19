@@ -2,12 +2,19 @@
 
 @section('content')
 
-<div id="_profile">
+    <div id="_profile">
+        <section class="container-fluid profile-page">
+            <div class="container">
+                <div class="row row-profile mb-3">
 
-    <profile-sidebar></profile-sidebar>
+                    <profile-sidebar></profile-sidebar>
 
-    <router-view></router-view>
-</div>
+                    <router-view></router-view>
+
+                </div>
+            </div>
+        </section>
+    </div>
 
 @endsection
 
