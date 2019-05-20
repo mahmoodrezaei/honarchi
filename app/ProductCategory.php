@@ -35,7 +35,7 @@ class ProductCategory extends Model
 
     public function hasParent()
     {
-        if ($this->parent()->get()) {
+        if ($this->parent()->first()) {
             return true;
         }
 
