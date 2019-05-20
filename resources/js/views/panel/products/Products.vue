@@ -115,7 +115,8 @@
                                         </td>
 
                                         <td class="m-datatable__cell text-center">
-                                            <span style="width: 110px;">{{product.is_simple}}</span>
+                                            <span style="width: 110px;" v-if="product.is_simple">ساده</span>
+                                            <span style="width: 110px;" v-else>متغیر</span>
                                         </td>
 
                                         <td class="m-datatable__cell">

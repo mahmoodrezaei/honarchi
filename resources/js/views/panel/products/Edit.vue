@@ -46,17 +46,17 @@
                                 </a>
                             </li>
                             <li v-if="!isSimple" class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#product_variants">
+                                <a class="nav-link" data-toggle="tab" href="#product_variants" @click="loadVariants">
                                     <i class="fa fa-code-branch m--font-primary" style="transform: rotate(180deg)"></i>مدیریت متغیرها
                                 </a>
                             </li>
                             <li v-else-if="isSimple" class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#product_variants">
+                                <a class="nav-link" data-toggle="tab" href="#product_variants" @click="loadVariants">
                                     <i class="fa fa-code-branch m--font-primary" style="transform: rotate(180deg)"></i>قیمت و مشخصه‌ها
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#product_gallery">
+                                <a class="nav-link" data-toggle="tab" href="#product_gallery" @click="loadGallery">
                                     <i class="fab fa-goodreads-g m--font-accent"></i>گالری
                                 </a>
                             </li>
@@ -76,10 +76,10 @@
                                 <product-recommendation></product-recommendation>
                             </div>
                             <div class="tab-pane" id="product_variants" role="tabpanel">
-                                <product-variants></product-variants>
+                                <product-variants ref="productVariants"></product-variants>
                             </div>
                             <div class="tab-pane" id="product_gallery" role="tabpanel">
-                                <product-gallery></product-gallery>
+                                <product-gallery ref="productGallery"></product-gallery>
                             </div>
                         </div>
 
@@ -142,6 +142,14 @@
 
             isSimpleIsChanged(isSimple) {
                 this.isSimple = isSimple;
+            },
+
+            loadGallery() {
+                this.$refs.productGallery.retrieveProductVariants();
+            },
+
+            loadVariants() {
+                this.$refs.productVariants.retrieveProductVariants();
             }
         }
     }

@@ -117,7 +117,7 @@
                 axios.post(`/api/admin/products/${this.id}/options`, { isSimple: this.isSimple, options: this.selectedOptions })
                     .then(response => {
                         if (response.status === 200) {
-                            location.reload();
+                            // location.reload();
                             flash(response.data.message);
                         }
                         this.sending = false;
