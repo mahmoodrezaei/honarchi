@@ -3,8 +3,6 @@
 <head>
     <meta charset="utf-8">
 
-    <meta name="csrf-token" content="{{ @csrf_token() }}">
-
     <link rel="stylesheet" type="text/css" href="{{ asset('css/front/material-kit.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/front/fontawesome.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/front/light.min.css') }}">
@@ -47,41 +45,50 @@
                             <i class="fal fa-user"></i>
                         </a>
                         <!-- is-login -->
-                        <!-- <ul class="tooltip-profile cart-tooltip p-2">
-                            <li class="d-block text-right mb-1">
-                                <a class="d-block" href="#">
-                                    <i class="fal fa-user ml-2 "></i>
-                                    پروفایل
-                                </a>
-                            </li>
-                            <li class="d-block text-right mb-1">
-                                <a class="d-block" href="#">
-                                    <i class="fal fa-shopping-basket ml-2"></i>
-                                    سفارش های من
-                                </a>
-                            </li>
-                            <li class="d-block text-right  mb-1">
-                                <a class="d-block" href="#">
-                                    <i class="fal fa-sign-out ml-2"></i>
-                                    خروج از حساب کاربری
-                                </a>
-                            </li>
-                        </ul> -->
-                        <ul class="tooltip-profile cart-tooltip p-2">
-                            <div class="login-link text-center">
-                                <button class="btn btn-primary btn-round">
-                                    <i class="fal fa-sign-in ml-2"></i>
-                                    ورود به هنرچی
-                                </button>
-                            </div>
-                            <br>
-                            <hr>
-                            <div class="register-link text-center mt-2">
-                                <p>کاربر جدید هستید ؟
-                                    <a class="clr-blue2" href="#">ثبت نام</a>
-                                </p>
-                            </div>
-                        </ul>
+
+                        @auth
+                            <ul class="tooltip-profile cart-tooltip p-2">
+                                <li class="d-block text-right mb-1">
+                                    <a class="d-block" href="/profile">
+                                        <i class="fal fa-user ml-2 "></i>
+                                        پروفایل
+                                    </a>
+                                </li>
+                                <li class="d-block text-right mb-1">
+                                    <a class="d-block" href="/profile/my-orders">
+                                        <i class="fal fa-shopping-basket ml-2"></i>
+                                        سفارش های من
+                                    </a>
+                                </li>
+                                <li class="d-block text-right  mb-1">
+                                    <a class="d-block" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fal fa-sign-out ml-2"></i>
+                                        خروج از حساب کاربری
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </li>
+                            </ul>
+                        @else
+                            <ul class="tooltip-profile cart-tooltip p-2">
+                                <div class="login-link text-center">
+                                    <button onclick="location.replace('/login')" class="btn btn-primary btn-round">
+                                        <i class="fal fa-sign-in ml-2"></i>
+                                        ورود به هنرچی
+                                    </button>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="register-link text-center mt-2">
+                                    <p>کاربر جدید هستید ؟
+                                        <a class="clr-blue2" href="/register">ثبت نام</a>
+                                    </p>
+                                </div>
+                            </ul>
+                        @endauth
+
                     </li>
 
                     <li id="wishlist" class="wishlist">

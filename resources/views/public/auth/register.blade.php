@@ -25,7 +25,10 @@
                         <a href="#"><img src="/assets/images/front/logo-form.svg" alt="هنرچی"></a>
                     </div>
                 </div>
-                <div class="content-form bx-sh bg-ff px-3 position-relative">
+                <form action="/register" method="post" class="content-form bx-sh bg-ff px-3 position-relative">
+
+                    @csrf
+
                     <div class="form-group bmd-form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -33,7 +36,7 @@
                                     <i class="fal fa-envelope fs-20 clr-92"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control" placeholder="پست الکترونیک یا شماره همراه">
+                            <input type="text" name="email" class="form-control" placeholder="پست الکترونیک یا شماره همراه">
                         </div>
                     </div>
                     <div class="form-group bmd-form-group">
@@ -43,7 +46,7 @@
                                     <i class="fal fa-lock-alt fs-20 clr-92"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control" placeholder="رمز عبور">
+                            <input type="text" name="password" class="form-control" placeholder="رمز عبور">
                         </div>
                     </div>
                     <small id="emailHelp" class="form-text text-muted">
@@ -62,18 +65,18 @@
                         </label>
                     </div>
                     <div class="btn-filter text-center mt-4">
-                        <button class="btn btn-info btn-round dastnevis btn-circle position-relative fs-16">
+                        <button type="submit" class="btn btn-info btn-round dastnevis btn-circle position-relative fs-16">
                             <i class="fal fa-user-plus clr-gold fs-18 position-relative"></i>
                             عضویت در هنرچی
                         </button>
                     </div>
                     <hr>
                     <p class="fs-12 text-center">قبلا در هنرچی ثبت نام کرده اید ؟
-                        <a class="clr-blue2" href="#">وارد شوید</a>
+                        <a class="clr-blue2" href="/login">وارد شوید</a>
 
                     </p>
 
-                </div>
+                </form>
 
 
             </div>

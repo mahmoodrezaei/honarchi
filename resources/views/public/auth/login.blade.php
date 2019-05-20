@@ -26,7 +26,10 @@
                         <a href="#"><img src="{{ asset('assets/images/front/logo-form.svg') }}" alt="هنرچی"></a>
                     </div>
                 </div>
-                <div class="content-form bx-sh bg-ff px-3 position-relative">
+                <form action="/login" method="POST" class="content-form bx-sh bg-ff px-3 position-relative">
+
+                    @csrf
+
                     <div class="form-group bmd-form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -34,7 +37,7 @@
                                     <i class="fal fa-envelope fs-20 clr-92"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control" placeholder="پست الکترونیک یا شماره همراه">
+                            <input type="email" name="email" class="form-control" placeholder="پست الکترونیک یا شماره همراه">
                         </div>
                     </div>
                     <div class="form-group bmd-form-group">
@@ -44,28 +47,33 @@
                                     <i class="fal fa-lock-alt fs-20 clr-92"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control" placeholder="رمز عبور">
+                            <input type="password" name="password" class="form-control" placeholder="رمز عبور">
                         </div>
                     </div>
                     <small id="emailHelp" class="form-text text-muted">
                         <a class="clr-blue2" href="#">رمز عبور خود را فراموش کرده ام</a>
                     </small>
                     <div class="btn-filter text-center mt-4">
-                        <button class="btn btn-info btn-round dastnevis btn-circle position-relative fs-16">
+                        <button type="submit" class="btn btn-info btn-round dastnevis btn-circle position-relative fs-16">
                             <i class="fal fa-sign-in clr-gold fs-18 position-relative"></i>
                             ورود به هنرچی
                         </button>
                     </div>
                     <div class="form-check remember">
                         <label class="form-check-label d-block my-3 text-right fs-12">	مرا بخاطر بسپار
-                            <input class="form-check-input" type="checkbox" value="">
+                            <input class="form-check-input" name="remember" type="checkbox" value="">
                             <span class="form-check-sign">
 										<span class="check"></span>
 									</span>
                         </label>
                     </div>
-                </div>
+                </form>
 
+                @if($errors->any)
+                    @foreach($errors as $error)
+                        {{ $error }}
+                    @endforeach
+                @endif
 
             </div>
             <div class="col-lg-4"></div>

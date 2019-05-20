@@ -66,4 +66,5 @@ Route::get('/', function() {
 
 // profile routes
 Route::get('/profile/{any?}', 'User\ProfileController@index')
-    ->where('any', '.*');
+    ->where('any', '.*')
+    ->middleware('auth');
