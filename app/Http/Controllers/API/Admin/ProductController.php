@@ -175,8 +175,6 @@ class ProductController extends Controller
     public function syncVariants(Request $request, Product $product)
     {
 
-        \Log::info($request->all());
-
         foreach ($request->all() as $item) {
             Validator::make($item, [
                 'on_hand' => 'required|integer',
@@ -184,14 +182,14 @@ class ProductController extends Controller
                     Rule::requiredIf(!$product->is_simple),
                     Rule::unique('product_variants')->where(function ($query) use ($item, $product) {
                         if (!isset($item['id'])) {
-                            return $query->where('name', $item['name'])->where('product_id', $product->id);
+                            return $query->where('name', $item['name'])->where('product_id', $product->id)->where('deleted_at', null);
                         } elseif (($variant = ProductVariant::find($item['id'])) !== false) {
                             if ($item['name'] == $variant->name)
                                 return $query->where('id', -1);
                             else
-                                return $query->where('name', $item['name'])->where('product_id', $product->id);
+                                return $query->where('name', $item['name'])->where('product_id', $product->id)->where('deleted_at', null);
                         } else {
-                            return $query->where('name', $item['name'])->where('product_id', $product->id);
+                            return $query->where('name', $item['name'])->where('product_id', $product->id)->where('deleted_at', null);
                         }
                     })
                 ],
@@ -199,14 +197,14 @@ class ProductController extends Controller
                     Rule::requiredIf(!$product->is_simple),
                     Rule::unique('product_variants')->where(function ($query) use ($item, $product) {
                         if (!isset($item['id'])) {
-                            return $query->where('code', $item['code'])->where('product_id', $product->id);
+                            return $query->where('code', $item['code'])->where('product_id', $product->id)->where('deleted_at', null);
                         } elseif (($variant = ProductVariant::find($item['id'])) !== false) {
                             if ($item['code'] == $variant->code)
                                 return $query->where('id', -1);
                             else
-                                return $query->where('code', $item['code'])->where('product_id', $product->id);
+                                return $query->where('code', $item['code'])->where('product_id', $product->id)->where('deleted_at', null);
                         } else {
-                            return $query->where('code', $item['code'])->where('product_id', $product->id);
+                            return $query->where('code', $item['code'])->where('product_id', $product->id)->where('deleted_at', null);
                         }
                     })
                 ],
@@ -307,9 +305,16 @@ class ProductController extends Controller
             'options' => 'required_if:isSimple,false'
         ]);
 
-        $product->update([
-            'is_simple' => $request->isSimple
-        ]);
+        if($product->is_simple != $request->isSimple)
+        {
+            $product->variants()->delete();
+            
+            $product->update([
+                'is_simple' => $request->isSimple
+            ]);
+
+        }
+       
 
         $optionIds = collect($request->options)->pluck('id')->toArray();
 
@@ -430,4 +435,18 @@ class ProductController extends Controller
 
         return response()->json($data, 200);
     }
+
+    public function destroyProduct(Product $product){
+        
+        $product->delete();
+        $product->variants()->delete();
+
+        $data = [
+            'message' => "successfully_deleted",
+            'status_code' => 200,
+        ];
+
+        return response()->json($data, 200);
+    }
+    
 }
