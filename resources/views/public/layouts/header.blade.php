@@ -10,8 +10,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/front/jasny-bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/front/owl.carousel.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/front/owl.theme.default.min.css') }}">
+
+    @yield('page-styles')
+
     <link rel="stylesheet" type="text/css" href="{{ asset('css/front/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/front/responsive.css') }}">
+
     <title>هنرچی ،دست ساخته های ایرانی</title>
 </head>
 <body class="home-page">

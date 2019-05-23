@@ -65,8 +65,12 @@ Route::get('/', function() {
     return view('public.index');
 });
 
-
 // profile routes
 Route::get('/profile/{any?}', 'User\ProfileController@index')
     ->where('any', '.*')
     ->middleware('auth');
+
+Route::prefix('/products')->group( function () {
+    Route::get('/', 'User\ProductController@index');
+    Route::get('/{slug}', 'User\ProductController@show');
+});

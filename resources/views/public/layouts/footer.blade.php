@@ -142,9 +142,12 @@
 <script type="text/javascript" src="{{ asset('js/front/nouislider.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/front/jasny-bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/front/owl.carousel.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/front/custom.js') }}"></script>
 
 @yield('page-scripts')
+
+<script type="text/javascript" src="{{ asset('js/front/custom.js') }}"></script>
+
+
 
 <!-- End scripts -->
 </body>
