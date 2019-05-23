@@ -31,7 +31,7 @@ class CreateProductsTable extends Migration
             $table->integer('prebuy_min')->nullable();
             $table->integer('prebuy_max')->nullable();
             $table->boolean('is_simple')->default(true);
-            $table->boolean('trashed')->default(false);
+            $table->softDeletes();
 
             $table->foreign('gallery_id')->references('id')->on('galleries');
         });

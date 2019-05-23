@@ -54,6 +54,8 @@ Route::prefix('/api/admin/products')->group(function () {
     Route::post('/{product}/gallery', 'API\Admin\ProductController@syncGallery');
     Route::get('/{product}/gallery', 'API\Admin\ProductController@getGallery');
     Route::delete('/{product}/image/{image}', 'API\Admin\ProductController@destroyImage');
+    Route::delete('/{product}', 'API\Admin\ProductController@destroyProduct');
+
 });
 
 
