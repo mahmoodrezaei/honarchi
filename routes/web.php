@@ -70,6 +70,13 @@ Route::get('/profile/{any?}', 'User\ProfileController@index')
     ->where('any', '.*')
     ->middleware('auth');
 
+Route::prefix('/api/user/profile')
+    ->namespace('User')
+    ->group( function() {
+        Route::get('/info', 'ProfileController@getUserInfo');
+});
+
+// products routes
 Route::prefix('/products')->group( function () {
     Route::get('/', 'User\ProductController@index');
     Route::get('/{slug}', 'User\ProductController@show');

@@ -51,7 +51,3 @@
         name: "PersonalInfo"
     }
 </script>
-
-<style scoped>
-
-</style>

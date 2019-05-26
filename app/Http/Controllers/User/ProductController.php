@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use phpDocumentor\Reflection\Types\Compound;
 
 class ProductController extends Controller
 {
@@ -16,6 +17,7 @@ class ProductController extends Controller
     {
         $products = null;
 
+        // categories
         if ($cats = $request->query('cat')) {
 //            ProductCategory::whereIn('slug', ['flowerpot', 'handmade-door-mat'])
             $products = DB::table('products')
@@ -23,6 +25,7 @@ class ProductController extends Controller
                 ->whereIn('product_category_id', $cats);
         }
 
+        // attributes
         if ($attr = $request->query('attr')) {
             if ($products === null) {
                 $products = DB::table('products')
@@ -34,6 +37,7 @@ class ProductController extends Controller
             }
         }
 
+        // attribute values
         if ($attr_val = $request->query('attr_val')) {
             if ($products === null) {
                 $products = DB::table('products')
@@ -59,19 +63,22 @@ class ProductController extends Controller
             }
         }
 
+        // pricing
         if ($price = $request->query('price')) {
             list($min, $max) = explode('-', $price);
 
             if ($products == null) {
-                $temp = DB::table('products')
+                $products = DB::table('products')
                     ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
                     ->join('product_variant_pricing', 'product_variants.id', '=', 'product_variant_pricing.product_variant_id')
                     ->whereBetween("configuration->originalPrice", [$min, $max]);
-
-                dd($temp->toSql());
+            } else {
+                $products = $products
+                    ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+                    ->join('product_variant_pricing', 'product_variants.id', '=', 'product_variant_pricing.product_variant_id')
+                    ->whereBetween("configuration->originalPrice", [$min, $max]);
             }
 
-            dd($min, $max);
         }
 
         // query
@@ -79,10 +86,14 @@ class ProductController extends Controller
             $products->where('name', 'like', '%' . $q . '%');
         }
 
+        if ($products == null) {
+            $products = Product::orderBy('created_at', 'desc')->paginate(15);
+//            dd($products);
+        } else {
+            $products = Product::whereIn('id', $products->select('products.id')->get()->pluck('id')->toArray())->paginate(3);
+        }
 
-//        dd($products);
-//        dd(Product::find(array_unique($products->get()->pluck('product_id')->toArray())));
-/*        highlight_string("<?php\n\$data =\n" . var_export($products->toArray(), true) . ";\n?>");*/
+        return view('public.archive-product', compact('products'));
     }
 
     public function show(string $slug)
