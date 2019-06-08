@@ -73,7 +73,9 @@ Route::get('/profile/{any?}', 'User\ProfileController@index')
 Route::prefix('/api/user/profile')
     ->namespace('User')
     ->group( function() {
-        Route::get('/info', 'ProfileController@getUserInfo');
+        Route::get('/info', 'ProfileController@show');
+        Route::post('/info', 'ProfileController@store');
+        Route::post('/avatar', 'AvatarController@store');
 });
 
 // products routes

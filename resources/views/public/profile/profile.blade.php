@@ -9,7 +9,11 @@
 
                     <profile-sidebar></profile-sidebar>
 
+                    {{-- Container for vue-router - SPA --}}
                     <router-view></router-view>
+
+                    {{-- Displaying messages --}}
+                    <flash></flash>
 
                 </div>
             </div>

@@ -3,15 +3,18 @@
         <div class="profile-box p-info-box bg-ff bx-sh">
             <div class="profile-image px-3 pt-5 pb-2">
                 <div class="p-img">
-                    <img src="/assets/images/front/accessory/shop-auther.jpg" alt="هنرچی">
-                    <a href="">
+                    <img :src="avatar" alt="هنرچی">
+                    <a>
                         <button class="bg-ff p-1">
-                            <i class="fal fa-edit"></i>
+                            <label for="avatar" style="cursor: pointer">
+                                <i class="fal fa-edit"></i>
+                            </label>
                         </button>
+                        <input @change="updateAvatar" type="file" id="avatar" name="avatar" accept="image/*" class="d-none">
                     </a>
                 </div>
                 <p class="dastnevis fs-18">
-                    تکتم حیدرزاده
+                    {{ userFullName }}
                 </p>
             </div>
             <div class="profile-pe py-3">
@@ -24,12 +27,15 @@
                     </a>
                 </div>
                 <div class="exit-profile pe-box">
-                    <a href="">
+                    <a href="/logout" @click.prevent="logout">
                         <i class="fal fa-sign-out-alt"></i>
                         <p>
                             خروج از سیستم
                         </p>
                     </a>
+
+                    <form id="logout-form" action="/logout" method="POST" style="display: none;"></form>
+
                 </div>
             </div>
         </div>
@@ -83,5 +89,61 @@
 </template>
 
 <script>
-    export default {}
+    export default {
+        data() {
+            return {
+                user: '',
+                avatar: '',
+            }
+        },
+
+        created() {
+            this.getUserInfo();
+        },
+
+        methods: {
+            getUserInfo() {
+                axios.get('/api/user/profile/info')
+                    .then(response => {
+                        // console.log(response.data.user);
+                        this.user = response.data.user;
+                        this.avatar = response.data.user.avatar_path;
+                        this.$forceUpdate();
+                    })
+                    .catch(error => {
+                        console.log(error.response);
+                    });
+            },
+
+            updateAvatar(e) {
+                if (! e.target.files.length) return;
+
+                let file = e.target.files[0];
+
+                this.avatar = URL.createObjectURL(file);
+
+                // prepare data for sending to server
+                let form = new FormData();
+
+                form.append('avatar', file);
+
+                axios.post('/api/user/profile/avatar', form)
+                    .then(response => {
+                        console.log(response.data);
+                        flash(response.data.message);
+                    })
+                    .catch(error => console.log(error.response));
+            },
+
+            logout() {
+                document.getElementById('logout-form').submit();
+            }
+        },
+
+        computed: {
+            userFullName() {
+                return this.user.first_name + ' ' + this.user.last_name;
+            }
+        }
+    }
 </script>

@@ -17,7 +17,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password',
+        'email', 'password', 'first_name', 'last_name',
+        'national_code', 'credit_card', 'phone',
+        'avatar_path', 'is_subscribed'
     ];
 
     /**
@@ -28,6 +30,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $casts = [
+        'is_subscribed' => 'boolean'
+    ];
+
+    public function getAvatarPathAttribute($avatar)
+    {
+        return ($avatar == null) ? asset('assets/images/default_avatar.svg') : '/storage/' . $avatar;
+    }
 
     public function gallery()
     {

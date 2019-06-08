@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -18,16 +20,26 @@ class ProfileController extends Controller
         return view('public.profile.profile');
     }
 
-    public function getUserInfo()
+    public function show()
     {
         return response()->json([
             'user' => Auth::user(),
         ]);
     }
 
-    public function updateUserInfo()
+    public function store(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
 
+        // update user info
+        $user = Auth::user();
+        $user->update($request->all());
+
+        return response()->json([
+            'user' => $user
+        ]);
     }
 
 }

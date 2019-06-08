@@ -1,5 +1,6 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import './setup';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
@@ -12,6 +13,8 @@ let router = new VueRouter({
 
 Vue.component('profile', require('./views/profile/ProfileOverview').default);
 Vue.component('profile-sidebar', require('./components/layouts/profile/ProfileSidebar').default);
+Vue.component('flash', require('./components/layouts/Flash').default);
+// Vue.component('flash', require('./components/layouts/Flash').default);
 
 new Vue({
     el: '#_profile',

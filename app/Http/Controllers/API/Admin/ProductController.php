@@ -15,6 +15,7 @@ use App\Product;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Ramsey\Uuid\Uuid;
 use Validator;
@@ -370,7 +371,8 @@ class ProductController extends Controller
 
         if($request->image !== 'undefined'){
             $uploadedImage = $request->file('image');
-            $imageName = uniqid() . $uploadedImage->getClientOriginalName();
+//            $imageName = uniqid() . $uploadedImage->getClientOriginalName();
+            $imageName = Str::random(30) . '.' . $uploadedImage->getClientOriginalExtension();
             \Storage::disk('public')->putFileAs(
                 'productImages',
                 $uploadedImage,
