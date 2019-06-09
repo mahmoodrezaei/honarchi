@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Gallery::class, 'owner_id');
     }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 }

@@ -3,7 +3,7 @@
         <div class="profile-box p-info-box bg-ff bx-sh">
             <div class="profile-image px-3 pt-5 pb-2">
                 <div class="p-img">
-                    <img :src="avatar" alt="هنرچی">
+                    <img :src="avatar" alt="هنرچی" style="width: 100%; height: 100%;">
                     <a>
                         <button class="bg-ff p-1">
                             <label for="avatar" style="cursor: pointer">
