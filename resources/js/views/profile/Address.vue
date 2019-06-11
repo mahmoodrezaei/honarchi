@@ -3,45 +3,49 @@
     <div class="col-lg-9 col-md-8 mt-2 p-left">
         <div class="profile-box">
             <div class="title-products text-right">
-                <h3 class="pro-title fs-18 dastnevis header-gradient d-inline-block px-4 px-md-4 mb-0 mt-0 pb-2">اطلاعات شخصس</h3>
+                <h3 class="pro-title fs-18 dastnevis header-gradient d-inline-block px-4 px-md-4 mb-0 mt-0 pb-2">آدرس‌ها</h3>
                 <hr class="under-title">
             </div>
-            <div class="pbox bg-ff bx-sh px-3 py-3">
+
+            <div v-for="(address, index) in addresses" :key="index" class="pbox bg-ff bx-sh px-3 py-3">
                 <div class="row text-right">
                     <div class="col-lg-12 col-md-12 col-sm-12 my-1">
-                        <p class="fs-16 m-0">وحید کدخدا</p>
+                        <p class="fs-16 m-0">{{ address.full_name}}</p>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 my-1">
-                        <p class="fs-16 m-0">استان خراسان جنوبی  ، شهر بیرجند ، آدرس پستی تستی</p>
+                        <p class="fs-16 m-0">{{ address.postal_address }}</p>
                     </div>
                 </div>
                 <div class="ab-hr d-none d-lg-block"></div>
                 <div class="col-lg-12 col-md-12 col-sm-12 my-2">
                     <i class="fal fa-barcode-read fs-20 d-inline-block"></i>
                     <p class="fs-14 m-0 mr-2 d-inline-block">کد پستی :</p>
-                    <p class="fs-14 m-0 mr-2 d-inline-block">9719897198</p>
+                    <p class="fs-14 m-0 mr-2 d-inline-block">{{ address.postal_code }}</p>
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 my-2">
                     <i class="fal fa-mobile-alt fs-25 mr-1 d-inline-block"></i>
                     <p class="fs-14 m-0 mr-2 d-inline-block">تلفن همراه :</p>
-                    <p class="fs-14 m-0 mr-2 d-inline-block">09120760113</p>
+                    <p class="fs-14 m-0 mr-2 d-inline-block">{{ address.phone }}</p>
                 </div>
                 <div class="text-left">
                     <button class="btn pro-frm-btn">ویرایش</button>
-                    <button class="btn pro-frm-btn">حذف</button>
+                    <button class="btn pro-frm-btn" @click="remove(address, index)">حذف</button>
                 </div>
             </div>
+
         </div>
+
         <button class="btn btn-round add-address-btn p-4 my-4 clr-75 fs-18" data-toggle="modal" data-target="#add-address">
             <i class="fal fa-map-marker-plus d-block my-1"></i>
             افزودن آدرس جدید
         </button>
+
         <div class="modal fade" id="add-address" tabindex="-1" role="">
             <div class="modal-dialog modal-login modal-lg" role="document">
                 <div class="modal-content">
                     <div class="card card-signup card-plain">
                         <div class="modal-header">
-                            <button type="button" class="close mt-0" data-dismiss="modal" aria-label="Close">
+                            <button type="button" id="close-new-address-modal" class="close mt-0" data-dismiss="modal" aria-label="Close">
                                 <i class="fal fa-times"></i>
                             </button>
                         </div>
@@ -62,7 +66,7 @@
                                                     <i class="fal fa-user"></i>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="نام و نام خانوادگی تحویل گیرنده">
+                                            <input type="text" class="form-control" v-model="newAddress.full_name" placeholder="نام و نام خانوادگی تحویل گیرنده">
                                         </div>
                                     </div>
                                     <div class="form-group bmd-form-group">
@@ -72,7 +76,7 @@
                                                     <i class="fal fa-mobile-alt"></i>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="شماره همراه ">
+                                            <input type="text" class="form-control" v-model="newAddress.phone" placeholder="شماره همراه ">
                                         </div>
                                     </div>
                                     <div class="form-group bmd-form-group">
@@ -82,7 +86,7 @@
                                                     <i class="fal fa-map-marker-alt"></i>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="استان">
+                                            <input type="text" class="form-control" v-model="newAddress.province" placeholder="استان">
                                         </div>
                                     </div>
                                     <div class="form-group bmd-form-group">
@@ -92,7 +96,7 @@
                                                     <i class="fal fa-map-marked"></i>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="شهر">
+                                            <input type="text" class="form-control" v-model="newAddress.city" placeholder="شهر">
                                         </div>
                                     </div>
                                     <div class="form-group bmd-form-group">
@@ -102,7 +106,7 @@
                                                     <i class="fal fa-street-view"></i>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="آدرس پستی">
+                                            <input type="text" class="form-control" v-model="newAddress.postal_address" placeholder="آدرس پستی">
                                         </div>
                                     </div>
                                     <div class="form-group bmd-form-group">
@@ -112,14 +116,14 @@
                                                     <i class="fal fa-barcode-read"></i>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="کد پستی">
+                                            <input type="text" class="form-control" v-model="newAddress.postal_code" placeholder="کد پستی">
                                         </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer justify-content-center">
-                            <button type="submit" class="btn pro-frm-btn px-4">ثبت آدرس</button>
+                            <button type="button" @click="createNewAddress" class="btn pro-frm-btn px-4">ثبت آدرس</button>
                         </div>
                     </div>
                 </div>
@@ -130,12 +134,66 @@
 </template>
 
 <script>
+    import Swal from 'sweetalert2';
+
     export default {
         name: "Address.vue",
 
         data() {
             return {
-                newAddress: ''
+                addresses: '',
+
+                newAddress: {},
+
+                editAddress: '',
+            }
+        },
+
+        mounted() {
+            this.getAllAddresses();
+        },
+
+        methods: {
+            getAllAddresses() {
+                axios.get('/api/user/profile/address')
+                    .then(response => {
+                        this.addresses = response.data.addresses;
+                    })
+                    .catch(error => console.log(error.response));
+            },
+
+            createNewAddress() {
+                axios.post('/api/user/profile/address', this.newAddress)
+                    .then(response => {
+                        flash(response.data.message);
+                        this.addresses.push(response.data.address);
+                        $('#close-new-address-modal').trigger('click');
+                        this.newAddress = {};
+                    })
+                    .catch(error => console.log(error.response));
+            },
+
+            remove(address, index) {
+                console.log('clicked');
+                /*Swal({
+                    text: "آیا اطمینان دارید که میخواهید این مورد را حذف کنید؟",
+                    type: "warning",
+                    confirmButtonText: "<span><i class='la'></i><span>بله</span></span>",
+                    confirmButtonClass:
+                        "btn btn-danger m-btn m-btn--pill m-btn--air m-btn--icon",
+                    showCancelButton: !0,
+                    cancelButtonText: "<span><i class='la'></i><span>خیر</span></span>",
+                    cancelButtonClass: "btn btn-secondary m-btn m-btn--pill m-btn--icon"
+                }).then(answer => {
+                    if (answer.value === true) {
+                        axios.delete(`/api/user/profile/address/${address.id}`)
+                            .then(response => {
+                                flash(response.data.message);
+                                this.addresses.splice(index, 1);
+                            })
+                            .catch(error => console.log(error.response));
+                    }
+                });*/
             }
         }
     }

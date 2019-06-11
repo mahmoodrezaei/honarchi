@@ -76,6 +76,9 @@ Route::prefix('/api/user/profile')
         Route::get('/info', 'ProfileController@show');
         Route::post('/info', 'ProfileController@store');
         Route::post('/avatar', 'AvatarController@store');
+        Route::get('/address', 'AddressController@index');
+        Route::post('/address', 'AddressController@store');
+        Route::delete('/address/{address}', 'AddressController@destroy');
 });
 
 // products routes
