@@ -14,6 +14,7 @@ Auth::routes();
 
 // Admin Routes
 // TODO: add auth middleware
+// TODO: add login and logout for routes
 Route::get('/admin/{any?}', 'AdminController@index')
     ->where('any', '.*');
 
@@ -21,11 +22,8 @@ Route::get('/api/admin/options', 'API\Admin\ProductOptionController@index');
 Route::post('/api/admin/options', 'API\Admin\ProductOptionController@store');
 Route::get('/api/admin/options/{option}/show', 'API\Admin\ProductOptionController@show');
 Route::put('/api/admin/options/{option}/update', 'API\Admin\ProductOptionController@update');
-
 Route::apiResource('api/admin/attributes', 'API\Admin\ProductAttributeController')->parameters(['attributes' => 'model']);
-
 Route::apiResource('api/admin/categories', 'API\Admin\ProductCategoryController')->parameters(['categories' => 'model']);
-
 Route::get('/api/admin/galleries', 'API\Admin\GalleryController@index');
 Route::post('/api/admin/galleries', 'API\Admin\GalleryController@store');
 Route::get('/api/admin/galleries/{gallery}', 'API\Admin\GalleryController@show');
@@ -34,7 +32,6 @@ Route::patch('/api/admin/galleries/{gallery}/approve', 'API\Admin\GalleryControl
 Route::patch('/api/admin/galleries/{gallery}/block', 'API\Admin\GalleryController@blockGallery');
 Route::patch('/api/admin/galleries/{gallery}/unblock', 'API\Admin\GalleryController@unblockGallery');
 Route::patch('/api/admin/galleries/{gallery}/unblock', 'API\Admin\GalleryController@unblockGallery');
-
 Route::prefix('/api/admin/products')->group(function () {
     Route::get('/', 'API\Admin\ProductController@index');
     Route::get('/names', 'API\Admin\ProductController@indexNames');
