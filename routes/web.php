@@ -78,6 +78,7 @@ Route::prefix('/api/user/profile')
         Route::post('/avatar', 'AvatarController@store');
         Route::get('/address', 'AddressController@index');
         Route::post('/address', 'AddressController@store');
+        Route::patch('/address/{address}', 'AddressController@update');
         Route::delete('/address/{address}', 'AddressController@destroy');
 });
 

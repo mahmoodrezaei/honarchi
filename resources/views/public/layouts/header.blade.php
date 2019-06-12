@@ -96,11 +96,13 @@
 
                     </li>
 
-                    <li id="wishlist" class="wishlist">
-                        <a class="wishlist-link" href="#">
-                            <i class="fal fa-heart"></i>
-                        </a>
-                    </li>
+                    @auth
+                        <li id="wishlist" class="wishlist">
+                            <a class="wishlist-link" href="/profile/wishlist">
+                                <i class="fal fa-heart"></i>
+                            </a>
+                        </li>
+                    @endauth
 
                     <li id="heder-cart" class="header-cart">
                         <a class="p-0 mr-2 header-cart-link" href="#">

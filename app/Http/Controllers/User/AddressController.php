@@ -17,9 +17,35 @@ class AddressController extends Controller
 
     public function update(Request $request, Address $address)
     {
-        if ($address->user_id == $request->user()->id) {
-            return true;
+        $request->validate([
+            'full_name' => 'required',
+            'phone' => 'required',
+            'province' => 'required',
+            'city' => 'required',
+            'postal_address' => 'required',
+            'postal_code' => 'required',
+        ]);
+
+        if ($request->user()->id == $address->user_id) {
+
+            $address->update([
+                'full_name' => $request->full_name,
+                'phone' => $request->phone,
+                'province' => $request->province,
+                'city' => $request->city,
+                'postal_address' => $request->postal_address,
+                'postal_code' => $request->postal_code
+            ]);
+
+            return response()->json([
+                'address' => $address,
+                'message' => 'آدرس با موفقیت ویرایش شد'
+            ]);
         }
+
+        return response()->json([
+            'message' => 'خطایی رخ داده است'
+        ]);
     }
 
     public function store(Request $request)
