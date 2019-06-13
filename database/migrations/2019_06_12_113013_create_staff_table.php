@@ -24,8 +24,8 @@ class CreateStaffTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('token', 30)->nullable();
             $table->string('password');
-            $table->string('avatar_path');
-            $table->boolean('is_subscribed');
+            $table->string('avatar_path')->nullable();
+            $table->boolean('is_subscribed')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

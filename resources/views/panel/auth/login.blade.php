@@ -61,7 +61,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									{{--<div class="m-login__head">
 										<h3 class="m-login__title">ورود به قسمت ادمین</h3>
 									</div>--}}
-									<form class="m-login__form m-form" action="/login" method="POST">
+									<form class="m-login__form m-form" action="/staff/login" method="POST">
 
 										@csrf
 
@@ -155,10 +155,10 @@ License: You must have a valid license purchased only from themeforest(the above
 				</div>
 				<div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content m-grid-item--center"
 					 style="background-image: url({{ asset('assets/images/bg/bg-2.jpg') }})">
-					<div class="m-grid__item">
-						<h3 class="m-login__welcome">Join Our Community</h3>
+					<div class="m-grid__item" style="direction: rtl">
+						<h3 class="m-login__welcome">هنرچی</h3>
 						<p class="m-login__msg">
-							Lorem ipsum dolor sit amet, coectetuer adipiscing<br>elit sed diam nonummy et nibh euismod
+							صدای دست ساخته‌های ایرانی
 						</p>
 					</div>
 				</div>

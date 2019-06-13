@@ -43,7 +43,7 @@ return [
 
         'staff' => [
             'driver' => 'session',
-            'provider' => 'staff',
+            'provider' => 'staffs',
         ],
 
         'api' => [
@@ -75,9 +75,9 @@ return [
             'model' => App\User::class,
         ],
 
-        'staff' => [
+        'staffs' => [
             'driver' => 'eloquent',
-            'model' => App\Staff::class,
+            'model' => \App\Staff::class
         ],
 
         // 'users' => [

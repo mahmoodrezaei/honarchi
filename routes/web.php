@@ -18,6 +18,12 @@ Auth::routes();
 Route::get('/admin/{any?}', 'AdminController@index')
     ->where('any', '.*');
 
+// Routes for staff login and logout
+Route::get('/staff/login', 'Auth\Admin\LoginController@showLoginForm');
+Route::post('/staff/login', 'Auth\Admin\LoginController@login')
+    ->name('admin.login')
+    ->middleware('assign.guard:admin');
+
 Route::get('/api/admin/options', 'API\Admin\ProductOptionController@index');
 Route::post('/api/admin/options', 'API\Admin\ProductOptionController@store');
 Route::get('/api/admin/options/{option}/show', 'API\Admin\ProductOptionController@show');

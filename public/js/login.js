@@ -26,15 +26,16 @@ var SnippetLogin = function () {
                         password: {required: !0}
                     }
                 }), l.valid() && (a.addClass("m-loader m-loader--right m-loader--light").attr("disabled", !0), l.ajaxSubmit({
-                    url: "http://localhost:8000/login",
+                    url: "http://localhost:8000/staff/login",
+                    method: 'POST',
                     success: function (e, t, r, s) {
-                        /*setTimeout(function () {
-                            a.removeClass("m-loader m-loader--right m-loader--light").attr("disabled", !1), i(l, "danger", "Incorrect username or password. Please try again.")
-                        }, 2e3)*/
+                        setTimeout(function () {
+                            a.removeClass("m-loader m-loader--right m-loader--light").attr("disabled", !1), i(l, "danger", "نام کاربری یا رمزعبور اشتباه است. دوباره سعی کنید.")
+                        }, 2e3)
                     },
                     error: function (e, t, r, s) {
                         setTimeout(function () {
-                            a.removeClass("m-loader m-loader--right m-loader--light").attr("disabled", !1), i(l, "danger", "Incorrect username or password. Please try again.")
+                            a.removeClass("m-loader m-loader--right m-loader--light").attr("disabled", !1), i(l, "danger", "نام کاربری یا رمزعبور اشتباه است. دوباره سعی کنید.")
                         }, 2e3)
                     }
                 }))
