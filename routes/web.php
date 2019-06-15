@@ -16,13 +16,13 @@ Auth::routes();
 // TODO: add auth middleware
 // TODO: add login and logout for routes
 Route::get('/admin/{any?}', 'AdminController@index')
+    ->middleware('assign.guard:staff,staff/login')
     ->where('any', '.*');
 
 // Routes for staff login and logout
-Route::get('/staff/login', 'Auth\Admin\LoginController@showLoginForm');
-Route::post('/staff/login', 'Auth\Admin\LoginController@login')
-    ->name('admin.login')
-    ->middleware('assign.guard:admin');
+Route::get('staff/login', 'Auth\Admin\LoginController@showLoginForm');
+Route::post('staff/login', 'Auth\Admin\LoginController@login')->name('admin.login');
+Route::post('staff/logout', 'Auth\Admin\LoginController@logout')->name('admin.logout');
 
 Route::get('/api/admin/options', 'API\Admin\ProductOptionController@index');
 Route::post('/api/admin/options', 'API\Admin\ProductOptionController@store');

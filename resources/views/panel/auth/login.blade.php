@@ -69,7 +69,7 @@ License: You must have a valid license purchased only from themeforest(the above
 											<input class="form-control m-input" type="text" placeholder="ایمیل" name="email" autocomplete="off">
 										</div>
 										<div class="form-group m-form__group">
-											<input class="form-control m-input m-login__form-input--last" type="password" placeholder="کلمه عبور" name="password">
+											<input class="form-control m-input m-login__form-input--last" name="password" type="password" placeholder="کلمه عبور">
 										</div>
 										<div class="row m-login__form-sub">
 											<div class="col m--align-left">
@@ -86,6 +86,9 @@ License: You must have a valid license purchased only from themeforest(the above
 											<button type="submit" id="m_login_signin_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">ورود</button>
 										</div>
 									</form>
+									@foreach($errors->all() as $error)
+										{{ $error }}
+									@endforeach
 								</div>
 
 								{{-- TODO: SIGN UP FORM --}}
@@ -171,7 +174,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script src="{{ asset('js/vendors.bundle.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('js/scripts.bundle.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('js/dashboard.js') }}" type="text/javascript"></script>
-		<script src="{{ asset('js/login.js') }}"></script>
+{{--		<script src="{{ asset('js/login.js') }}"></script>--}}
 
 		<!--end::Page Scripts -->
 	</body>

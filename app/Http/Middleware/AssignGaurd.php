@@ -16,7 +16,7 @@ class AssignGaurd
      * @param string $redirectTo
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null, $redirectTo = '/login')
+    public function handle($request, Closure $next, $guard = null, $redirectTo = '/staff/login')
     {
         if (!Auth::guard($guard)->check()) {
             return redirect($redirectTo);
