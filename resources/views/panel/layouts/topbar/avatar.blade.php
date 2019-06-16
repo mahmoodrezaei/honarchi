@@ -38,7 +38,7 @@
                                 <i class="m-nav__link-icon flaticon-profile-1"></i>
                                 <span class="m-nav__link-title">
                                     <span class="m-nav__link-wrap">
-                                        <span class="m-nav__link-text">My Profile</span>
+                                        <span class="m-nav__link-text">پروفایل من</span>
                                         <span class="m-nav__link-badge"><span
                                                     class="m-badge m-badge--success">2</span></span>
                                     </span>
@@ -52,7 +52,7 @@
                         <li class="m-nav__item">
                             <a href="/staff/logout"
                                onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();"
-                               class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</a>
+                               class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">خروج</a>
 
                             <form id="admin-logout-form" action="/staff/logout" method="post" style="display: none;">
                                 @csrf

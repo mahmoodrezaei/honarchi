@@ -39,7 +39,7 @@ Route::patch('/api/admin/galleries/{gallery}/block', 'API\Admin\GalleryControlle
 Route::patch('/api/admin/galleries/{gallery}/unblock', 'API\Admin\GalleryController@unblockGallery');
 Route::patch('/api/admin/galleries/{gallery}/unblock', 'API\Admin\GalleryController@unblockGallery');
 Route::prefix('/api/admin/products')->group(function () {
-    Route::get('/', 'API\Admin\ProductController@index');
+    Route::get('/', 'API\Admin\ProductController@index')->middleware('assign.guard:staff');
     Route::get('/names', 'API\Admin\ProductController@indexNames');
     Route::post('/', 'API\Admin\ProductController@store');
     Route::get('/{product}/show', 'API\Admin\ProductController@show');
@@ -89,4 +89,10 @@ Route::prefix('/api/user/profile')
 Route::prefix('/products')->group( function () {
     Route::get('/', 'User\ProductController@index');
     Route::get('/{slug}', 'User\ProductController@show');
+});
+
+// blog routes
+Route::prefix('/blog')->group( function() {
+    Route::get('/', 'User\ArticleController@index');
+    Route::get('/{blog}', 'User\ArticleController@show');
 });
