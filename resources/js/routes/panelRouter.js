@@ -24,38 +24,24 @@ import CategoriesEdit from "../views/panel/categories/Edit";
 
 import FileManager from "../views/panel/file_manager/File_Manager";
 
+import Articles from "../views/panel/blog/Articles";
+import ArticlesCreate from "../views/panel/blog/Create";
+import ArticlesEdit from "../views/panel/blog/Edit";
+
 Vue.use(VueRouter);
 
 let routes = [
-    {
-        path: "/admin/users",
-        component: Users
-    },
+    { path: "/admin/users", component: Users },
 
-    {
-        path: "/admin/permissions",
-        component: Permissions
-    },
+    { path: "/admin/permissions", component: Permissions },
 
-    {
-        path: "/admin/categories",
-        component: Categories
-    },
+    { path: "/admin/categories", component: Categories },
 
-    {
-        path: "/admin/features",
-        component: Features
-    },
+    { path: "/admin/features", component: Features },
 
-    {
-        path: "/admin/roles",
-        component: Roles
-    },
+    { path: "/admin/roles", component: Roles },
 
-    {
-        path: "/admin/galleries",
-        component: Galleries
-    },
+    { path: "/admin/galleries", component: Galleries },
 
     { path: "/admin/products", component: Products },
     { path: "/admin/products/create", component: ProductsCreate },
@@ -73,7 +59,11 @@ let routes = [
     { path: "/admin/categories/create", component: CategoriesCreate },
     { path: "/admin/categories/:id/edit", component: CategoriesEdit },
 
-    { path: "/admin/file_manager", component: FileManager }
+    { path: "/admin/file_manager", component: FileManager },
+
+    { path: "/admin/articles", component: Articles },
+    { path: "/admin/articles/create", component: ArticlesCreate},
+    { path: "/admin/articles/:id/edit", component: ArticlesEdit}
 ];
 
 let router = new VueRouter({

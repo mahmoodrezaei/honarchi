@@ -95,6 +95,22 @@
             </a>
           </li>
 
+          <li class="m-menu__section">
+            <h4 class="m-menu__section-text">بلاگ</h4>
+            <i class="m-menu__section-icon flaticon-more-v2"></i>
+          </li>
+
+          <li class="m-menu__item m-menu__item" aria-haspopup="true">
+            <a href="#" @click.prevent="$router.push('/admin/articles')" class="m-menu__link">
+              <i class="m-menu__link-icon flaticon-notes"></i>
+              <span class="m-menu__link-title">
+                <span class="m-menu__link-wrap">
+                  <span class="m-menu__link-text">مقالات</span>
+                </span>
+              </span>
+            </a>
+          </li>
+
           <!-- setting section -->
           <li class="m-menu__section">
             <h4 class="m-menu__section-text">مدیریت کاربران</h4>
@@ -106,6 +122,17 @@
               <span class="m-menu__link-title">
                 <span class="m-menu__link-wrap">
                   <span class="m-menu__link-text">لیست کاربران</span>
+                </span>
+              </span>
+            </a>
+          </li>
+
+          <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true">
+            <a href="#" @click.prevent="$router.push('/admin/users')" class="m-menu__link">
+              <i class="m-menu__link-icon flaticon-users-1"></i>
+              <span class="m-menu__link-title">
+                <span class="m-menu__link-wrap">
+                  <span class="m-menu__link-text">لیست پرسنل</span>
                 </span>
               </span>
             </a>
