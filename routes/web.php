@@ -61,6 +61,13 @@ Route::prefix('/api/admin/products')->group(function () {
 
 });
 
+// blog routes
+Route::prefix('/api/admin/articles')->namespace('API\Admin')->group( function () {
+    Route::get('/', 'ArticleController@index');
+    Route::get('/{article}', 'ArticleController@show');
+    Route::post('/', 'ArticleController@store');
+});
+
 
 // Public Routes
 // index page

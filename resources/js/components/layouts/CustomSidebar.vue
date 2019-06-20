@@ -111,6 +111,17 @@
             </a>
           </li>
 
+          <li class="m-menu__item m-menu__item" aria-haspopup="true">
+            <a href="#" class="m-menu__link">
+              <i class="m-menu__link-icon flaticon-squares"></i>
+              <span class="m-menu__link-title">
+                <span class="m-menu__link-wrap">
+                  <span class="m-menu__link-text">دسته‌بندی</span>
+                </span>
+              </span>
+            </a>
+          </li>
+
           <!-- setting section -->
           <li class="m-menu__section">
             <h4 class="m-menu__section-text">مدیریت کاربران</h4>
