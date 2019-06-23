@@ -296,7 +296,7 @@
                             flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
                         } else {
                             // this.loading = false;
-                            console.log(error.response.data);
+                            console.log(errors.response.data);
                         }
                     });
             },

@@ -193,7 +193,10 @@ return [
         'optionType'            => 'نوع گزینه',
         'published_date'        => 'تاریخ انتشار',
         'gallery_id'            => 'گالری',
-        'recommendations'       => 'محصولات پیشنهادی'
+        'recommendations'       => 'محصولات پیشنهادی',
+        'slug'                  => 'نامک',
+        'body'                  => 'متن',
+        'feature_image'         => 'تصویر شاخص'
     ],
 
     'entities' => [

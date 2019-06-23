@@ -30,8 +30,8 @@
                                     <label for="name">عنوان:</label>
                                     <input type="text" v-model="article.title" id="name" class="form-control m-input"
                                            placeholder="">
-                                    <!--<span v-if="!errors.title" class="m-form__help">لطقا عنوان مقاله را وارد کنید</span>
-                                    <form-error v-if="errors.title" :errors="errors">{{ errors.title[0] }}</form-error>-->
+                                    <span v-if="!errors.title" class="m-form__help">لطقا عنوان مقاله را وارد کنید</span>
+                                    <form-error v-if="errors.title" :errors="errors">{{ errors.title[0] }}</form-error>
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="slug">نامک:</label>
@@ -41,8 +41,8 @@
                                         <span class="m-input-icon__icon m-input-icon__icon--right"><span><i
                                                 class="la la-"></i></span></span>
                                     </div>
-                                    <!--<span v-if="!errors.slug" class="m-form__help">لطفا نامک محصول را بدون فاصله وارد کنید</span>
-                                    <form-error v-if="errors.slug" :errors="errors">{{ errors.slug[0] }}</form-error>-->
+                                    <span v-if="!errors.slug" class="m-form__help">لطفا نامک مقاله را بدون فاصله وارد کنید</span>
+                                    <form-error v-if="errors.slug" :errors="errors">{{ errors.slug[0] }}</form-error>
                                 </div>
                             </div>
 
@@ -54,8 +54,8 @@
                                     <div class="m-input-icon m-input-icon--right">
                                         <TinyMCE_Editor id="description" v-model="article.body"/>
                                     </div>
-                                    <!--<span v-if="!errors.description" class="m-form__help">توضیحات محصول را اینجا بنویسید</span>
-                                    <form-error v-if="errors.description" :errors="errors">{{ errors.description[0] }}</form-error>-->
+                                    <span v-if="!errors.body" class="m-form__help">متن مقاله را اینجا بنویسید</span>
+                                    <form-error v-if="errors.body" :errors="errors">{{ errors.body[0] }}</form-error>
                                 </div>
                             </div>
 
@@ -75,8 +75,8 @@
                                             </div>
                                             <date-picker v-model="article.published_date" element="published_date"></date-picker>
                                         </div>
-                                        <!--<span v-if="!errors.published_date" class="m-form__help">تاریخ انتشار محصول را مشخص کنید</span>
-                                        <form-error v-if="errors.published_date" :errors="errors">{{ errors.published_date[0] }}</form-error>-->
+                                        <span v-if="!errors.published_date" class="m-form__help">تاریخ انتشار مقاله را مشخص کنید</span>
+                                        <form-error v-if="errors.published_date" :errors="errors">{{ errors.published_date[0] }}</form-error>
                                     </div>
                                     <div class="form-group m-form__group">
                                         <label for="meta_description">توضیحات متا:</label>
@@ -99,16 +99,16 @@
                                     <label for="published_date">تصویر شاخص:</label>
                                     <div class="m-widget29">
                                         <div class="m-widget_content text-center align-content-center">
-                                            <img src="" class="mb-3" alt="" width="190" height="190">
+                                            <img :src="article.feature_image" class="mb-3" alt="" width="190" height="190">
 
                                             <div class="custom-file">
-                                                <input class="d-none" type="file" accept="image/*" :id="test_img">
-                                                <label class="custom-file-label" :for="test_img">انتخاب فایل</label>
+                                                <input @change="updateFeatureImage" class="d-none" type="file" accept="image/*" id="test_img">
+                                                <label class="custom-file-label" for="test_img">انتخاب فایل</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <!--<span v-if="!errors.published_date" class="m-form__help">تاریخ انتشار محصول را مشخص کنید</span>
-                                    <form-error v-if="errors.published_date" :errors="errors">{{ errors.published_date[0] }}</form-error>-->
+                                    <span v-if="!errors.feature_image" class="m-form__help">تصویر شاخص مقاله را مشخص کنید</span>
+                                    <form-error v-if="errors.feature_image" :errors="errors">{{ errors.feature_image[0] }}</form-error>
                                 </div>
                             </div>
 
@@ -137,6 +137,7 @@
 <script>
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker';
     import TinyMCE_Editor from '../../../components/tinyMCE';
+    import FormError from '../../../components/FormError'
 
     // config for VuePersianDatetimePicker
     Vue.use(VuePersianDatetimePicker, {
@@ -153,19 +154,83 @@
     export default {
         name: "ArticlesCreate.vue",
 
-        components: { VuePersianDatetimePicker, TinyMCE_Editor },
+        components: { VuePersianDatetimePicker, TinyMCE_Editor, FormError },
 
         data() {
             return {
-                article: {},
+                article: {
+                    title: '',
+                    slug: '',
+                    body: '',
+                    published_date: '',
+                    feature_image: '',
+                    feature_image_file: '',
+                    meta_description: '',
+                    meta_keywords: ''
+                },
 
                 sending: false,
+
+                errors: '',
             }
         },
 
         methods: {
             submit() {
 
+                let data = this.prepareData(this.article);
+
+                this.sending = true;
+
+                axios.post('/api/admin/articles/', data)
+                    .then(response => {
+                        flash(response.data.message);
+                        this.sending = false;
+                        this.$router.push({
+                            path: `/admin/articles/${response.data.article.id}/edit`
+                        });
+                    })
+                    .catch(errors => {
+                        if (errors.message === 'Network Error') {
+                            flash('خطایی در اتصال به شبکه رخ داده است', 'warning');
+                        } else {
+                            switch (errors.response.status) {
+                                case 422:
+                                    this.errors = errors.response.data.errors;
+                                    break;
+                                case 500:
+                                    break;
+                                default:
+                                    console.log(errors.response);
+                            }
+                        }
+
+                        console.log(errors.response);
+                        this.sending = false;
+                    });
+            },
+
+            prepareData(data) {
+                let form = new FormData();
+
+                form.append('title', data.title);
+                form.append('slug', data.slug);
+                form.append('feature_image', data.feature_image_file);
+                form.append('body', data.body);
+                form.append('published_date', data.published_date);
+                form.append('meta_description', data.meta_description);
+                form.append('meta_keywords', data.meta_keywords);
+
+                return form;
+            },
+
+            updateFeatureImage(e) {
+                if (! e.target.files.length) return;
+
+                let file = e.target.files[0];
+
+                this.article.feature_image = URL.createObjectURL(file);
+                this.article.feature_image_file = file;
             }
         },
 
