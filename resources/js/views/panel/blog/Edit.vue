@@ -189,13 +189,13 @@
             getArticle() {
                 axios.get(`/api/admin/articles/${this.id}`)
                     .then(response => {
-                        this.article.title = response.data.article.title;
-                        this.article.slug = response.data.article.slug;
-                        this.article.body = response.data.article.body;
-                        this.article.published_date = response.data.article.published_date;
-                        this.article.feature_image = response.data.article.feature_image;
-                        this.article.meta_description = response.data.article.seo.meta_description;
-                        this.article.meta_keywords = response.data.article.seo.meta_keywords;
+                        this.article['title'] = response.data.article.title;
+                        this.article['slug'] = response.data.article.slug;
+                        this.article['body'] = response.data.article.body;
+                        this.article['published_date'] = response.data.article.published_date;
+                        this.article['feature_image'] = response.data.article.feature_image;
+                        this.article['meta_description'] = response.data.article.seo.meta_description;
+                        this.article['meta_keywords'] = response.data.article.seo.meta_keywords;
                     })
                     .catch(errors => {
                         if (errors.message === 'Network Error') {
@@ -211,7 +211,7 @@
 
                 this.sending = true;
 
-                axios.patch(`/api/admin/articles/${this.id}/update`, data)
+                axios.post(`/api/admin/articles/${this.id}/update`, data)
                     .then(response => {
                         console.log(response.data);
                         this.sending = false;
@@ -246,8 +246,6 @@
             },
 
             prepareData(data) {
-                console.log('prepareData was run!!!');
-
                 let form = new FormData();
 
                 form.append('title', data.title);
