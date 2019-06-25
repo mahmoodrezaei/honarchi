@@ -207,11 +207,10 @@
             },
 
             update() {
-                let data = this.prepareData(this.article);
 
                 this.sending = true;
 
-                axios.post(`/api/admin/articles/${this.id}/update`, data)
+                axios.put(`/api/admin/articles/${this.id}/update`, {test: 'test'})
                     .then(response => {
                         console.log(response.data);
                         this.sending = false;

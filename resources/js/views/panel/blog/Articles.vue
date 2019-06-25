@@ -25,33 +25,33 @@
 
                     <div class="m-portlet__body">
                         <!--begin: Search Form-->
-                        <!--<div class="m-form m-form&#45;&#45;label-align-right m&#45;&#45;margin-top-20 m&#45;&#45;margin-bottom-30">
+                        <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
                             <div class="row align-items-center">
-                                &lt;!&ndash; search section &ndash;&gt;
+                                <!-- search section -->
                                 <div class="col-xl-8 order-2 order-xl-1">
                                     <div class="form-group m-form__group row align-items-center">
-                                        <div class="col-md-4 m&#45;&#45;align-right">
-                                            <div class="m-input-icon m-input-icon&#45;&#45;left">
+                                        <div class="col-md-4 m--align-right">
+                                            <div class="m-input-icon m-input-icon--left">
                                                 <input
                                                         v-model="search"
                                                         @input="resetPagination"
                                                         type="text"
-                                                        class="form-control m-input m-input&#45;&#45;solid"
-                                                        placeholder="Search..."
+                                                        class="form-control m-input m-input--solid"
+                                                        placeholder="جستجو..."
                                                         id="generalSearch"
                                                 >
-                                                <span class="m-input-icon__icon m-input-icon__icon&#45;&#45;left">
-                          <span>
-                            <i class="la la-search"></i>
-                          </span>
-                        </span>
+                                                <span class="m-input-icon__icon m-input-icon__icon--left">
+                                                  <span>
+                                                    <i class="la la-search"></i>
+                                                  </span>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-xl-4 order-1 order-xl-2 m&#45;&#45;align-right">
-                                    &lt;!&ndash; select how many items show in page &ndash;&gt;
+                                <div class="col-xl-4 order-1 order-xl-2 m--align-right">
+                                    <!-- select how many items show in page -->
                                     <div class="form-group m-form__group row">
                                         <label class="col-9 col-form-label-sm" for="perPage">تعداد رکوردها</label>
                                         <div class="col-3">
@@ -69,64 +69,48 @@
                                         </div>
                                     </div>
 
-                                    <div class="m-separator m-separator&#45;&#45;dashed d-xl-none"></div>
+                                    <div class="m-separator m-separator--dashed d-xl-none"></div>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                         <!--end: Search Form -->
                         <!--begin: Datatable -->
                         <div class="m_datatable m-datatable m-datatable--default m-datatable--loaded" id="local_data">
-                            <!--<data-table
+                            <data-table
                                     :columns="columns"
                                     :sortKey="sortKey"
                                     :sortOrders="sortOrders"
                                     @sort="sortBy">
                                 <tbody class="m-datatable__body">
-                                <tr v-for="product in paginated" :key="product.id" class="m-datatable__row m-datatable__row" style="left: 0px;">
+                                <tr v-for="article in paginated" :key="article.id" class="m-datatable__row m-datatable__row" style="left: 0px;">
 
                                     <td class="m-datatable__cell text-center">
-                                            <span style="width: 110px;" v-if="product.feature_image">
-                                                <img :src="product.feature_image.path" width="100" alt="">
-                                            </span>
+                                        <span style="width: 110px;" v-if="article.feature_image">
+                                            <img :src="article.feature_image" width="100" alt="">
+                                        </span>
                                         <span style="width: 110px;" v-else></span>
                                     </td>
 
                                     <td class="m-datatable__cell text-center">
-                                        <span style="width: 110px;">{{product.sku}}</span>
+                                        <span style="width: 110px;">{{ article.title }}</span>
                                     </td>
 
                                     <td class="m-datatable__cell text-center">
-                                        <span style="width: 110px;">{{product.name}}</span>
+                                        <span style="width: 110px;">{{ article.slug }}</span>
                                     </td>
 
                                     <td class="m-datatable__cell text-center">
-                                        <span style="width: 110px;" v-if="product.price">{{ product.price.originalPrice }}</span>
-                                        <span style="width: 110px;" v-else></span>
-                                    </td>
-
-                                    <td class="m-datatable__cell text-center">
-                                        <span style="width: 110px;" v-if="product.price">{{ product.price.discountPrice.price }}</span>
-                                        <span style="width: 110px;" v-else></span>
-                                    </td>
-
-                                    <td class="m-datatable__cell text-center">
-                                        <span style="width: 110px;" v-if="product.price">{{ product.price.purchasedPrice }}</span>
-                                        <span style="width: 110px;" v-else></span>
-                                    </td>
-
-                                    <td class="m-datatable__cell text-center">
-                                        <span style="width: 110px;" v-if="product.is_simple">ساده</span>
-                                        <span style="width: 110px;" v-else>متغیر</span>
+                                        <span style="width: 110px;">{{ article.published_date }}</span>
                                     </td>
 
                                     <td class="m-datatable__cell">
                                             <span style="overflow: visible; position: relative; width: 110px;">
-                                                <button @click="remove(product)" class="m-portlet__nav-link btn m-btn m-btn&#45;&#45;hover-danger m-btn&#45;&#45;icon m-btn&#45;&#45;icon-only m-btn&#45;&#45;pill" title="حذف">
+                                                <button @click="remove(article)" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="حذف">
                                                   <i class="la la-remove"></i>
                                                 </button>
 
-                                                <router-link :to="`/admin/products/${product.id}/edit`">
-                                                    <button class="m-portlet__nav-link btn m-btn m-btn&#45;&#45;hover-danger m-btn&#45;&#45;icon m-btn&#45;&#45;icon-only m-btn&#45;&#45;pill" title="ویرایش">
+                                                <router-link :to="`/admin/articles/${article.id}/edit`">
+                                                    <button class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="ویرایش">
                                                       <i class="la la-edit"></i>
                                                     </button>
                                                 </router-link>
@@ -134,14 +118,14 @@
                                     </td>
                                 </tr>
                                 </tbody>
-                            </data-table>-->
+                            </data-table>
 
-                            <!--<pagination
+                            <pagination
                                     :pagination="pagination"
-                                    :filtered="filteredproducts"
-                                    @prev="&#45;&#45;pagination.currentPage"
+                                    :filtered="filteredArticles"
+                                    @prev="--pagination.currentPage"
                                     @next="++pagination.currentPage"
-                            ></pagination>-->
+                            ></pagination>
                         </div>
 
                         <!--end: Datatable -->
@@ -207,7 +191,9 @@
             getArticles() {
                 axios.get('/api/admin/articles')
                     .then(response => {
-                        console.log(response.data)
+                        console.log(response.data);
+                        this.articles = response.data;
+                        this.pagination.total = this.articles.length;
                     })
                     .catch(errors => {
                         if (errors.message === 'Network Error') {
@@ -216,11 +202,89 @@
                             console.log(errors.response.data);
                         }
                     });
-            }
+            },
+
+            paginate(data, perPage, pageNumber) {
+                this.pagination.from = data.length ? (pageNumber - 1) * perPage + 1 : " ";
+                this.pagination.to =
+                    pageNumber * perPage > data.length ? data.length : pageNumber * perPage;
+                this.pagination.prevPage = pageNumber > 1 ? pageNumber : "";
+                this.pagination.nextPage =
+                    data.length > this.pagination.to ? pageNumber + 1 : "";
+                return data.slice((pageNumber - 1) * perPage, pageNumber * perPage);
+            },
+
+            resetPagination() {
+                this.pagination.currentPage = 1;
+                this.pagination.prevPage = "";
+                this.pagination.nextPage = "";
+            },
+
+            sortBy(key) {
+                this.resetPagination();
+                this.sortKey = key;
+                this.sortOrders[key] = this.sortOrders[key] * -1;
+            },
+
+            getIndex(array, key, value) {
+                return array.findIndex(i => i[key] == value);
+            },
+
+            remove(article) {}
         },
 
         computed: {
+            filteredArticles() {
+                let articles = this.articles;
 
+                if (this.search) {
+                    articles = articles.filter(row => {
+                        return Object.keys(row).some(key => {
+                            return (
+                                String(row[key])
+                                    .toLowerCase()
+                                    .indexOf(this.search.toLowerCase()) > -1
+                            );
+                        });
+                    });
+                }
+
+                let sortKey = this.sortKey;
+                let order = this.sortOrders[sortKey] || 1;
+                if (sortKey) {
+                    articles = articles.slice().sort((a, b) => {
+                        let index = this.getIndex(this.columns, "name", sortKey);
+                        a = String(a[sortKey]).toLowerCase();
+                        b = String(b[sortKey]).toLowerCase();
+                        if (this.columns[index].type && this.columns[index].type === "date") {
+                            return (
+                                (a === b
+                                    ? 0
+                                    : new Date(a).getTime() > new Date(b).getTime()
+                                        ? 1
+                                        : -1) * order
+                            );
+                        } else if (
+                            this.columns[index].type &&
+                            this.columns[index].type === "number"
+                        ) {
+                            return (+a === +b ? 0 : +a > +b ? 1 : -1) * order;
+                        } else {
+                            return (a === b ? 0 : a > b ? 1 : -1) * order;
+                        }
+                    });
+                }
+
+                return articles;
+            },
+
+            paginated() {
+                return this.paginate(
+                    this.filteredArticles,
+                    this.perPage,
+                    this.pagination.currentPage
+                );
+            }
         }
     }
 </script>

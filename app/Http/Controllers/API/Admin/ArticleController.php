@@ -83,7 +83,7 @@ class ArticleController extends Controller
 
         return response()->json([
             'message' => 'مقاله با موفقیت بروزرسانی شد.',
-            'article' => $article
+            'article' => $request->all()
         ]);
     }
 }

@@ -65,7 +65,7 @@ Route::prefix('/api/admin/products')->group(function () {
 Route::prefix('/api/admin/articles')->namespace('API\Admin')->group( function () {
     Route::get('/', 'ArticleController@index');
     Route::get('/{article}', 'ArticleController@show');
-    Route::patch('/{article}/update', 'ArticleController@update');
+    Route::put('/{article}/update', 'ArticleController@update');
     Route::post('/', 'ArticleController@store');
 });
 
